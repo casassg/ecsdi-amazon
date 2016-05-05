@@ -3,13 +3,7 @@
 from flask import Flask
 from rdflib import Graph
 
-
 app = Flask(__name__)
-
-
-@app.route('/')
-def main_view():
-    return find_products()
 
 
 def find_products():
@@ -30,5 +24,13 @@ def find_products():
     print products
 
 
-if __name__ == '__main__':
-    app.run()
+class SellerAgent:
+    def __init__(self):
+        pass
+
+    @app.route('/')
+    def main_view(self):
+        return find_products()
+
+    if __name__ == '__main__':
+        app.run()
