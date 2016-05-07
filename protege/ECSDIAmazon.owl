@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:swrlb="http://www.w3.org/2003/11/swrlb#"
+    xmlns:xsp="http://www.owl-ontologies.com/2005/08/07/xsp.owl#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:protege="http://protege.stanford.edu/plugins/owl/protege#"
+    xmlns:swrl="http://www.w3.org/2003/11/swrl#"
+    xmlns="http://www.owl-ontologies.com/ECSDIAmazon.owl#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+  xml:base="http://www.owl-ontologies.com/ECSDIAmazon.owl">
+  <owl:Ontology rdf:about=""/>
+  <owl:Class rdf:ID="Transportista"/>
+  <owl:Class rdf:ID="Existencia"/>
+  <owl:Class rdf:ID="Valoracion"/>
+  <owl:Class rdf:ID="Vendedor_externo"/>
+  <owl:Class rdf:ID="Centro_logistico"/>
+  <owl:Class rdf:ID="Anuncio_externo">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Anuncio"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Accion"/>
+  <owl:Class rdf:ID="Producto">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >&lt;p style="margin-top: 0"&gt;
+      Classe del productes
+    &lt;/p&gt;</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="Usuario"/>
+  <owl:Class rdf:ID="Entrega"/>
+  <owl:ObjectProperty rdf:ID="Tiene">
+    <rdfs:range rdf:resource="#Producto"/>
+    <rdfs:domain rdf:resource="#Existencia"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="Guarda">
+    <rdfs:range rdf:resource="#Existencia"/>
+    <rdfs:domain rdf:resource="#Centro_logistico"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="Anuncia">
+    <rdfs:domain rdf:resource="#Anuncio"/>
+    <rdfs:range rdf:resource="#Producto"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="Anunciado_por">
+    <rdfs:domain rdf:resource="#Anuncio_externo"/>
+    <rdfs:range rdf:resource="#Vendedor_externo"/>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:ID="Marca">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Producto"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="DatatypeProperty_17"/>
+  <owl:DatatypeProperty rdf:ID="Modelo">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Producto"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="Precio">
+    <rdfs:domain rdf:resource="#Producto"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="Fecha">
+    <rdfs:domain rdf:resource="#Entrega"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="Cantidad">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#Existencia"/>
+  </owl:DatatypeProperty>
+</rdf:RDF>
+
+<!-- Created with Protege (with OWL Plugin 3.4.8, Build 629)  http://protege.stanford.edu -->
