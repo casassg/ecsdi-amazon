@@ -24,13 +24,14 @@ def find_products():
     print products
 
 
+def sell_products():
+    # TODO We need to communicate with Financial Agent
+    print "Sell"
+
+
 class SellerAgent:
     def __init__(self):
         pass
-
-    @app.route('/')
-    def main_view(self):
-        return find_products()
 
     if __name__ == '__main__':
         app.run()
