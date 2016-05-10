@@ -25,7 +25,7 @@ __author__ = 'amazadonde'
 
 # Configuration stuff
 hostname = socket.gethostname()
-port = 9010
+port = 9025
 
 # Agent Namespace
 agn = Namespace("http://www.agentes.org#")
