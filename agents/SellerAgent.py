@@ -16,6 +16,7 @@ import socket
 from rdflib import Namespace, Graph
 from utils.FlaskServer import shutdown_server
 from utils.Agent import Agent
+from utils.OntologyNamespaces import TIO
 
 # Author
 __author__ = 'amazadonde'
@@ -113,15 +114,26 @@ def find_products():
     graph = Graph()
 
     # TODO Load ontology file
-    ontologyFile = open('')
+    ontologyFile = open('../data/data')
     graph.parse(ontologyFile, format='turtle')
 
     # TODO Get graph with information
-    queryResult = graph.query()
+    queryResult = graph.query(
+        """
+        prefix tio:<http://purl.org/tio/ns#>
+        prefix geo:<http://www.w3.org/2003/01/geo/wgs84_pos#>
+        prefix dbp:<http://dbpedia.org/ontology/>
+
+        Select ?f
+        where {
+            ?f rdf:type dbp:Producto .
+            }
+        """,
+        initNs=dict(tio=TIO))
 
     # TODO Analyse query results (indicate what columns we want to show)
     for res in queryResult:
-        products = res['column']
+        products = res
 
     print products
 
@@ -136,13 +148,15 @@ def sell_products():
 
 if __name__ == '__main__':
 
+    find_products()
+
     # Run behaviors
-    ab1 = Process(target=agentBehaviour, args=(queue,))
-    ab1.start()
+    #ab1 = Process(target=agentBehaviour, args=(queue,))
+    #ab1.start()
 
     # Run server
-    app.run(host=hostname, port=port)
+    #app.run(host=hostname, port=port)
 
     # Wait behaviors
-    ab1.join()
-    print 'The End'
+    #ab1.join()
+    #print 'The End'

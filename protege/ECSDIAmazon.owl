@@ -215,6 +215,7 @@
         <owl:unionOf rdf:parseType="Collection">
           <owl:Class rdf:about="#Ciudad"/>
           <owl:Class rdf:about="#Vendedor"/>
+          <owl:Class rdf:about="#Producto"/>
         </owl:unionOf>
       </owl:Class>
     </rdfs:domain>
@@ -287,6 +288,46 @@
     <rdfs:domain rdf:resource="#Existencia"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="DatatypeProperty_101"/>
+  <Producto rdf:ID="Producto_2">
+    <Nombre rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Garmin 325</Nombre>
+    <Marca rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Garmin</Marca>
+    <Precio rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
+    >308.0</Precio>
+    <Modelo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >325</Modelo>
+  </Producto>
+  <Producto rdf:ID="Producto_3">
+    <Nombre rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Pioneer</Nombre>
+    <Precio rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
+    >200.0</Precio>
+    <Marca rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Elephone</Marca>
+    <Modelo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >P7000</Modelo>
+  </Producto>
+  <Producto rdf:ID="Producto_4">
+    <Modelo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Nexus 5</Modelo>
+    <Nombre rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Google Nexus 5</Nombre>
+    <Precio rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
+    >350.0</Precio>
+    <Marca rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Google</Marca>
+  </Producto>
+  <Producto rdf:ID="Producto_1">
+    <Marca rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Nintendo</Marca>
+    <Modelo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Choripan 3DS</Modelo>
+    <Nombre rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Nintendo Choripan</Nombre>
+    <Precio rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
+    >100.0</Precio>
+  </Producto>
 </rdf:RDF>
 
-<!-- Created with Protege (with OWL Plugin 3.4.8, Build 629)  http://protege.stanford.edu -->
+<!-- Created with Protege (with OWL Plugin 3.5, Build 663)  http://protege.stanford.edu -->

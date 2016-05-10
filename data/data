@@ -1,0 +1,404 @@
+@prefix default:  <http://www.owl-ontologies.com/ECSDIAmazon.owl#> .
+@prefix xsp:     <http://www.owl-ontologies.com/2005/08/07/xsp.owl#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix protege:  <http://protege.stanford.edu/plugins/owl/protege#> .
+@prefix swrl:    <http://www.w3.org/2003/11/swrl#> .
+@prefix swrlb:   <http://www.w3.org/2003/11/swrlb#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+
+default:Enviar_a
+      a       owl:ObjectProperty ;
+      rdfs:domain default:Compra ;
+      rdfs:range default:Ciudad .
+
+default:Valoracion
+      a       owl:Class .
+
+default:Centro_logistico
+      a       owl:Class .
+
+default:Cerca_productes
+      a       owl:Class ;
+      rdfs:subClassOf default:Accion .
+
+default:Producto
+      a       owl:Class ;
+      rdfs:comment """<p style=\"margin-top: 0\">
+      Classe del productes
+    </p>"""^^xsd:string .
+
+default:Compra
+      a       owl:Class .
+
+default:Puntuacion
+      a       owl:DatatypeProperty ;
+      rdfs:domain default:Valoracion ;
+      rdfs:range xsd:float .
+
+default:Plazos_entrega
+      a       owl:Class ;
+      rdfs:subClassOf default:Restriccions .
+
+default:Envio
+      a       owl:Class .
+
+default:Respuesta_disponibilidad
+      a       owl:Class ;
+      rdfs:subClassOf default:Respuesta .
+
+default:DatatypeProperty_104
+      a       owl:DatatypeProperty .
+
+default:Valora
+      a       owl:ObjectProperty ;
+      rdfs:domain default:Valoracion ;
+      rdfs:range default:Producto .
+
+default:Restriccion_modelo
+      a       owl:Class ;
+      rdfs:subClassOf default:Restriccions .
+
+default:Precio_max
+      a       owl:DatatypeProperty ;
+      rdfs:domain default:Rango_precio ;
+      rdfs:range xsd:float .
+
+default:Plazo_maximo_entrega
+      a       owl:DatatypeProperty ;
+      rdfs:domain default:Pedir_oferta_transporta ;
+      rdfs:range xsd:dateTime .
+
+default:Vendido
+      a       owl:ObjectProperty ;
+      rdfs:domain default:Producto_externo ;
+      rdfs:range default:Vendedor .
+
+default:Latitud
+      a       owl:DatatypeProperty ;
+      rdfs:domain default:Ciudad ;
+      rdfs:range xsd:float .
+
+default:DatatypeProperty_120
+      a       owl:DatatypeProperty .
+
+default:a_enviar
+      a       owl:ObjectProperty ;
+      rdfs:domain default:Enviar_lot ;
+      rdfs:range default:Lote_producto .
+
+default:Fecha_maxima
+      a       owl:DatatypeProperty ;
+      rdfs:domain default:Plazos_entrega ;
+      rdfs:range xsd:date .
+
+default:Productos
+      a       owl:ObjectProperty ;
+      rdfs:domain default:Compra ;
+      rdfs:range default:Producto .
+
+default:Restriccions
+      a       owl:Class .
+
+default:Prio
+      a       owl:DatatypeProperty .
+
+default:ObjectProperty_83
+      a       owl:ObjectProperty .
+
+default:Precio_base
+      a       owl:DatatypeProperty ;
+      rdfs:range xsd:float .
+
+default:DatatypeProperty_23
+      a       owl:DatatypeProperty .
+
+default:ObjectProperty_16
+      a       owl:ObjectProperty .
+
+default:Anuncia
+      a       owl:ObjectProperty ;
+      rdfs:range default:Producto .
+
+default:Enviar_lot
+      a       owl:Class ;
+      rdfs:subClassOf default:Accion .
+
+default:Precio_total
+      a       owl:DatatypeProperty ;
+      rdfs:domain default:Compra ;
+      rdfs:range xsd:float .
+
+default:Rango_precio
+      a       owl:Class ;
+      rdfs:subClassOf default:Restriccions .
+
+default:Producto_2
+      a       default:Producto ;
+      default:Marca "Garmin"^^xsd:string ;
+      default:Modelo "325"^^xsd:string ;
+      default:Nombre "Garmin 325"^^xsd:string ;
+      default:Precio "308.0"^^xsd:float .
+
+default:Restriccion_Marca
+      a       owl:Class ;
+      rdfs:subClassOf default:Restriccions .
+
+default:Marca
+      a       owl:DatatypeProperty ;
+      rdfs:domain
+              [ a       owl:Class ;
+                owl:unionOf (default:Producto default:Restriccion_Marca)
+              ] ;
+      rdfs:range xsd:string .
+
+default:Oferta
+      a       owl:ObjectProperty ;
+      rdfs:domain default:Transportista ;
+      rdfs:range default:Oferta_transporte .
+
+default:Transporta
+      a       owl:ObjectProperty ;
+      rdfs:domain
+              [ a       owl:Class ;
+                owl:unionOf (default:Pedir_oferta_transporta default:Oferta_transporte)
+              ] ;
+      rdfs:range default:Compra .
+
+default:Transportista
+      a       owl:Class .
+
+default:Producto_3
+      a       default:Producto ;
+      default:Marca "Elephone"^^xsd:string ;
+      default:Modelo "P7000"^^xsd:string ;
+      default:Nombre "Pioneer"^^xsd:string ;
+      default:Precio "200.0"^^xsd:float .
+
+default:Fecha_minima
+      a       owl:DatatypeProperty ;
+      rdfs:domain default:Plazos_entrega ;
+      rdfs:range xsd:date .
+
+default:Fecha
+      a       owl:DatatypeProperty ;
+      rdfs:range xsd:dateTime .
+
+default:Vendedor
+      a       owl:Class .
+
+default:Ciudad
+      a       owl:Class .
+
+default:DatatypeProperty_17
+      a       owl:DatatypeProperty .
+
+default:Modelo
+      a       owl:DatatypeProperty ;
+      rdfs:domain
+              [ a       owl:Class ;
+                owl:unionOf (default:Producto default:Restriccion_modelo)
+              ] ;
+      rdfs:range xsd:string .
+
+default:Precio
+      a       owl:DatatypeProperty ;
+      rdfs:domain default:Producto ;
+      rdfs:range xsd:float .
+
+default:Producto_4
+      a       default:Producto ;
+      default:Marca "Google"^^xsd:string ;
+      default:Modelo "Nexus 5"^^xsd:string ;
+      default:Nombre "Google Nexus 5"^^xsd:string ;
+      default:Precio "350.0"^^xsd:float .
+
+default:Restringe
+      a       owl:ObjectProperty ;
+      rdfs:domain default:Cerca_productes ;
+      rdfs:range default:Restriccions .
+
+default:Existe_existencias
+      a       owl:DatatypeProperty ;
+      rdfs:domain default:Respuesta_disponibilidad ;
+      rdfs:range xsd:boolean .
+
+default:ObjectProperty_3
+      a       owl:ObjectProperty .
+
+default:Cantidad
+      a       owl:DatatypeProperty ;
+      rdfs:domain default:Existencia ;
+      rdfs:range xsd:int .
+
+default:Lote_producto
+      a       owl:Class .
+
+default:Accion
+      a       owl:Class .
+
+default:Prioridad
+      a       owl:DatatypeProperty ;
+      rdfs:domain
+              [ a       owl:Class ;
+                owl:unionOf (default:Peticion_compra default:Lote_producto)
+              ] ;
+      rdfs:range xsd:int .
+
+default:Pedir_disponibilidad
+      a       owl:Class ;
+      rdfs:subClassOf default:Accion .
+
+default:productos
+      a       owl:ObjectProperty ;
+      rdfs:domain default:Lote_producto ;
+      rdfs:range default:Producto .
+
+default:Producto_externo
+      a       owl:Class ;
+      rdfs:subClassOf default:Producto .
+
+default:Producto_1
+      a       default:Producto ;
+      default:Marca "Nintendo"^^xsd:string ;
+      default:Modelo "Choripan 3DS"^^xsd:string ;
+      default:Nombre "Nintendo Choripan"^^xsd:string ;
+      default:Precio "100.0"^^xsd:float .
+
+default:ObjectProperty_87
+      a       owl:ObjectProperty .
+
+default:ObjectProperty_11
+      a       owl:ObjectProperty .
+
+default:Anunciado_por
+      a       owl:ObjectProperty .
+
+default:Cerca
+      a       owl:ObjectProperty ;
+      rdfs:domain default:Centro_logistico ;
+      rdfs:range default:Ciudad .
+
+default:Pedir_oferta_transporta
+      a       owl:Class ;
+      rdfs:subClassOf default:Accion .
+
+default:Peso_envio
+      a       owl:DatatypeProperty ;
+      rdfs:domain default:Pedir_oferta_transporta ;
+      rdfs:range xsd:float .
+
+default:Propuesta_precio
+      a       owl:DatatypeProperty .
+
+default:DatatypeProperty_31
+      a       owl:DatatypeProperty .
+
+default:DatatypeProperty_101
+      a       owl:DatatypeProperty .
+
+default:Longitud
+      a       owl:DatatypeProperty ;
+      rdfs:domain default:Ciudad ;
+      rdfs:range xsd:float .
+
+<http://www.owl-ontologies.com/ECSDIAmaz>
+      a       owl:DatatypeProperty .
+
+default:Fecha_de_entrega
+      a       owl:DatatypeProperty ;
+      rdfs:domain default:Envio ;
+      rdfs:range xsd:dateTime .
+
+default:Tiene
+      a       owl:ObjectProperty ;
+      rdfs:domain default:Existencia ;
+      rdfs:range default:Producto .
+
+default:Precio_min
+      a       owl:DatatypeProperty ;
+      rdfs:domain default:Rango_precio ;
+      rdfs:range xsd:float .
+
+default:Restriccion_Valoracion
+      a       owl:Class ;
+      rdfs:subClassOf default:Restriccions .
+
+default:Precio_envio
+      a       owl:DatatypeProperty ;
+      rdfs:domain default:Oferta_transporte ;
+      rdfs:range xsd:float .
+
+default:Contraoferta
+      a       owl:Class ;
+      rdfs:subClassOf default:Oferta_transporte .
+
+<http://www.owl-ontologies.com/ECSDIAmazon.owl>
+      a       owl:Ontology .
+
+default:Respuesta
+      a       owl:Class .
+
+default:Responde_a
+      a       owl:ObjectProperty ;
+      rdfs:domain default:Contraoferta ;
+      rdfs:range default:Oferta_transporte .
+
+default:Existencia
+      a       owl:Class .
+
+default:Nombre
+      a       owl:DatatypeProperty ;
+      rdfs:domain
+              [ a       owl:Class ;
+                owl:unionOf (default:Ciudad default:Vendedor default:Producto)
+              ] ;
+      rdfs:range xsd:string .
+
+default:Existe
+      a       owl:ObjectProperty ;
+      rdfs:domain default:Pedir_disponibilidad ;
+      rdfs:range default:Existencia .
+
+default:Oferta_transporte
+      a       owl:Class .
+
+default:Transportista_actual
+      a       owl:DatatypeProperty ;
+      rdfs:domain default:Transportista ;
+      rdfs:range xsd:boolean .
+
+default:Puntucacion_minima
+      a       owl:DatatypeProperty ;
+      rdfs:domain default:Restriccion_Valoracion ;
+      rdfs:range xsd:int .
+
+default:Envia
+      a       owl:ObjectProperty ;
+      rdfs:domain default:Envio ;
+      rdfs:range default:Lote_producto .
+
+default:Sobre
+      a       owl:ObjectProperty ;
+      rdfs:domain default:Peticion_compra ;
+      rdfs:range default:Compra .
+
+default:Guarda
+      a       owl:ObjectProperty ;
+      rdfs:domain default:Centro_logistico ;
+      rdfs:range default:Existencia .
+
+default:Peticion_compra
+      a       owl:Class ;
+      rdfs:subClassOf default:Accion .
+
+default:Pagat
+      a       owl:DatatypeProperty ;
+      rdfs:domain default:Compra ;
+      rdfs:range xsd:boolean .
+
+default:Destino
+      a       owl:ObjectProperty ;
+      rdfs:domain default:Pedir_oferta_transporta ;
+      rdfs:range default:Ciudad .
