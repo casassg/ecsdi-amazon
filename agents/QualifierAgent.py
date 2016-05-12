@@ -27,14 +27,14 @@ hostname = socket.gethostname()
 port = 9020
 
 # Agent Namespace
-agn = Namespace("http://www.agentes.org#")
+agn = Namespace("http://www.agentes.org#") #Revisar url -> definir nuevo espacio de nombre incluyendo agentes nuestros
 
 # Message Count
 messageCount = 0
 
 # Data Agent
-PersonalAgent = Agent('AgenteSimple',
-                      agn.AgenteSimple,
+QualifierAgent = Agent('AgenteCalificador',
+                      agn.AgenteCalificador,
                       'http://%s:%d/comm' % (hostname, port),
                       'http://%s:%d/Stop' % (hostname, port))
 
