@@ -28,16 +28,16 @@ hostname = socket.gethostname()
 port = 9025
 
 # Agent Namespace
-agn = Namespace("http://www.agentes.org#") #Revisar url -> definir nuevo espacio de nombre incluyendo agentes nuestros
+agn = Namespace("http://www.agentes.org#")  # Revisar url -> definir nuevo espacio de nombre incluyendo agentes nuestros
 
 # Message Count
 messageCount = 0
 
 # Data Agent
 SellerAgent = Agent('AgenteVendedor',
-                      agn.AgenteVendedor,
-                      'http://%s:%d/comm' % (hostname, port),
-                      'http://%s:%d/Stop' % (hostname, port))
+                    agn.AgenteVendedor,
+                    'http://%s:%d/comm' % (hostname, port),
+                    'http://%s:%d/Stop' % (hostname, port))
 
 # Directory agent address
 DirectoryAgent = Agent('DirectoryAgent',
@@ -108,12 +108,12 @@ def agentBehaviour(queue):
 ontologyFile = open('../data/data')
 
 
-def print_products(queryResult):
+def printProducts(queryResult):
     products = []
     for res in queryResult:
         prod = 'NOMBRE: ' + res['nombre'] + ' ' + \
-               'MODELO: ' + res['marca'] + ' ' + \
-               'MARCA: ' + res['modelo'] + ' ' + \
+               'MODELO: ' + res['modelo'] + ' ' + \
+               'MARCA: ' + res['marca'] + ' ' + \
                'PRECIO: ' + res['precio'] + ' '
         products.append(prod)
 
@@ -121,10 +121,10 @@ def print_products(queryResult):
         print prod
 
 
-def find_all_products():
+def findAllProducts():
     graph = Graph()
     graph.parse(ontologyFile, format='turtle')
-    print_products(graph.query(
+    printProducts(graph.query(
         """
         prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         prefix xsd:<http://www.w3.org/2001/XMLSchema#>
@@ -142,10 +142,10 @@ def find_all_products():
         """))
 
 
-def find_products_between_prices(min_price, max_price):
+def findProductsBetweenPrices(min_price, max_price):
     graph = Graph()
     graph.parse(ontologyFile, format='turtle')
-    print_products(graph.query(
+    printProducts(graph.query(
         """
         prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         prefix xsd:<http://www.w3.org/2001/XMLSchema#>
@@ -160,12 +160,35 @@ def find_products_between_prices(min_price, max_price):
             ?producto default:Modelo ?modelo .
             ?producto default:Precio ?precio .
             FILTER(
-                ?precio >= ?minp &&
-                ?precio <= ?maxp
+                ?precio >= """ + str(min_price) + """ &&
+                ?precio <= """ + str(max_price) + """
             )
             }
-        """,
-        initBindings={'minp': min_price, 'maxp': max_price}))
+        """))
+
+
+def findProductsOfBrand(brand):
+    graph = Graph()
+    graph.parse(ontologyFile, format='turtle')
+    printProducts(graph.query(
+        """
+        prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        prefix xsd:<http://www.w3.org/2001/XMLSchema#>
+        prefix default:<http://www.owl-ontologies.com/ECSDIAmazon.owl#>
+        prefix owl:<http://www.w3.org/2002/07/owl#>
+
+        SELECT DISTINCT ?nombre ?marca ?modelo ?precio
+        where {
+            ?producto a default:Producto .
+            ?producto default:Nombre ?nombre .
+            ?producto default:Marca ?marca .
+            ?producto default:Modelo ?modelo .
+            ?producto default:Precio ?precio .
+            FILTER(
+                str(?marca) = '""" + brand + """'
+            )
+            }
+        """))
 
 
 def sell_products():
@@ -176,9 +199,12 @@ def sell_products():
 # MAIN METHOD ----------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
-    # find_all_products()
-    find_products_between_prices(150.0, 400.0)
+    # --------------------------------------- TEST ---------------------------------------------------------
+    # findAllProducts()
+    # findProductsBetweenPrices(250.0, 400.0)
+    findProductsOfBrand('Google')
 
+    # ------------------------------------------------------------------------------------------------------
     # Run behaviors
     # ab1 = Process(target=agentBehaviour, args=(queue,))
     # ab1.start()
