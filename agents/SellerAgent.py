@@ -191,6 +191,57 @@ def findProductsOfBrand(brand):
         """))
 
 
+def findProductsOfModel(model):
+    graph = Graph()
+    graph.parse(ontologyFile, format='turtle')
+    printProducts(graph.query(
+        """
+        prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        prefix xsd:<http://www.w3.org/2001/XMLSchema#>
+        prefix default:<http://www.owl-ontologies.com/ECSDIAmazon.owl#>
+        prefix owl:<http://www.w3.org/2002/07/owl#>
+
+        SELECT DISTINCT ?nombre ?marca ?modelo ?precio
+        where {
+            ?producto a default:Producto .
+            ?producto default:Nombre ?nombre .
+            ?producto default:Marca ?marca .
+            ?producto default:Modelo ?modelo .
+            ?producto default:Precio ?precio .
+            FILTER(
+                str(?modelo) = '""" + model + """'
+            )
+            }
+        """))
+
+
+def findProductsByParameters(brand, model, min_price, max_price):
+    graph = Graph()
+    graph.parse(ontologyFile, format='turtle')
+    printProducts(graph.query(
+        """
+        prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        prefix xsd:<http://www.w3.org/2001/XMLSchema#>
+        prefix default:<http://www.owl-ontologies.com/ECSDIAmazon.owl#>
+        prefix owl:<http://www.w3.org/2002/07/owl#>
+
+        SELECT DISTINCT ?nombre ?marca ?modelo ?precio
+        where {
+            ?producto a default:Producto .
+            ?producto default:Nombre ?nombre .
+            ?producto default:Marca ?marca .
+            ?producto default:Modelo ?modelo .
+            ?producto default:Precio ?precio .
+            FILTER(
+                str(?brand) = '""" + brand + """' &&
+                str(?modelo) = '""" + model + """' &&
+                ?precio >= """ + str(min_price) + """ &&
+                ?precio <= """ + str(max_price) + """
+            )
+            }
+        """))
+
+
 def sell_products():
     # TODO We need to communicate with Financial Agent
     print "Sell"
@@ -202,7 +253,9 @@ if __name__ == '__main__':
     # --------------------------------------- TEST ---------------------------------------------------------
     # findAllProducts()
     # findProductsBetweenPrices(250.0, 400.0)
-    findProductsOfBrand('Google')
+    # findProductsOfBrand('Google')
+    # findProductsOfModel('Choripan 3DS')
+    findProductsByParameters('Nintendo', 'Choripan 3DS', 300.0, 400.0)
 
     # ------------------------------------------------------------------------------------------------------
     # Run behaviors
