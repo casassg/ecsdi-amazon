@@ -59,7 +59,6 @@ app = Flask(__name__)
 
 @app.route("/comm")
 def communication():
-
     """
     Communication Entrypoint
     """
@@ -71,7 +70,6 @@ def communication():
 
 @app.route("/Stop")
 def stop():
-
     """
     Entrypoint to the agent
     :return: string
@@ -83,7 +81,6 @@ def stop():
 
 
 def tidyUp():
-
     """
     Previous actions for the agent.
     """
@@ -94,7 +91,6 @@ def tidyUp():
 
 
 def agentBehaviour(queue):
-
     """
     Agent Behaviour in a concurrent thread.
 
@@ -109,37 +105,70 @@ def agentBehaviour(queue):
 
 # DETERMINATE AGENT FUNCTIONS ------------------------------------------------------------------------------
 
-def find_products():
-    global products
+ontologyFile = open('../data/data')
+
+
+def print_products(queryResult):
+    products = []
+    for res in queryResult:
+        prod = 'NOMBRE: ' + res['nombre'] + ' ' + \
+               'MODELO: ' + res['marca'] + ' ' + \
+               'MARCA: ' + res['modelo'] + ' ' + \
+               'PRECIO: ' + res['precio'] + ' '
+        products.append(prod)
+
+    for prod in products:
+        print prod
+
+
+def find_all_products():
     graph = Graph()
-
-    # TODO Load ontology file
-    ontologyFile = open('../data/data')
     graph.parse(ontologyFile, format='turtle')
-
-    # TODO Get graph with information
-    queryResult = graph.query(
+    print_products(graph.query(
         """
-        prefix tio:<http://purl.org/tio/ns#>
-        prefix geo:<http://www.w3.org/2003/01/geo/wgs84_pos#>
-        prefix dbp:<http://dbpedia.org/ontology/>
+        prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        prefix xsd:<http://www.w3.org/2001/XMLSchema#>
+        prefix default:<http://www.owl-ontologies.com/ECSDIAmazon.owl#>
+        prefix owl:<http://www.w3.org/2002/07/owl#>
 
-        Select ?f
+        SELECT DISTINCT ?nombre ?marca ?modelo ?precio
         where {
-            ?f rdf:type dbp:Producto .
+            ?producto a default:Producto .
+            ?producto default:Nombre ?nombre .
+            ?producto default:Marca ?marca .
+            ?producto default:Modelo ?modelo .
+            ?producto default:Precio ?precio
+            }
+        """))
+
+
+def find_products_between_prices(min_price, max_price):
+    graph = Graph()
+    graph.parse(ontologyFile, format='turtle')
+    print_products(graph.query(
+        """
+        prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        prefix xsd:<http://www.w3.org/2001/XMLSchema#>
+        prefix default:<http://www.owl-ontologies.com/ECSDIAmazon.owl#>
+        prefix owl:<http://www.w3.org/2002/07/owl#>
+
+        SELECT DISTINCT ?nombre ?marca ?modelo ?precio
+        where {
+            ?producto a default:Producto .
+            ?producto default:Nombre ?nombre .
+            ?producto default:Marca ?marca .
+            ?producto default:Modelo ?modelo .
+            ?producto default:Precio ?precio .
+            FILTER(
+                ?precio >= ?minp &&
+                ?precio <= ?maxp
+            )
             }
         """,
-        initNs=dict(tio=TIO))
-
-    # TODO Analyse query results (indicate what columns we want to show)
-    for res in queryResult:
-        products = res
-
-    print products
+        initBindings={'minp': min_price, 'maxp': max_price}))
 
 
 def sell_products():
-
     # TODO We need to communicate with Financial Agent
     print "Sell"
 
@@ -147,16 +176,16 @@ def sell_products():
 # MAIN METHOD ----------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
-
-    find_products()
+    # find_all_products()
+    find_products_between_prices(150.0, 400.0)
 
     # Run behaviors
-    #ab1 = Process(target=agentBehaviour, args=(queue,))
-    #ab1.start()
+    # ab1 = Process(target=agentBehaviour, args=(queue,))
+    # ab1.start()
 
     # Run server
-    #app.run(host=hostname, port=port)
+    # app.run(host=hostname, port=port)
 
     # Wait behaviors
-    #ab1.join()
-    #print 'The End'
+    # ab1.join()
+    # print 'The End'
