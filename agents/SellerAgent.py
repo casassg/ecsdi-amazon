@@ -9,7 +9,7 @@ Agente usando los servicios web de Flask
 Tiene una funcion AgentBehavior1 que se lanza como un thread concurrente
 Asume que el agente de registro esta en el puerto 9000
 """
-import tabulate as tabulate
+import sys
 from flask import Flask
 from multiprocessing import Process, Queue
 import socket
@@ -118,105 +118,7 @@ def printProducts(queryResult):
     print data
 
 
-def findAllProducts():
-    graph = Graph()
-    graph.parse(ontologyFile, format='turtle')
-    return graph.query(
-        """
-        prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-        prefix xsd:<http://www.w3.org/2001/XMLSchema#>
-        prefix default:<http://www.owl-ontologies.com/ECSDIAmazon.owl#>
-        prefix owl:<http://www.w3.org/2002/07/owl#>
-
-        SELECT DISTINCT ?nombre ?marca ?modelo ?precio
-        where {
-            ?producto a default:Producto .
-            ?producto default:Nombre ?nombre .
-            ?producto default:Marca ?marca .
-            ?producto default:Modelo ?modelo .
-            ?producto default:Precio ?precio
-            }
-        order by asc(UCASE(str(?nombre)))
-        """)
-
-
-def findProductsBetweenPrices(min_price, max_price):
-    graph = Graph()
-    graph.parse(ontologyFile, format='turtle')
-    return graph.query(
-        """
-        prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-        prefix xsd:<http://www.w3.org/2001/XMLSchema#>
-        prefix default:<http://www.owl-ontologies.com/ECSDIAmazon.owl#>
-        prefix owl:<http://www.w3.org/2002/07/owl#>
-
-        SELECT DISTINCT ?nombre ?marca ?modelo ?precio
-        where {
-            ?producto a default:Producto .
-            ?producto default:Nombre ?nombre .
-            ?producto default:Marca ?marca .
-            ?producto default:Modelo ?modelo .
-            ?producto default:Precio ?precio .
-            FILTER(
-                ?precio >= """ + str(min_price) + """ &&
-                ?precio <= """ + str(max_price) + """
-            )
-            }
-        order by asc(UCASE(str(?nombre)))
-        """)
-
-
-def findProductsOfBrand(brand):
-    graph = Graph()
-    graph.parse(ontologyFile, format='turtle')
-    return graph.query(
-        """
-        prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-        prefix xsd:<http://www.w3.org/2001/XMLSchema#>
-        prefix default:<http://www.owl-ontologies.com/ECSDIAmazon.owl#>
-        prefix owl:<http://www.w3.org/2002/07/owl#>
-
-        SELECT DISTINCT ?nombre ?marca ?modelo ?precio
-        where {
-            ?producto a default:Producto .
-            ?producto default:Nombre ?nombre .
-            ?producto default:Marca ?marca .
-            ?producto default:Modelo ?modelo .
-            ?producto default:Precio ?precio .
-            FILTER(
-                str(?marca) = '""" + brand + """'
-            )
-            }
-        order by asc(UCASE(str(?nombre)))
-        """)
-
-
-def findProductsOfModel(model):
-    graph = Graph()
-    graph.parse(ontologyFile, format='turtle')
-    return graph.query(
-        """
-        prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-        prefix xsd:<http://www.w3.org/2001/XMLSchema#>
-        prefix default:<http://www.owl-ontologies.com/ECSDIAmazon.owl#>
-        prefix owl:<http://www.w3.org/2002/07/owl#>
-
-        SELECT DISTINCT ?nombre ?marca ?modelo ?precio
-        where {
-            ?producto a default:Producto .
-            ?producto default:Nombre ?nombre .
-            ?producto default:Marca ?marca .
-            ?producto default:Modelo ?modelo .
-            ?producto default:Precio ?precio .
-            FILTER(
-                str(?modelo) = '""" + model + """'
-            )
-            }
-        order by asc(UCASE(str(?nombre)))
-        """)
-
-
-def findProductsByParameters(model=None, brand=None, min_price=0.0, max_price=float('Inf')):
+def findProducts(model=None, brand=None, min_price=0.0, max_price=sys.float_info.max):
     graph = Graph()
     graph.parse(ontologyFile, format='turtle')
     first = second = 0
@@ -263,11 +165,7 @@ def sell_products():
 
 if __name__ == '__main__':
     # --------------------------------------- TEST ---------------------------------------------------------
-    printProducts(findAllProducts())
-    # printProducts(findProductsBetweenPrices(250.0, 400.0))
-    # printProducts(findProductsOfBrand('Google'))
-    # printProducts(findProductsOfModel('Choripan 3DS'))
-    # printProducts(findProductsByParameters(model='325', brand='Garmin', min_price=50.0, max_price=400.0))
+    printProducts(findProducts())
 
     # ------------------------------------------------------------------------------------------------------
     # Run behaviors
