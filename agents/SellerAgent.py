@@ -9,14 +9,14 @@ Agente usando los servicios web de Flask
 Tiene una funcion AgentBehavior1 que se lanza como un thread concurrente
 Asume que el agente de registro esta en el puerto 9000
 """
-
+import tabulate as tabulate
 from flask import Flask
 from multiprocessing import Process, Queue
 import socket
 from rdflib import Namespace, Graph
 from utils.FlaskServer import shutdown_server
 from utils.Agent import Agent
-from utils.OntologyNamespaces import TIO
+from prettytable import PrettyTable
 
 # Author
 __author__ = 'amazadonde'
@@ -109,22 +109,19 @@ ontologyFile = open('../data/data')
 
 
 def printProducts(queryResult):
-    products = []
+    data = PrettyTable(['Nombre', 'Modelo', 'Marca', 'Precio'])
     for res in queryResult:
-        prod = 'NOMBRE: ' + res['nombre'] + ' ' + \
-               'MODELO: ' + res['modelo'] + ' ' + \
-               'MARCA: ' + res['marca'] + ' ' + \
-               'PRECIO: ' + res['precio'] + ' '
-        products.append(prod)
-
-    for prod in products:
-        print prod
+        data.add_row([res['nombre'],
+                      res['modelo'],
+                      res['marca'],
+                      res['precio']])
+    print data
 
 
 def findAllProducts():
     graph = Graph()
     graph.parse(ontologyFile, format='turtle')
-    printProducts(graph.query(
+    return graph.query(
         """
         prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         prefix xsd:<http://www.w3.org/2001/XMLSchema#>
@@ -139,13 +136,14 @@ def findAllProducts():
             ?producto default:Modelo ?modelo .
             ?producto default:Precio ?precio
             }
-        """))
+        order by asc(UCASE(str(?nombre)))
+        """)
 
 
 def findProductsBetweenPrices(min_price, max_price):
     graph = Graph()
     graph.parse(ontologyFile, format='turtle')
-    printProducts(graph.query(
+    return graph.query(
         """
         prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         prefix xsd:<http://www.w3.org/2001/XMLSchema#>
@@ -164,13 +162,14 @@ def findProductsBetweenPrices(min_price, max_price):
                 ?precio <= """ + str(max_price) + """
             )
             }
-        """))
+        order by asc(UCASE(str(?nombre)))
+        """)
 
 
 def findProductsOfBrand(brand):
     graph = Graph()
     graph.parse(ontologyFile, format='turtle')
-    printProducts(graph.query(
+    return graph.query(
         """
         prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         prefix xsd:<http://www.w3.org/2001/XMLSchema#>
@@ -188,13 +187,14 @@ def findProductsOfBrand(brand):
                 str(?marca) = '""" + brand + """'
             )
             }
-        """))
+        order by asc(UCASE(str(?nombre)))
+        """)
 
 
 def findProductsOfModel(model):
     graph = Graph()
     graph.parse(ontologyFile, format='turtle')
-    printProducts(graph.query(
+    return graph.query(
         """
         prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         prefix xsd:<http://www.w3.org/2001/XMLSchema#>
@@ -212,14 +212,15 @@ def findProductsOfModel(model):
                 str(?modelo) = '""" + model + """'
             )
             }
-        """))
+        order by asc(UCASE(str(?nombre)))
+        """)
 
 
-def findProductsByParameters(brand, model, min_price, max_price):
+def findProductsByParameters(model=None, brand=None, min_price=0.0, max_price=float('Inf')):
     graph = Graph()
     graph.parse(ontologyFile, format='turtle')
-    printProducts(graph.query(
-        """
+    first = second = 0
+    query = """
         prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         prefix xsd:<http://www.w3.org/2001/XMLSchema#>
         prefix default:<http://www.owl-ontologies.com/ECSDIAmazon.owl#>
@@ -232,14 +233,25 @@ def findProductsByParameters(brand, model, min_price, max_price):
             ?producto default:Marca ?marca .
             ?producto default:Modelo ?modelo .
             ?producto default:Precio ?precio .
-            FILTER(
-                str(?brand) = '""" + brand + """' &&
-                str(?modelo) = '""" + model + """' &&
-                ?precio >= """ + str(min_price) + """ &&
-                ?precio <= """ + str(max_price) + """
-            )
-            }
-        """))
+            FILTER("""
+
+    if model is not None:
+        query += """str(?modelo) = '""" + model + """'"""
+        first = 1
+
+    if brand is not None:
+        if first == 1:
+            query += """ && """
+        query += """str(?marca) = '""" + brand + """'"""
+        second = 1
+
+    if first == 1 or second == 1:
+        query += """ && """
+    query += """?precio >= """ + str(min_price) + """ &&
+                ?precio <= """ + str(max_price) + """  )}
+                order by asc(UCASE(str(?nombre)))"""
+
+    return graph.query(query)
 
 
 def sell_products():
@@ -251,11 +263,11 @@ def sell_products():
 
 if __name__ == '__main__':
     # --------------------------------------- TEST ---------------------------------------------------------
-    # findAllProducts()
-    # findProductsBetweenPrices(250.0, 400.0)
-    # findProductsOfBrand('Google')
-    # findProductsOfModel('Choripan 3DS')
-    findProductsByParameters('Nintendo', 'Choripan 3DS', 300.0, 400.0)
+    printProducts(findAllProducts())
+    # printProducts(findProductsBetweenPrices(250.0, 400.0))
+    # printProducts(findProductsOfBrand('Google'))
+    # printProducts(findProductsOfModel('Choripan 3DS'))
+    # printProducts(findProductsByParameters(model='325', brand='Garmin', min_price=50.0, max_price=400.0))
 
     # ------------------------------------------------------------------------------------------------------
     # Run behaviors
