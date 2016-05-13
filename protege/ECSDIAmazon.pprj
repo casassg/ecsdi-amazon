@@ -1,4 +1,4 @@
-; Tue May 10 09:50:26 CEST 2016
+; Fri May 13 08:56:35 CEST 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -6,11 +6,11 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
-		[ECSDIAmazon_ProjectKB_Class10092]
-		[ECSDIAmazon_ProjectKB_Class10093]
-		[ECSDIAmazon_ProjectKB_Class10094]
-		[ECSDIAmazon_ProjectKB_Class10095]
-		[ECSDIAmazon_ProjectKB_Class10096]))
+		[ECSDIAmazon_ProjectKB_Class88]
+		[ECSDIAmazon_ProjectKB_Class89]
+		[ECSDIAmazon_ProjectKB_Class90]
+		[ECSDIAmazon_ProjectKB_Class91]
+		[ECSDIAmazon_ProjectKB_Class92]))
 
 ([CLSES_TAB] of  Widget
 
@@ -31,31 +31,6 @@
 ([ECSDIAmazon_ProjectKB_Class10091] of  String
 
 	(name "RenameAcrossFiles"))
-
-([ECSDIAmazon_ProjectKB_Class10092] of  String
-
-	(name ":INSTANCE-ANNOTATION")
-	(string_value "%3AANNOTATION-TEXT"))
-
-([ECSDIAmazon_ProjectKB_Class10093] of  String
-
-	(name "http://www.w3.org/2002/07/owl#Thing")
-	(string_value "%3ANAME"))
-
-([ECSDIAmazon_ProjectKB_Class10094] of  String
-
-	(name "http://www.w3.org/2002/07/owl#Class")
-	(string_value "%3ANAME"))
-
-([ECSDIAmazon_ProjectKB_Class10095] of  String
-
-	(name ":PAL-CONSTRAINT")
-	(string_value "%3APAL-NAME"))
-
-([ECSDIAmazon_ProjectKB_Class10096] of  String
-
-	(name ":META-CLASS")
-	(string_value "%3ANAME"))
 
 ([ECSDIAmazon_ProjectKB_Class11] of  Widget
 
@@ -285,11 +260,36 @@
 ([ECSDIAmazon_ProjectKB_Class8] of  Property_List
 )
 
+([ECSDIAmazon_ProjectKB_Class88] of  String
+
+	(name ":INSTANCE-ANNOTATION")
+	(string_value "%3AANNOTATION-TEXT"))
+
+([ECSDIAmazon_ProjectKB_Class89] of  String
+
+	(name "http://www.w3.org/2002/07/owl#Thing")
+	(string_value "%3ANAME"))
+
 ([ECSDIAmazon_ProjectKB_Class9] of  Widget
 
 	(is_hidden TRUE)
 	(property_list [ECSDIAmazon_ProjectKB_Class10])
 	(widget_class_name "edu.stanford.smi.protege.query.LuceneQueryPlugin"))
+
+([ECSDIAmazon_ProjectKB_Class90] of  String
+
+	(name "http://www.w3.org/2002/07/owl#Class")
+	(string_value "%3ANAME"))
+
+([ECSDIAmazon_ProjectKB_Class91] of  String
+
+	(name ":PAL-CONSTRAINT")
+	(string_value "%3APAL-NAME"))
+
+([ECSDIAmazon_ProjectKB_Class92] of  String
+
+	(name ":META-CLASS")
+	(string_value "%3ANAME"))
 
 ([empty.owl_ProjectKB_Class5] of  String
 
@@ -755,9 +755,6 @@
 ([KB_140180_Instance_9] of  Property_List
 )
 
-([KB_151366_Class0] of  Map
-)
-
 ([KB_221055_Instance_10] of  Widget
 
 	(height 0)
@@ -1038,6 +1035,9 @@
 	(name "http://protege.stanford.edu/plugins/owl/protege#ExternalResource")
 	(property_list [XY_Instance_890])
 	(widget_class_name "edu.stanford.smi.protegex.owl.ui.widget.OWLFormWidget"))
+
+([KB_612372_Class0] of  Map
+)
 
 ([KB_632156_Instance_0] of  String
 

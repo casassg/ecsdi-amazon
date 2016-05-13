@@ -136,6 +136,7 @@ default:Rango_precio
 
 default:Producto_2
       a       default:Producto ;
+      default:Id "2"^^xsd:int ;
       default:Marca "Garmin"^^xsd:string ;
       default:Modelo "325"^^xsd:string ;
       default:Nombre "Garmin 325"^^xsd:string ;
@@ -171,6 +172,7 @@ default:Transportista
 
 default:Producto_3
       a       default:Producto ;
+      default:Id "3"^^xsd:int ;
       default:Marca "Elephone"^^xsd:string ;
       default:Modelo "P7000"^^xsd:string ;
       default:Nombre "Pioneer"^^xsd:string ;
@@ -209,6 +211,7 @@ default:Precio
 
 default:Producto_4
       a       default:Producto ;
+      default:Id "4"^^xsd:int ;
       default:Marca "Google"^^xsd:string ;
       default:Modelo "Nexus 5"^^xsd:string ;
       default:Nombre "Google Nexus 5"^^xsd:string ;
@@ -261,6 +264,7 @@ default:Producto_externo
 
 default:Producto_1
       a       default:Producto ;
+      default:Id "1"^^xsd:int ;
       default:Marca "Nintendo"^^xsd:string ;
       default:Modelo "Choripan 3DS"^^xsd:string ;
       default:Nombre "Nintendo Choripan"^^xsd:string ;
@@ -310,6 +314,11 @@ default:Fecha_de_entrega
       a       owl:DatatypeProperty ;
       rdfs:domain default:Envio ;
       rdfs:range xsd:dateTime .
+
+default:Id
+      a       owl:DatatypeProperty ;
+      rdfs:domain default:Producto ;
+      rdfs:range xsd:int .
 
 default:Tiene
       a       owl:ObjectProperty ;

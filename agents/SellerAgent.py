@@ -109,49 +109,57 @@ ontologyFile = open('../data/data')
 
 
 def printProducts(queryResult):
-    data = PrettyTable(['Nombre', 'Modelo', 'Marca', 'Precio'])
+    data = PrettyTable(['ID', 'Nombre', 'Modelo', 'Marca', 'Precio'])
     for res in queryResult:
-        data.add_row([res['nombre'],
+        data.add_row([res['id'],
+                      res['nombre'],
                       res['modelo'],
                       res['marca'],
                       res['precio']])
     print data
 
 
-def findProducts(model=None, brand=None, min_price=0.0, max_price=sys.float_info.max):
+def findProducts(identifier=None, model=None, brand=None, min_price=0.0, max_price=sys.float_info.max):
     graph = Graph()
     graph.parse(ontologyFile, format='turtle')
-    first = second = 0
+    first = second = third = 0
     query = """
         prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         prefix xsd:<http://www.w3.org/2001/XMLSchema#>
         prefix default:<http://www.owl-ontologies.com/ECSDIAmazon.owl#>
         prefix owl:<http://www.w3.org/2002/07/owl#>
 
-        SELECT DISTINCT ?nombre ?marca ?modelo ?precio
+        SELECT DISTINCT ?id ?nombre ?marca ?modelo ?precio
         where {
             ?producto a default:Producto .
+            ?producto default:Id ?id .
             ?producto default:Nombre ?nombre .
             ?producto default:Marca ?marca .
             ?producto default:Modelo ?modelo .
             ?producto default:Precio ?precio .
             FILTER("""
 
-    if model is not None:
-        query += """str(?modelo) = '""" + model + """'"""
+    if identifier is not None:
+        query += """?id = """ + str(identifier)
         first = 1
 
-    if brand is not None:
+    if model is not None:
         if first == 1:
             query += """ && """
-        query += """str(?marca) = '""" + brand + """'"""
+        query += """str(?modelo) = '""" + model + """'"""
         second = 1
 
-    if first == 1 or second == 1:
+    if brand is not None:
+        if second == 1 or first == 1:
+            query += """ && """
+        query += """str(?marca) = '""" + brand + """'"""
+        third = 1
+
+    if first == 1 or second == 1 or third == 1:
         query += """ && """
     query += """?precio >= """ + str(min_price) + """ &&
                 ?precio <= """ + str(max_price) + """  )}
-                order by asc(UCASE(str(?nombre)))"""
+                order by asc(UCASE(str(?id)))"""
 
     return graph.query(query)
 
