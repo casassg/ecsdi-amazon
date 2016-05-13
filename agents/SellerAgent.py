@@ -2,10 +2,8 @@
 
 """
 Agente usando los servicios web de Flask
-
 /comm es la entrada para la recepcion de mensajes del agente
 /Stop es la entrada que para el agente
-
 Tiene una funcion AgentBehavior1 que se lanza como un thread concurrente
 Asume que el agente de registro esta en el puerto 9000
 """
@@ -93,7 +91,6 @@ def tidyUp():
 def agentBehaviour(queue):
     """
     Agent Behaviour in a concurrent thread.
-
     :param queue: the queue
     :return: something
     """
@@ -109,57 +106,48 @@ ontologyFile = open('../data/data')
 
 
 def printProducts(queryResult):
-    data = PrettyTable(['ID', 'Nombre', 'Modelo', 'Marca', 'Precio'])
+    data = PrettyTable(['Nombre', 'Modelo', 'Marca', 'Precio'])
     for res in queryResult:
-        data.add_row([res['id'],
-                      res['nombre'],
+        data.add_row([res['nombre'],
                       res['modelo'],
                       res['marca'],
                       res['precio']])
     print data
 
 
-def findProducts(identifier=None, model=None, brand=None, min_price=0.0, max_price=sys.float_info.max):
+def findProducts(model=None, brand=None, min_price=0.0, max_price=sys.float_info.max):
     graph = Graph()
     graph.parse(ontologyFile, format='turtle')
-    first = second = third = 0
+    first = second = 0
     query = """
         prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         prefix xsd:<http://www.w3.org/2001/XMLSchema#>
         prefix default:<http://www.owl-ontologies.com/ECSDIAmazon.owl#>
         prefix owl:<http://www.w3.org/2002/07/owl#>
-
-        SELECT DISTINCT ?id ?nombre ?marca ?modelo ?precio
+        SELECT DISTINCT ?nombre ?marca ?modelo ?precio
         where {
             ?producto a default:Producto .
-            ?producto default:Id ?id .
             ?producto default:Nombre ?nombre .
             ?producto default:Marca ?marca .
             ?producto default:Modelo ?modelo .
             ?producto default:Precio ?precio .
             FILTER("""
 
-    if identifier is not None:
-        query += """?id = """ + str(identifier)
+    if model is not None:
+        query += """str(?modelo) = '""" + model + """'"""
         first = 1
 
-    if model is not None:
+    if brand is not None:
         if first == 1:
             query += """ && """
-        query += """str(?modelo) = '""" + model + """'"""
+        query += """str(?marca) = '""" + brand + """'"""
         second = 1
 
-    if brand is not None:
-        if second == 1 or first == 1:
-            query += """ && """
-        query += """str(?marca) = '""" + brand + """'"""
-        third = 1
-
-    if first == 1 or second == 1 or third == 1:
+    if first == 1 or second == 1:
         query += """ && """
     query += """?precio >= """ + str(min_price) + """ &&
                 ?precio <= """ + str(max_price) + """  )}
-                order by asc(UCASE(str(?id)))"""
+                order by asc(UCASE(str(?nombre)))"""
 
     return graph.query(query)
 
