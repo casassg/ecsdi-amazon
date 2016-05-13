@@ -317,7 +317,6 @@ default:Fecha_de_entrega
 
 default:Id
       a       owl:DatatypeProperty ;
-      rdfs:domain default:Producto ;
       rdfs:range xsd:int .
 
 default:Tiene

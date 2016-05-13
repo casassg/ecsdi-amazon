@@ -167,7 +167,6 @@
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="Id">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-    <rdfs:domain rdf:resource="#Producto"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="Precio_min">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
