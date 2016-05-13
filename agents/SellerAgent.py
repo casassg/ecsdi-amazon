@@ -152,9 +152,13 @@ def findProducts(model=None, brand=None, min_price=0.0, max_price=sys.float_info
     return graph.query(query)
 
 
-def sell_products():
-    # TODO We need to communicate with Financial Agent
-    print "Sell"
+def sell_products(urlProductsList):
+    productList = []
+    baseURL = 'http://www.owl-ontologies.com/ECSDIAmazon.owl#'
+    for f in urlProductsList:
+        productList.append(baseURL + f)
+
+    # TODO Send 'vull-comprar' message to financialAgent
 
 
 # MAIN METHOD ----------------------------------------------------------------------------------------------
@@ -162,6 +166,7 @@ def sell_products():
 if __name__ == '__main__':
     # --------------------------------------- TEST ---------------------------------------------------------
     printProducts(findProducts())
+    sell_products(['Producto_1', 'Producto_2'])
 
     # ------------------------------------------------------------------------------------------------------
     # Run behaviors
