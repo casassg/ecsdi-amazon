@@ -12,9 +12,12 @@ from flask import Flask
 from multiprocessing import Process, Queue
 import socket
 from rdflib import Namespace, Graph
+
+from agents.FinancialAgent import FinancialAgent
 from utils.FlaskServer import shutdown_server
 from utils.Agent import Agent
 from prettytable import PrettyTable
+from utils.ACLMessages import *
 
 # Author
 __author__ = 'amazadonde'
@@ -26,7 +29,7 @@ hostname = socket.gethostname()
 port = 9025
 
 # Agent Namespace
-agn = Namespace("http://www.agentes.org#")  # Revisar url -> definir nuevo espacio de nombre incluyendo agentes nuestros
+agn = Namespace("http://www.owl-ontologies.com/ECSDIAmazon.owl#")
 
 # Message Count
 messageCount = 0
@@ -153,19 +156,30 @@ def findProducts(model=None, brand=None, min_price=0.0, max_price=sys.float_info
 
 
 def sell_products(urlProductsList):
+    global messageCount
     productList = []
     baseURL = 'http://www.owl-ontologies.com/ECSDIAmazon.owl#'
     for f in urlProductsList:
         productList.append(baseURL + f)
 
-    # TODO Send 'vull-comprar' message to financialAgent
+    rsp_obj = agn['Productos']
 
+    # TODO Insert into message the product list
+    message = build_message(graphMessage=Graph(),
+                            perf=ACL.request,
+                            sender=SellerAgent.uri,
+                            receiver=FinancialAgent.uri,
+                            content=rsp_obj,
+                            msgcnt=messageCount)
+    # gr = send_message(message, FinancialAgent.address)
+    # messageCount += 1
+    # return gr
 
 # MAIN METHOD ----------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
     # --------------------------------------- TEST ---------------------------------------------------------
-    printProducts(findProducts())
+    # printProducts(findProducts())
     sell_products(['Producto_1', 'Producto_2'])
 
     # ------------------------------------------------------------------------------------------------------
