@@ -107,19 +107,19 @@ def agentBehaviour(queue):
 def sendProducts():
 
     # TODO Receive communication of send something and send it.
-    print "Send Products"
+    print("Send Products")
 
 
 def recordDeliveries():
 
     # TODO Record Receive communication of availability discussion and record deliveries.
-    print "Record Deliveries"
+    print("Record Deliveries")
 
 
 def requestTransport():
 
     # TODO Discuss with Transport Dealer.
-    print "Request Transport"
+    print("Request Transport")
 
 
 # MAIN METHOD ----------------------------------------------------------------------------------------------
@@ -135,4 +135,4 @@ if __name__ == '__main__':
 
     # Wait behaviors
     ab1.join()
-    print 'The End'
+    print('The End')

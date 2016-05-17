@@ -115,7 +115,7 @@ def printProducts(queryResult):
                       res['modelo'],
                       res['marca'],
                       res['precio']])
-    print data
+    print(data)
 
 
 def findProducts(model=None, brand=None, min_price=0.0, max_price=sys.float_info.max):
@@ -189,7 +189,7 @@ if __name__ == '__main__':
     # ab1.start()
 
     # Run server
-    # app.run(host=hostname, port=port)
+    app.run(host=hostname, port=port)
 
     # Wait behaviors
     # ab1.join()

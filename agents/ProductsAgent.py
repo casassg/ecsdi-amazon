@@ -168,13 +168,13 @@ def agentBehaviour(queue):
 def distributeDelivery():
 
     # TODO Get products availability and send them.
-    print "Distribute Delivery"
+    print("Distribute Delivery")
 
 
 def recordExternalProduct():
 
     # TODO Record product of an external seller.
-    print "RecordExternalProduct"
+    print("RecordExternalProduct")
 
 
 # MAIN METHOD ----------------------------------------------------------------------------------------------
@@ -190,4 +190,4 @@ if __name__ == '__main__':
 
     # Wait behaviors
     ab1.join()
-    print 'The End'
+    print('The End')

@@ -111,13 +111,13 @@ def agentBehaviour(queue):
 def payDelivery():
 
     # TODO Record the purchase.
-    print "PayDelivery"
+    print("PayDelivery")
 
 
 def confirmTransfer():
 
     # TODO Confirm the transfer, deliver receipt and communicate with Products Agent.
-    print "ConfirmTransfer"
+    print("ConfirmTransfer")
 
 
 # MAIN METHOD ----------------------------------------------------------------------------------------------
@@ -133,4 +133,4 @@ if __name__ == '__main__':
 
     # Wait behaviors
     ab1.join()
-    print 'The End'
+    print('The End')

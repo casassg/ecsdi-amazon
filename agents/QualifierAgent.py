@@ -111,13 +111,13 @@ def agentBehaviour(queue):
 def recommend():
 
     # TODO Recommend some products to user.
-    print "Recommend"
+    print("Recommend")
 
 
 def value():
 
     # TODO Value some products by user.
-    print "Value"
+    print("Value")
 
 
 # MAIN METHOD ----------------------------------------------------------------------------------------------
@@ -133,4 +133,4 @@ if __name__ == '__main__':
 
     # Wait behaviors
     ab1.join()
-    print 'The End'
+    print('The End')

@@ -111,25 +111,25 @@ def agentBehaviour(queue):
 def requestOffer():
 
     # TODO Request Offer.
-    print "Request Offer"
+    print("Request Offer")
 
 
 def sendCounterOffer():
 
     # TODO Send Counter Offer.
-    print "Send Counter Offer"
+    print("Send Counter Offer")
 
 
 def valueOffer():
 
     # TODO Value Offer.
-    print "Value Offer"
+    print("Value Offer")
 
 
 def acceptOffer():
 
     # TODO Accept Offer.
-    print "Accept Offer"
+    print("Accept Offer")
 
 
 # MAIN METHOD ----------------------------------------------------------------------------------------------
@@ -145,4 +145,4 @@ if __name__ == '__main__':
 
     # Wait behaviors
     ab1.join()
-    print 'The End'
+    print('The End')
