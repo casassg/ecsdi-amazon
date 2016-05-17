@@ -20,6 +20,8 @@ from utils.FlaskServer import shutdown_server
 from utils.Agent import Agent
 
 # Author
+from utils.OntologyNamespaces import ECSDI
+
 __author__ = 'amazadonde'
 
 # AGENT ATTRIBUTES ----------------------------------------------------------------------------------------
@@ -116,7 +118,7 @@ def confirmTransfer():
     print("ConfirmTransfer")
 
 
-def writeSells(paid, totalPrice, productList, sendTo):
+def writeSells(paid, totalPrice, productsList, sendTo):
     URI = "http://www.owl-ontologies.com/ECSDIAmazon.owl#"
     millis = int(round(time.time() * 1000))
     URISell = URI + "Compra_" + str(millis)
@@ -125,12 +127,12 @@ def writeSells(paid, totalPrice, productList, sendTo):
 
     g = Graph()
     g.parse(ontologyFile, format='turtle')
-    g.add((URIRef(URISell), RDF.type, FOAF.Compra))
-    g.add((URIRef(URISell), FOAF.Pagat, Literal(paid)))
-    g.add((URIRef(URISell), FOAF.Precio_total, Literal(totalPrice)))
-    g.add((URIRef(URISell), FOAF.Enviar_a, URIRef(URI + sendTo)))
-    for p in productList:
-        g.add((URIRef(URISell), FOAF.Productos, URIRef(URI + p)))
+    g.add((URIRef(URISell), RDF.type, ECSDI.Compra))
+    g.add((URIRef(URISell), ECSDI.Pagat, Literal(paid)))
+    g.add((URIRef(URISell), ECSDI.Precio_total, Literal(totalPrice)))
+    g.add((URIRef(URISell), ECSDI.Enviar_a, URIRef(URI + sendTo)))
+    for p in productsList:
+        g.add((URIRef(URISell), ECSDI.Productos, URIRef(URI + p)))
 
     g.serialize(destination='../data/data', format='turtle')
 
@@ -138,8 +140,8 @@ def writeSells(paid, totalPrice, productList, sendTo):
 # MAIN METHOD ----------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
-    productList = ['Producto_1', 'Producto_2']
-    writeSells(0, 10.20, productList, 'Ciudad_1')
+    productList = ['Producto_1', 'Producto_3']
+    writeSells(1, 15.30, productList, 'Ciudad_1')
 
     # Run behaviors
     # ab1 = Process(target=agentBehaviour, args=(queue,))
