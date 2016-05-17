@@ -171,6 +171,7 @@ def sell_products(urlProductsList):
                             receiver=FinancialAgent.uri,
                             content=rsp_obj,
                             msgcnt=messageCount)
+    print(get_message_properties(message))
     # gr = send_message(message, FinancialAgent.address)
     # messageCount += 1
     # return gr
