@@ -7,44 +7,82 @@ Agente usando los servicios web de Flask
 Tiene una funcion AgentBehavior1 que se lanza como un thread concurrente
 Asume que el agente de registro esta en el puerto 9000
 """
-import sys
-from flask import Flask
-from multiprocessing import Process, Queue
+import argparse
 import socket
-from rdflib import Namespace, Graph
+import sys
+from multiprocessing import Queue
+from multiprocessing.context import Process
+
+from flask import Flask, request
+from prettytable import PrettyTable
+from rdflib import Namespace, Literal
+from rdflib.namespace import FOAF
 
 from agents.FinancialAgent import FinancialAgent
-from utils.FlaskServer import shutdown_server
-from utils.Agent import Agent
-from prettytable import PrettyTable
 from utils.ACLMessages import *
-
+from utils.Agent import Agent
+from utils.FlaskServer import shutdown_server
 # Author
+from utils.Logging import config_logger
+from utils.OntologyNamespaces import DSO
+
 __author__ = 'amazadonde'
+
+# Definimos los parametros de la linea de comandos
+parser = argparse.ArgumentParser()
+parser.add_argument('--open', help="Define si el servidor est abierto al exterior o no", action='store_true',
+                    default=False)
+parser.add_argument('--port', type=int, help="Puerto de comunicacion del agente")
+parser.add_argument('--dhost', default='localhost', help="Host del agente de directorio")
+parser.add_argument('--dport', type=int, help="Puerto de comunicacion del agente de directorio")
+
+# Logging
+logger = config_logger(level=1)
+
+# parsing de los parametros de la linea de comandos
+args = parser.parse_args()
+
+# Configuration stuff
+if args.port is None:
+    port = 9002
+else:
+    port = args.port
+
+if args.open is None:
+    hostname = '0.0.0.0'
+else:
+    hostname = socket.gethostname()
+
+if args.dport is None:
+    dport = 9000
+else:
+    dport = args.dport
+
+if args.dhost is None:
+    dhostname = socket.gethostname()
+else:
+    dhostname = args.dhost
 
 # AGENT ATTRIBUTES ----------------------------------------------------------------------------------------
 
-# Configuration stuff
-hostname = socket.gethostname()
-port = 9025
-
 # Agent Namespace
-agn = Namespace("http://www.owl-ontologies.com/ECSDIAmazon.owl#")
+agn = Namespace("http://www.agentes.org#")
 
 # Message Count
 messageCount = 0
 
 # Data Agent
-SellerAgent = Agent('AgenteVendedor',
-                    agn.AgenteVendedor,
+# Datos del Agente
+SellerAgent = Agent('SellerAgent',
+                    agn.SellerAgent,
                     'http://%s:%d/comm' % (hostname, port),
                     'http://%s:%d/Stop' % (hostname, port))
 
 # Directory agent address
 DirectoryAgent = Agent('DirectoryAgent',
                        agn.Directory,
-                       'http://%s:9000/Register' % hostname,
-                       'http://%s:9000/Stop' % hostname)
+                       'http://%s:%d/Register' % (dhostname, dport),
+                       'http://%s:%d/Stop' % (dhostname, dport))
 
 # Global triplestore graph
 dsGraph = Graph()
@@ -58,15 +96,95 @@ app = Flask(__name__)
 
 # AGENT FUNCTIONS ------------------------------------------------------------------------------------------
 
+def register_message():
+    """
+    Envia un mensaje de registro al servicio de registro
+    usando una performativa Request y una accion Register del
+    servicio de directorio
+
+    :param gmess:
+    :return:
+    """
+
+    logger.info('Nos registramos')
+
+    global messageCount
+
+    gmess = Graph()
+
+    # Construimos el mensaje de registro
+    gmess.bind('foaf', FOAF)
+    gmess.bind('dso', DSO)
+    reg_obj = agn[SellerAgent.name + '-Register']
+    gmess.add((reg_obj, RDF.type, DSO.Register))
+    gmess.add((reg_obj, DSO.Uri, SellerAgent.uri))
+    gmess.add((reg_obj, FOAF.Name, Literal(SellerAgent.name)))
+    gmess.add((reg_obj, DSO.Address, Literal(SellerAgent.address)))
+    gmess.add((reg_obj, DSO.AgentType, DSO.HotelsAgent))
+
+    # Lo metemos en un envoltorio FIPA-ACL y lo enviamos
+    gr = send_message(
+        build_message(gmess, perf=ACL.request,
+                      sender=SellerAgent.uri,
+                      receiver=DirectoryAgent.uri,
+                      content=reg_obj,
+                      msgcnt=messageCount),
+        DirectoryAgent.address)
+    messageCount += 1
+
+    return gr
+
+
 @app.route("/comm")
 def communication():
     """
     Communication Entrypoint
     """
 
+    logger.info('Peticion de informacion recibida')
     global dsGraph
     global messageCount
-    pass
+
+    message = request.args['content']
+    gm = Graph()
+    gm.parse(data=message)
+
+    msgdic = get_message_properties(gm)
+
+    if msgdic is None:
+        # Si no es, respondemos que no hemos entendido el mensaje
+        gr = build_message(Graph(), ACL['not-understood'], sender=SellerAgent.uri, msgcnt=messageCount)
+    else:
+        # Obtenemos la performativa
+        perf = msgdic['performative']
+
+        if perf != ACL.request:
+            # Si no es un request, respondemos que no hemos entendido el mensaje
+            gr = build_message(Graph(), ACL['not-understood'], sender=SellerAgent.uri, msgcnt=messageCount)
+        else:
+            # Extraemos el objeto del contenido que ha de ser una accion de la ontologia de acciones del agente
+            # de registro
+
+            # Averiguamos el tipo de la accion
+            if 'content' in msgdic:
+                content = msgdic['content']
+                accion = gm.value(subject=content, predicate=RDF.type)
+
+            # Aqui realizariamos lo que pide la accion
+
+
+
+            # Por ahora simplemente retornamos un Inform-done
+            gr = build_message(Graph(),
+                               ACL['inform-done'],
+                               sender=SellerAgent.uri,
+                               msgcnt=messageCount,
+                               receiver=msgdic['sender'], )
+    messageCount += 1
+
+    logger.info('Respondemos a la peticion')
+
+    return gr.serialize(format='xml')
 
 
 @app.route("/Stop")
@@ -91,16 +209,14 @@ def tidyUp():
     pass
 
 
-def agentBehaviour(queue):
+def agent_behaviour(queue):
     """
     Agent Behaviour in a concurrent thread.
     :param queue: the queue
     :return: something
     """
 
-    # TODO Behaviour
-
-    pass
+    gr = register_message()
 
 
 # DETERMINATE AGENT FUNCTIONS ------------------------------------------------------------------------------
@@ -165,7 +281,7 @@ def sell_products(urlProductsList):
     rsp_obj = agn['Productos']
 
     # TODO Insert into message the product list
-    message = build_message(graphMessage=Graph(),
+    message = build_message(gmess=Graph(),
                             perf=ACL.request,
                             sender=SellerAgent.uri,
                             receiver=FinancialAgent.uri,
@@ -176,6 +292,7 @@ def sell_products(urlProductsList):
     # messageCount += 1
     # return gr
 
+
 # MAIN METHOD ----------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
@@ -185,12 +302,12 @@ if __name__ == '__main__':
 
     # ------------------------------------------------------------------------------------------------------
     # Run behaviors
-    # ab1 = Process(target=agentBehaviour, args=(queue,))
-    # ab1.start()
+    ab1 = Process(target=agent_behaviour, args=(queue,))
+    ab1.start()
 
     # Run server
     app.run(host=hostname, port=port)
 
     # Wait behaviors
-    # ab1.join()
-    # print 'The End'
+    ab1.join()
+    print('The End')
