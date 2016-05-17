@@ -10,21 +10,18 @@ Asume que el agente de registro esta en el puerto 9000
 import argparse
 import socket
 import sys
-from multiprocessing import Queue
-from multiprocessing.context import Process
+from multiprocessing import Queue, Process
 
 from flask import Flask, request
 from prettytable import PrettyTable
-from rdflib import Namespace, Literal
-from rdflib.namespace import FOAF
 
 from agents.FinancialAgent import FinancialAgent
+from utils import AgentTypes
 from utils.ACLMessages import *
 from utils.Agent import Agent
 from utils.FlaskServer import shutdown_server
 # Author
 from utils.Logging import config_logger
-from utils.OntologyNamespaces import DSO
 
 __author__ = 'amazadonde'
 
@@ -33,7 +30,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--open', help="Define si el servidor est abierto al exterior o no", action='store_true',
                     default=False)
 parser.add_argument('--port', type=int, help="Puerto de comunicacion del agente")
-parser.add_argument('--dhost', default='localhost', help="Host del agente de directorio")
+parser.add_argument('--dhost', default=socket.gethostname(), help="Host del agente de directorio")
 parser.add_argument('--dport', type=int, help="Puerto de comunicacion del agente de directorio")
 
 # Logging
@@ -52,6 +49,7 @@ if args.open is None:
     hostname = '0.0.0.0'
 else:
     hostname = socket.gethostname()
+    print(hostname)
 
 if args.dport is None:
     dport = 9000
@@ -60,6 +58,7 @@ else:
 
 if args.dhost is None:
     dhostname = socket.gethostname()
+    print(dhostname)
 else:
     dhostname = args.dhost
 
@@ -110,26 +109,7 @@ def register_message():
 
     global messageCount
 
-    gmess = Graph()
-
-    # Construimos el mensaje de registro
-    gmess.bind('foaf', FOAF)
-    gmess.bind('dso', DSO)
-    reg_obj = agn[SellerAgent.name + '-Register']
-    gmess.add((reg_obj, RDF.type, DSO.Register))
-    gmess.add((reg_obj, DSO.Uri, SellerAgent.uri))
-    gmess.add((reg_obj, FOAF.Name, Literal(SellerAgent.name)))
-    gmess.add((reg_obj, DSO.Address, Literal(SellerAgent.address)))
-    gmess.add((reg_obj, DSO.AgentType, DSO.HotelsAgent))
-
-    # Lo metemos en un envoltorio FIPA-ACL y lo enviamos
-    gr = send_message(
-        build_message(gmess, perf=ACL.request,
-                      sender=SellerAgent.uri,
-                      receiver=DirectoryAgent.uri,
-                      content=reg_obj,
-                      msgcnt=messageCount),
-        DirectoryAgent.address)
+    gr = register_agent(SellerAgent, DirectoryAgent, AgentTypes.SellerAgentType, messageCount)
     messageCount += 1
 
     return gr

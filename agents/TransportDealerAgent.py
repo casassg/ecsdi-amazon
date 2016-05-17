@@ -14,6 +14,9 @@ from flask import Flask
 from multiprocessing import Process, Queue
 import socket
 from rdflib import Namespace, Graph
+
+from utils import AgentTypes
+from utils.ACLMessages import get_agent_info
 from utils.FlaskServer import shutdown_server
 from utils.Agent import Agent
 
@@ -27,16 +30,16 @@ hostname = socket.gethostname()
 port = 9030
 
 # Agent Namespace
-agn = Namespace("http://www.agentes.org#") #Revisar url -> definir nuevo espacio de nombre incluyendo agentes nuestros
+agn = Namespace("http://www.agentes.org#")  # Revisar url -> definir nuevo espacio de nombre incluyendo agentes nuestros
 
 # Message Count
 messageCount = 0
 
 # Data Agent
 TransportDealerAgent = Agent('AgenteNegociadorTransporte',
-                      agn.AgenteNegociadorTransporte,
-                      'http://%s:%d/comm' % (hostname, port),
-                      'http://%s:%d/Stop' % (hostname, port))
+                             agn.AgenteNegociadorTransporte,
+                             'http://%s:%d/comm' % (hostname, port),
+                             'http://%s:%d/Stop' % (hostname, port))
 
 # Directory agent address
 DirectoryAgent = Agent('DirectoryAgent',
@@ -58,7 +61,6 @@ app = Flask(__name__)
 
 @app.route("/comm")
 def communication():
-
     """
     Communication Entrypoint
     """
@@ -70,7 +72,6 @@ def communication():
 
 @app.route("/Stop")
 def stop():
-
     """
     Entrypoint to the agent
     :return: string
@@ -82,7 +83,6 @@ def stop():
 
 
 def tidyUp():
-
     """
     Previous actions for the agent.
     """
@@ -93,7 +93,6 @@ def tidyUp():
 
 
 def agentBehaviour(queue):
-
     """
     Agent Behaviour in a concurrent thread.
 
@@ -109,25 +108,21 @@ def agentBehaviour(queue):
 # DETERMINATE AGENT FUNCTIONS ------------------------------------------------------------------------------
 
 def requestOffer():
-
     # TODO Request Offer.
     print("Request Offer")
 
 
 def sendCounterOffer():
-
     # TODO Send Counter Offer.
     print("Send Counter Offer")
 
 
 def valueOffer():
-
     # TODO Value Offer.
     print("Value Offer")
 
 
 def acceptOffer():
-
     # TODO Accept Offer.
     print("Accept Offer")
 
@@ -135,10 +130,12 @@ def acceptOffer():
 # MAIN METHOD ----------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
-
     # Run behaviors
     ab1 = Process(target=agentBehaviour, args=(queue,))
     ab1.start()
+
+    print get_agent_info(AgentTypes.SellerAgentType, DirectoryAgent, TransportDealerAgent, messageCount)
+    messageCount += 1
 
     # Run server
     app.run(host=hostname, port=port)

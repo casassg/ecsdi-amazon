@@ -8,12 +8,16 @@ Created on 08/02/2014
 
 @author: javier
 """
+from utils.Agent import Agent
+
 __author__ = 'amazdonde'
 
 import requests
-from rdflib import Graph
-from rdflib.namespace import RDF
-from utils.OntologyNamespaces import ACL
+from rdflib import Graph, Namespace, Literal
+from rdflib.namespace import RDF, FOAF
+from utils.OntologyNamespaces import ACL, DSO
+
+agn = Namespace("http://www.agentes.org#")
 
 
 def build_message(gmess, perf, sender=None, receiver=None, content=None, msgcnt=0):
@@ -82,3 +86,48 @@ def get_message_properties(msg):
             if val is not None:
                 msgdic[key] = val
     return msgdic
+
+
+def get_agent_info(type_, directory_agent, sender, msgcnt):
+    gmess = Graph()
+    # Construimos el mensaje de registro
+    gmess.bind('foaf', FOAF)
+    gmess.bind('dso', DSO)
+    ask_obj = agn[sender.name + '-Search']
+
+    gmess.add((ask_obj, RDF.type, DSO.Search))
+    gmess.add((ask_obj, DSO.AgentType, type_))
+    gr = send_message(
+        build_message(gmess, perf=ACL.request, sender=sender.uri, receiver=directory_agent.uri, msgcnt=msgcnt,
+                      content=ask_obj),
+        directory_agent.address
+    )
+    dic = get_message_properties(gr)
+    content = dic['content']
+
+    address = gr.value(subject=content, predicate=DSO.Address)
+    url = gr.value(subject=content, predicate=DSO.Uri)
+    name = gr.value(subject=content, predicate=FOAF.name)
+
+    return Agent(name, url, address, None)
+
+
+def register_agent(origin_agent, directory_agent, type_, msg_cnt):
+    gmess = Graph()
+    # Construimos el mensaje de registro
+    gmess.bind('foaf', FOAF)
+    gmess.bind('dso', DSO)
+    reg_obj = agn[origin_agent.name + '-Register']
+    gmess.add((reg_obj, RDF.type, DSO.Register))
+    gmess.add((reg_obj, DSO.Uri, origin_agent.uri))
+    gmess.add((reg_obj, FOAF.Name, Literal(origin_agent.name)))
+    gmess.add((reg_obj, DSO.Address, Literal(origin_agent.address)))
+    gmess.add((reg_obj, DSO.AgentType, type_))
+    # Lo metemos en un envoltorio FIPA-ACL y lo enviamos
+    gr = send_message(
+        build_message(gmess, perf=ACL.request,
+                      sender=origin_agent.uri,
+                      receiver=directory_agent.uri,
+                      content=reg_obj,
+                      msgcnt=msg_cnt),
+        directory_agent.address)
