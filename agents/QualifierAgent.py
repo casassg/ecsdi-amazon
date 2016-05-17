@@ -84,10 +84,11 @@ def stop():
 def tidyUp():
 
     """
-    Previous actions for the agent.
-    """
+    Acciones previas a parar el agente
 
-    # TODO Actions
+    """
+    global cola1
+    cola1.put(0)
 
     pass
 

@@ -58,6 +58,11 @@ default:Enviar_a a owl:ObjectProperty ;
     rdfs:domain default:Compra ;
     rdfs:range default:Ciudad .
 
+default:Envio_1463519476587 a ns1:Envio ;
+    ns1:Envia default:Producto_1,
+        default:Producto_2,
+        default:Producto_3 .
+
 default:Existe a owl:ObjectProperty ;
     rdfs:domain default:Pedir_disponibilidad ;
     rdfs:range default:Existencia .
@@ -167,13 +172,6 @@ default:Prioridad a owl:DatatypeProperty ;
             owl:unionOf ( default:Peticion_compra default:Lote_producto ) ] ;
     rdfs:range xsd:int .
 
-default:Producto_3 a default:Producto ;
-    default:Id "3"^^xsd:int ;
-    default:Marca "Elephone"^^xsd:string ;
-    default:Modelo "P7000"^^xsd:string ;
-    default:Nombre "Pioneer"^^xsd:string ;
-    default:Precio "200.0"^^xsd:float .
-
 default:Producto_4 a default:Producto ;
     default:Id "4"^^xsd:int ;
     default:Marca "Google"^^xsd:string ;
@@ -253,19 +251,12 @@ default:Enviar_lot a owl:Class ;
 default:Pedir_disponibilidad a owl:Class ;
     rdfs:subClassOf default:Accion .
 
-default:Producto_1 a default:Producto ;
-    default:Id "1"^^xsd:int ;
-    default:Marca "Nintendo"^^xsd:string ;
-    default:Modelo "Choripan 3DS"^^xsd:string ;
-    default:Nombre "Nintendo Choripan"^^xsd:string ;
-    default:Precio "100.0"^^xsd:float .
-
-default:Producto_2 a default:Producto ;
-    default:Id "2"^^xsd:int ;
-    default:Marca "Garmin"^^xsd:string ;
-    default:Modelo "325"^^xsd:string ;
-    default:Nombre "Garmin 325"^^xsd:string ;
-    default:Precio "308.0"^^xsd:float .
+default:Producto_3 a default:Producto ;
+    default:Id "3"^^xsd:int ;
+    default:Marca "Elephone"^^xsd:string ;
+    default:Modelo "P7000"^^xsd:string ;
+    default:Nombre "Pioneer"^^xsd:string ;
+    default:Precio "200.0"^^xsd:float .
 
 default:Producto_externo a owl:Class ;
     rdfs:subClassOf default:Producto .
@@ -293,6 +284,20 @@ default:Peticion_compra a owl:Class ;
 
 default:Plazos_entrega a owl:Class ;
     rdfs:subClassOf default:Restriccions .
+
+default:Producto_1 a default:Producto ;
+    default:Id "1"^^xsd:int ;
+    default:Marca "Nintendo"^^xsd:string ;
+    default:Modelo "Choripan 3DS"^^xsd:string ;
+    default:Nombre "Nintendo Choripan"^^xsd:string ;
+    default:Precio "100.0"^^xsd:float .
+
+default:Producto_2 a default:Producto ;
+    default:Id "2"^^xsd:int ;
+    default:Marca "Garmin"^^xsd:string ;
+    default:Modelo "325"^^xsd:string ;
+    default:Nombre "Garmin 325"^^xsd:string ;
+    default:Precio "308.0"^^xsd:float .
 
 default:Rango_precio a owl:Class ;
     rdfs:subClassOf default:Restriccions .

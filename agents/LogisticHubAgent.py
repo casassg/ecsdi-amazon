@@ -9,11 +9,23 @@ Agente usando los servicios web de Flask
 Tiene una funcion AgentBehavior1 que se lanza como un thread concurrente
 Asume que el agente de registro esta en el puerto 9000
 """
+from numbers import Complex
+from random import randint
 
+
+import time
+
+import datetime as dateTime
 from flask import Flask
 from multiprocessing import Process, Queue
 import socket
-from rdflib import Namespace, Graph
+
+
+from pyparsing import Literal
+from rdflib import Namespace, Graph, URIRef, RDF, namespace
+from rdflib.namespace import FOAF, XSD
+from rdflib.plugins.parsers.pyRdfa import ns_xsd
+
 from utils.FlaskServer import shutdown_server
 from utils.Agent import Agent
 
@@ -84,7 +96,8 @@ def tidyUp():
     Previous actions for the agent.
     """
 
-    # TODO Actions
+    global cola
+    cola.add(0)
 
     pass
 
@@ -97,7 +110,15 @@ def agentBehaviour(queue):
     :return: something
     """
 
-    # TODO Behaviour
+    fin = False
+    while not fin:
+        while cola.empty():
+            pass
+        v = cola.get()
+        if v == 0:
+            fin = True
+        else:
+            print v
 
     pass
 
@@ -121,18 +142,49 @@ def requestTransport():
     # TODO Discuss with Transport Dealer.
     print("Request Transport")
 
+def writeSends(productList,deliverDate):
+    URI = "http://www.owl-ontologies.com/ECSDIAmazon.owl#"
+
+    ECSDI = Namespace(URI)
+
+    n = int(round(time.time() * 1000))
+    data = URI + "Envio_" + str(n)
+
+    ontologyFile = open('../data/data')
+
+    gm = Graph()
+    gm.parse(ontologyFile, format='turtle')
+    gm.add((URIRef(data), RDF.type, ECSDI.Envio))
+    #gm.add((URIRef(data), ECSDI.Fecha_de_entrega, Literal(deliverDate)))
+    for a in productList:
+        gm.add((URIRef(data), ECSDI.Envia,URIRef(URI+a)))
+
+    gm.serialize(destination='../data/data', format='turtle')
+
+#def writeExistences(exists, qtt):
+ #   URI = "http://www.owl-ontologies.com/ECSDIAmazon.owl#"
+    #data = Namespace(URI)
+
+  #  gm = Graph()
+   # gm.add()
 
 # MAIN METHOD ----------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
 
     # Run behaviors
-    ab1 = Process(target=agentBehaviour, args=(queue,))
-    ab1.start()
+    #ab1 = Process(target=agentBehaviour, args=(queue,))
+    #ab1.start()
 
     # Run server
-    app.run(host=hostname, port=port)
+    #app.run(host=hostname, port=port)
 
     # Wait behaviors
-    ab1.join()
+    #ab1.join()
+
+    lista = ['Producto_1', 'Producto_2', 'Producto_3']
+    writeSends(lista,dateTime.date.today())
+
+    #print(dateTime.date.today())
+
     print('The End')
