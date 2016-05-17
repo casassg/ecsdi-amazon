@@ -9,27 +9,19 @@ Agente usando los servicios web de Flask
 Tiene una funcion AgentBehavior1 que se lanza como un thread concurrente
 Asume que el agente de registro esta en el puerto 9000
 """
-from numbers import Complex
-from random import randint
-
-
 import time
-
 import datetime as dateTime
 from flask import Flask
 from multiprocessing import Process, Queue
 import socket
-
-
-from pyparsing import Literal
-from rdflib import Namespace, Graph, URIRef, RDF, namespace
-from rdflib.namespace import FOAF, XSD
-from rdflib.plugins.parsers.pyRdfa import ns_xsd
+from rdflib import Namespace, Graph, URIRef, RDF
 
 from utils.FlaskServer import shutdown_server
 from utils.Agent import Agent
 
 # Author
+from utils.OntologyNamespaces import ECSDI
+
 __author__ = 'amazadonde'
 
 # AGENT ATTRIBUTES ----------------------------------------------------------------------------------------
@@ -39,16 +31,16 @@ hostname = socket.gethostname()
 port = 9035
 
 # Agent Namespace
-agn = Namespace("http://www.agentes.org#") #Revisar url -> definir nuevo espacio de nombre incluyendo agentes nuestros
+agn = Namespace("http://www.agentes.org#")  # Revisar url -> definir nuevo espacio de nombre incluyendo agentes nuestros
 
 # Message Count
 messageCount = 0
 
 # Data Agent
 LogisticsAgent = Agent('AgenteLogistics',
-                      agn.AgenteLogistics,
-                      'http://%s:%d/comm' % (hostname, port),
-                      'http://%s:%d/Stop' % (hostname, port))
+                       agn.AgenteLogistics,
+                       'http://%s:%d/comm' % (hostname, port),
+                       'http://%s:%d/Stop' % (hostname, port))
 
 # Directory agent address
 DirectoryAgent = Agent('DirectoryAgent',
@@ -126,27 +118,22 @@ def agentBehaviour(queue):
 # DETERMINATE AGENT FUNCTIONS ------------------------------------------------------------------------------
 
 def sendProducts():
-
     # TODO Receive communication of send something and send it.
     print("Send Products")
 
 
 def recordDeliveries():
-
     # TODO Record Receive communication of availability discussion and record deliveries.
     print("Record Deliveries")
 
 
 def requestTransport():
-
     # TODO Discuss with Transport Dealer.
     print("Request Transport")
 
-def writeSends(productList,deliverDate):
+
+def writeSends(productList, deliverDate):
     URI = "http://www.owl-ontologies.com/ECSDIAmazon.owl#"
-
-    ECSDI = Namespace(URI)
-
     n = int(round(time.time() * 1000))
     data = URI + "Envio_" + str(n)
 
@@ -155,36 +142,36 @@ def writeSends(productList,deliverDate):
     gm = Graph()
     gm.parse(ontologyFile, format='turtle')
     gm.add((URIRef(data), RDF.type, ECSDI.Envio))
-    #gm.add((URIRef(data), ECSDI.Fecha_de_entrega, Literal(deliverDate)))
+    # gm.add((URIRef(data), ECSDI.Fecha_de_entrega, Literal(deliverDate)))
     for a in productList:
-        gm.add((URIRef(data), ECSDI.Envia,URIRef(URI+a)))
+        gm.add((URIRef(data), ECSDI.Envia, URIRef(URI + a)))
 
     gm.serialize(destination='../data/data', format='turtle')
 
-#def writeExistences(exists, qtt):
- #   URI = "http://www.owl-ontologies.com/ECSDIAmazon.owl#"
-    #data = Namespace(URI)
 
-  #  gm = Graph()
-   # gm.add()
+# def writeExistences(exists, qtt):
+#   URI = "http://www.owl-ontologies.com/ECSDIAmazon.owl#"
+# data = Namespace(URI)
+
+#  gm = Graph()
+# gm.add()
 
 # MAIN METHOD ----------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
-
     # Run behaviors
-    #ab1 = Process(target=agentBehaviour, args=(queue,))
-    #ab1.start()
+    # ab1 = Process(target=agentBehaviour, args=(queue,))
+    # ab1.start()
 
     # Run server
-    #app.run(host=hostname, port=port)
+    # app.run(host=hostname, port=port)
 
     # Wait behaviors
-    #ab1.join()
+    # ab1.join()
 
-    lista = ['Producto_1', 'Producto_2', 'Producto_3']
-    writeSends(lista,dateTime.date.today())
+    productsList = ['Producto_1', 'Producto_2', 'Producto_3']
+    writeSends(productsList, dateTime.date.today())
 
-    #print(dateTime.date.today())
+    # print(dateTime.date.today())
 
     print('The End')

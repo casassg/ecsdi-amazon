@@ -14,7 +14,6 @@ from flask import Flask
 from multiprocessing import Process, Queue
 import socket
 from rdflib import Namespace, Graph, URIRef, RDF, Literal
-from rdflib.namespace import FOAF
 
 from utils.FlaskServer import shutdown_server
 from utils.Agent import Agent
