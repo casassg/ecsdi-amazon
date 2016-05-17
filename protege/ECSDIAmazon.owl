@@ -335,6 +335,14 @@
     <Precio rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
     >100.0</Precio>
   </Producto>
+  <Ciudad rdf:ID="Ciudad_1">
+    <Longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
+    >2.188247</Longitud>
+    <Nombre rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Barcelona</Nombre>
+    <Latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
+    >41.398373</Latitud>
+  </Ciudad>
 </rdf:RDF>
 
 <!-- Created with Protege (with OWL Plugin 3.5, Build 663)  http://protege.stanford.edu -->

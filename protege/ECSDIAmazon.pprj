@@ -1,4 +1,4 @@
-; Fri May 13 10:02:50 CEST 2016
+; Tue May 17 20:49:37 CEST 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -6,11 +6,11 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
+		[ECSDIAmazon_ProjectKB_Class84]
+		[ECSDIAmazon_ProjectKB_Class85]
 		[ECSDIAmazon_ProjectKB_Class86]
 		[ECSDIAmazon_ProjectKB_Class87]
-		[ECSDIAmazon_ProjectKB_Class88]
-		[ECSDIAmazon_ProjectKB_Class89]
-		[ECSDIAmazon_ProjectKB_Class90]))
+		[ECSDIAmazon_ProjectKB_Class88]))
 
 ([CLSES_TAB] of  Widget
 
@@ -260,36 +260,36 @@
 ([ECSDIAmazon_ProjectKB_Class8] of  Property_List
 )
 
-([ECSDIAmazon_ProjectKB_Class86] of  String
+([ECSDIAmazon_ProjectKB_Class84] of  String
 
 	(name ":INSTANCE-ANNOTATION")
 	(string_value "%3AANNOTATION-TEXT"))
 
-([ECSDIAmazon_ProjectKB_Class87] of  String
+([ECSDIAmazon_ProjectKB_Class85] of  String
 
 	(name "http://www.w3.org/2002/07/owl#Thing")
 	(string_value "%3ANAME"))
 
-([ECSDIAmazon_ProjectKB_Class88] of  String
+([ECSDIAmazon_ProjectKB_Class86] of  String
 
 	(name "http://www.w3.org/2002/07/owl#Class")
 	(string_value "%3ANAME"))
 
-([ECSDIAmazon_ProjectKB_Class89] of  String
+([ECSDIAmazon_ProjectKB_Class87] of  String
 
 	(name ":PAL-CONSTRAINT")
 	(string_value "%3APAL-NAME"))
+
+([ECSDIAmazon_ProjectKB_Class88] of  String
+
+	(name ":META-CLASS")
+	(string_value "%3ANAME"))
 
 ([ECSDIAmazon_ProjectKB_Class9] of  Widget
 
 	(is_hidden TRUE)
 	(property_list [ECSDIAmazon_ProjectKB_Class10])
 	(widget_class_name "edu.stanford.smi.protege.query.LuceneQueryPlugin"))
-
-([ECSDIAmazon_ProjectKB_Class90] of  String
-
-	(name ":META-CLASS")
-	(string_value "%3ANAME"))
 
 ([empty.owl_ProjectKB_Class5] of  String
 
@@ -1050,6 +1050,9 @@
 
 	(boolean_value FALSE)
 	(name "DisabledByUser"))
+
+([KB_634046_Class0] of  Map
+)
 
 ([KB_635552_Instance_0] of  Widget
 
@@ -3284,9 +3287,6 @@
 	(name "http://www.w3.org/2002/07/owl#Ontology")
 	(property_list [XY_Instance_195])
 	(widget_class_name "edu.stanford.smi.protegex.owl.ui.widget.OWLFormWidget"))
-
-([KB_781649_Class0] of  Map
-)
 
 ([KB_865583_Instance_10] of  Widget
 
