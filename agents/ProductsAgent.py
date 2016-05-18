@@ -14,14 +14,12 @@ from flask import Flask, request
 from multiprocessing import Process, Queue
 import socket
 from rdflib import Namespace, Graph, logger, RDF
-
 from utils.ACLMessages import get_message_properties, build_message
 from utils.FlaskServer import shutdown_server
 from utils.Agent import Agent
-
-# Author
 from utils.OntologyNamespaces import ACL
 
+# Author
 __author__ = 'amazadonde'
 
 # AGENT ATTRIBUTES ----------------------------------------------------------------------------------------
@@ -139,12 +137,12 @@ def stop():
 
 
 def tidyUp():
-
     """
     Previous actions for the agent.
     """
 
-    # TODO Actions
+    global queue
+    queue.add(0)
 
     pass
 

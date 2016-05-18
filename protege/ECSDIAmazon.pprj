@@ -1,4 +1,4 @@
-; Tue May 17 20:49:37 CEST 2016
+; Tue May 17 23:43:12 CEST 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -6,11 +6,11 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
-		[ECSDIAmazon_ProjectKB_Class84]
-		[ECSDIAmazon_ProjectKB_Class85]
-		[ECSDIAmazon_ProjectKB_Class86]
-		[ECSDIAmazon_ProjectKB_Class87]
-		[ECSDIAmazon_ProjectKB_Class88]))
+		[ECSDIAmazon_ProjectKB_Class55]
+		[ECSDIAmazon_ProjectKB_Class56]
+		[ECSDIAmazon_ProjectKB_Class57]
+		[ECSDIAmazon_ProjectKB_Class58]
+		[ECSDIAmazon_ProjectKB_Class59]))
 
 ([CLSES_TAB] of  Widget
 
@@ -248,6 +248,31 @@
 ([ECSDIAmazon_ProjectKB_Class54] of  Property_List
 )
 
+([ECSDIAmazon_ProjectKB_Class55] of  String
+
+	(name ":INSTANCE-ANNOTATION")
+	(string_value "%3AANNOTATION-TEXT"))
+
+([ECSDIAmazon_ProjectKB_Class56] of  String
+
+	(name "http://www.w3.org/2002/07/owl#Thing")
+	(string_value "%3ANAME"))
+
+([ECSDIAmazon_ProjectKB_Class57] of  String
+
+	(name "http://www.w3.org/2002/07/owl#Class")
+	(string_value "%3ANAME"))
+
+([ECSDIAmazon_ProjectKB_Class58] of  String
+
+	(name ":PAL-CONSTRAINT")
+	(string_value "%3APAL-NAME"))
+
+([ECSDIAmazon_ProjectKB_Class59] of  String
+
+	(name ":META-CLASS")
+	(string_value "%3ANAME"))
+
 ([ECSDIAmazon_ProjectKB_Class6] of  Property_List
 )
 
@@ -259,31 +284,6 @@
 
 ([ECSDIAmazon_ProjectKB_Class8] of  Property_List
 )
-
-([ECSDIAmazon_ProjectKB_Class84] of  String
-
-	(name ":INSTANCE-ANNOTATION")
-	(string_value "%3AANNOTATION-TEXT"))
-
-([ECSDIAmazon_ProjectKB_Class85] of  String
-
-	(name "http://www.w3.org/2002/07/owl#Thing")
-	(string_value "%3ANAME"))
-
-([ECSDIAmazon_ProjectKB_Class86] of  String
-
-	(name "http://www.w3.org/2002/07/owl#Class")
-	(string_value "%3ANAME"))
-
-([ECSDIAmazon_ProjectKB_Class87] of  String
-
-	(name ":PAL-CONSTRAINT")
-	(string_value "%3APAL-NAME"))
-
-([ECSDIAmazon_ProjectKB_Class88] of  String
-
-	(name ":META-CLASS")
-	(string_value "%3ANAME"))
 
 ([ECSDIAmazon_ProjectKB_Class9] of  Widget
 
@@ -912,6 +912,9 @@
 ([KB_221055_Instance_71] of  Property_List
 )
 
+([KB_282820_Class0] of  Map
+)
+
 ([KB_301165_Instance_1013] of  Widget
 
 	(is_hidden FALSE)
@@ -1050,9 +1053,6 @@
 
 	(boolean_value FALSE)
 	(name "DisabledByUser"))
-
-([KB_634046_Class0] of  Map
-)
 
 ([KB_635552_Instance_0] of  Widget
 

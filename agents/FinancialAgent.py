@@ -14,13 +14,11 @@ from flask import Flask
 from multiprocessing import Process, Queue
 import socket
 from rdflib import Namespace, Graph, URIRef, RDF, Literal
-
 from utils.FlaskServer import shutdown_server
 from utils.Agent import Agent
-
-# Author
 from utils.OntologyNamespaces import ECSDI
 
+# Author
 __author__ = 'amazadonde'
 
 # AGENT ATTRIBUTES ----------------------------------------------------------------------------------------
@@ -87,7 +85,8 @@ def tidyUp():
     Previous actions for the agent.
     """
 
-    # TODO Actions
+    global queue
+    queue.add(0)
 
     pass
 
@@ -114,6 +113,10 @@ def payDelivery():
 
 def confirmTransfer():
     # TODO Confirm the transfer, deliver receipt and communicate with Products Agent.
+
+    productList = ['Producto_2', 'Producto_3']
+    writeSells(1, 15.30, productList, 'Ciudad_1')
+
     print("ConfirmTransfer")
 
 
@@ -139,16 +142,19 @@ def writeSells(paid, totalPrice, productsList, sendTo):
 # MAIN METHOD ----------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
-    productList = ['Producto_1', 'Producto_3']
-    writeSells(1, 15.30, productList, 'Ciudad_1')
+
+    # ---------------------------------------------- TEST --------------------------------------------------
+    confirmTransfer()
+
+    # ------------------------------------------------------------------------------------------------------
 
     # Run behaviors
-    # ab1 = Process(target=agentBehaviour, args=(queue,))
-    # ab1.start()
+    ab1 = Process(target=agentBehaviour, args=(queue,))
+    ab1.start()
 
     # Run server
-    # app.run(host=hostname, port=port)
+    app.run(host=hostname, port=port)
 
     # Wait behaviors
-    # ab1.join()
-    # print('The End')
+    ab1.join()
+    print('The End')

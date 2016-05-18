@@ -184,7 +184,8 @@ def tidyUp():
     Previous actions for the agent.
     """
 
-    # TODO Actions
+    global queue
+    queue.put(0)
 
     pass
 

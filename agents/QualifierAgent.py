@@ -82,13 +82,12 @@ def stop():
 
 
 def tidyUp():
-
     """
-    Acciones previas a parar el agente
-
+    Previous actions for the agent.
     """
-    global cola1
-    cola1.put(0)
+
+    global queue
+    queue.put(0)
 
     pass
 
