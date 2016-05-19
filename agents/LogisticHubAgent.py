@@ -10,11 +10,11 @@ Tiene una funcion AgentBehavior1 que se lanza como un thread concurrente
 Asume que el agente de registro esta en el puerto 9000
 """
 import time
-import datetime as dateTime
+import datetime
 from flask import Flask
 from multiprocessing import Process, Queue
 import socket
-from rdflib import Namespace, Graph, URIRef, RDF
+from rdflib import Namespace, Graph, URIRef, RDF, Literal
 from utils.FlaskServer import shutdown_server
 from utils.Agent import Agent
 from utils.OntologyNamespaces import ECSDI
@@ -102,9 +102,9 @@ def agentBehaviour(queue):
 
     fin = False
     while not fin:
-        while cola.empty():
+        while queue.empty():
             pass
-        v = cola.get()
+        v = queue.get()
         if v == 0:
             fin = True
         else:
@@ -130,6 +130,10 @@ def requestTransport():
     print("Request Transport")
 
 
+def dateToMillis(date):
+    return int(round((date - datetime.datetime(1970, 1, 1)).total_seconds())) * 1000.0
+
+
 def writeSends(productList, deliverDate):
     URI = "http://www.owl-ontologies.com/ECSDIAmazon.owl#"
     n = int(round(time.time() * 1000))
@@ -140,10 +144,7 @@ def writeSends(productList, deliverDate):
     gm = Graph()
     gm.parse(ontologyFile, format='turtle')
     gm.add((URIRef(data), RDF.type, ECSDI.Envio))
-
-    # TODO Ask to bejar
-    # gm.add((URIRef(data), ECSDI.Fecha_de_entrega, Literal(deliverDate)))
-
+    gm.add((URIRef(data), ECSDI.Fecha_de_entrega, Literal(dateToMillis(deliverDate))))
     for a in productList:
         gm.add((URIRef(data), ECSDI.Envia, URIRef(URI + a)))
 
@@ -163,18 +164,19 @@ def writeSends(productList, deliverDate):
 if __name__ == '__main__':
     # ---------------------------------------------- TEST --------------------------------------------------
     productsList = ['Producto_1', 'Producto_2', 'Producto_3']
-    writeSends(productsList, dateTime.date.today())
+    t = datetime.datetime(2009, 10, 21, 0, 0)
+    writeSends(productsList, t)
 
     # ------------------------------------------------------------------------------------------------------
 
     # Run behaviors
-    ab1 = Process(target=agentBehaviour, args=(queue,))
-    ab1.start()
+    # ab1 = Process(target=agentBehaviour, args=(queue,))
+    # ab1.start()
 
     # Run server
-    app.run(host=hostname, port=port)
+    # app.run(host=hostname, port=port)
 
     # Wait behaviors
-    ab1.join()
+    # ab1.join()
 
     print('The End')

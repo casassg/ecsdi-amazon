@@ -72,6 +72,12 @@ default:Enviar_a a owl:ObjectProperty ;
     rdfs:domain default:Compra ;
     rdfs:range default:Ciudad .
 
+default:Envio_1463639630327 a default:Envio ;
+    default:Envia default:Producto_1,
+        default:Producto_2,
+        default:Producto_3 ;
+    default:Fecha_de_entrega 1.256083e+12 .
+
 default:Existe a owl:ObjectProperty ;
     rdfs:domain default:Pedir_disponibilidad ;
     rdfs:range default:Existencia .
@@ -274,13 +280,27 @@ default:Restriccion_modelo a owl:Class ;
 
 default:Centro_logistico a owl:Class .
 
-default:Envio a owl:Class .
-
 default:Peticion_compra a owl:Class ;
     rdfs:subClassOf default:Accion .
 
 default:Plazos_entrega a owl:Class ;
     rdfs:subClassOf default:Restriccions .
+
+default:Rango_precio a owl:Class ;
+    rdfs:subClassOf default:Restriccions .
+
+default:Transportista a owl:Class .
+
+default:Valoracion a owl:Class .
+
+default:Vendedor a owl:Class .
+
+default:Ciudad_1 a default:Ciudad ;
+    default:Latitud "41.398373"^^xsd:float ;
+    default:Longitud "2.188247"^^xsd:float ;
+    default:Nombre "Barcelona"^^xsd:string .
+
+default:Envio a owl:Class .
 
 default:Producto_1 a default:Producto ;
     default:Id "1"^^xsd:int ;
@@ -302,20 +322,6 @@ default:Producto_3 a default:Producto ;
     default:Modelo "P7000"^^xsd:string ;
     default:Nombre "Pioneer"^^xsd:string ;
     default:Precio "200.0"^^xsd:float .
-
-default:Rango_precio a owl:Class ;
-    rdfs:subClassOf default:Restriccions .
-
-default:Transportista a owl:Class .
-
-default:Valoracion a owl:Class .
-
-default:Vendedor a owl:Class .
-
-default:Ciudad_1 a default:Ciudad ;
-    default:Latitud "41.398373"^^xsd:float ;
-    default:Longitud "2.188247"^^xsd:float ;
-    default:Nombre "Barcelona"^^xsd:string .
 
 default:Existencia a owl:Class .
 
