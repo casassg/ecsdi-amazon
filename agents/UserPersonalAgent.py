@@ -7,6 +7,8 @@ Agent que implementa la interacció amb l'usuari
 
 @author: casassg
 """
+from utils.ACLMessages import get_agent_info, send_message, build_message
+from utils.OntologyNamespaces import ECSDI, ACL
 
 __author__ = 'casassg'
 
@@ -15,7 +17,7 @@ import socket
 from multiprocessing import Process
 
 from flask import Flask, render_template, request
-from rdflib import Graph, Namespace
+from rdflib import Graph, Namespace, RDF, URIRef, Literal
 
 from utils.Agent import Agent
 from utils.FlaskServer import shutdown_server
@@ -66,10 +68,10 @@ agn = Namespace("http://www.agentes.org#")
 mss_cnt = 0
 
 # Datos del Agente
-AgentePersonal = Agent('UserPersonalAgent',
-                       agn.UserPersonalAgent,
-                       'http://%s:%d/comm' % (hostname, port),
-                       'http://%s:%d/Stop' % (hostname, port))
+UserPersonalAgent = Agent('UserPersonalAgent',
+                          agn.UserPersonalAgent,
+                          'http://%s:%d/comm' % (hostname, port),
+                          'http://%s:%d/Stop' % (hostname, port))
 
 # Directory agent address
 DirectoryAgent = Agent('DirectoryAgent',
@@ -81,18 +83,58 @@ DirectoryAgent = Agent('DirectoryAgent',
 dsgraph = Graph()
 
 
+def get_count():
+    mss_cnt += 1
+    return mss_cnt
+
+
 @app.route("/cerca", methods=['GET', 'POST'])
 def browser_cerca():
     """
     Permite la comunicacion con el agente via un navegador
     via un formulario
     """
+    global mss_cnt
     if request.method == 'GET':
         return render_template('cerca.html')
     else:
-        user = request.form['username']
-        mess = request.form['message']
-        return render_template('cerca.html', user=user, mess=mess)
+        logger.info("Enviando peticion de busqueda")
+        subject = ECSDI['Cerca_productes_' + str(get_count())]
+
+        gr = Graph()
+        gr.add((subject, RDF.type, ECSDI.Cerca_productes))
+
+        nom = request.form['nom']
+        if nom:
+            subject_nom = ECSDI['RestriccioNom' + str(get_count())]
+            gr.add((subject_nom, RDF.type, ECSDI.RestriccioNom))
+            gr.add((subject_nom, ECSDI.Nom, Literal(nom)))
+            gr.add((subject, ECSDI.Restringe, URIRef(subject_nom)))
+        marca = request.form['marca']
+        if marca:
+            subject_marca = ECSDI['Restriccion_Marca_' + str(get_count())]
+            gr.add((subject_marca, RDF.type, ECSDI.Restriccion_Marca))
+            gr.add((subject_marca, ECSDI.Marca, Literal(marca)))
+            gr.add((subject, ECSDI.Restringe, URIRef(subject_marca)))
+        min_price = request.form['min_price']
+        max_price = request.form['max_price']
+
+        if min_price or max_price:
+            subject_preus = ECSDI['Restriccion_Preus_' + str(get_count())]
+            gr.add((subject_preus, RDF.type, ECSDI.Rango_precio))
+            if min_price:
+                gr.add((subject_preus, ECSDI.Precio_min, Literal(min_price)))
+            if max_price:
+                gr.add((subject_preus, ECSDI.Precio_max, Literal(max_price)))
+            gr.add((subject, ECSDI.Restringe, URIRef(subject_preus)))
+
+        seller = get_agent_info(agn.SellerAgent, DirectoryAgent, UserPersonalAgent, get_count())
+
+        gr = send_message(
+            build_message(gr, perf=ACL.request, sender=UserPersonalAgent, receiver=seller, msgcnt=get_count(),
+                          content=subject), seller.address)
+
+        return gr.serialize()
 
 
 @app.route("/Stop")
