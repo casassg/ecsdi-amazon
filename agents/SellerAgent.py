@@ -16,12 +16,14 @@ from flask import Flask, request
 from prettytable import PrettyTable
 
 from agents.FinancialAgent import FinancialAgent
+from agents.ProductsAgent import mss_cnt
 from utils import AgentTypes
 from utils.ACLMessages import *
 from utils.Agent import Agent
 from utils.FlaskServer import shutdown_server
 # Author
 from utils.Logging import config_logger
+from utils.OntologyNamespaces import ECSDI
 
 __author__ = 'amazadonde'
 
@@ -115,6 +117,8 @@ def register_message():
     return gr
 
 
+
+
 @app.route("/comm")
 def communication():
     """
@@ -136,30 +140,46 @@ def communication():
         gr = build_message(Graph(), ACL['not-understood'], sender=SellerAgent.uri, msgcnt=messageCount)
     else:
         # Obtenemos la performativa
-        perf = msgdic['performative']
-
-        if perf != ACL.request:
+        if msgdic['performative'] != ACL.request:
             # Si no es un request, respondemos que no hemos entendido el mensaje
-            gr = build_message(Graph(), ACL['not-understood'], sender=SellerAgent.uri, msgcnt=messageCount)
-        else:
-            # Extraemos el objeto del contenido que ha de ser una accion de la ontologia de acciones del agente
-            # de registro
-
-            # Averiguamos el tipo de la accion
-            if 'content' in msgdic:
-                content = msgdic['content']
-                accion = gm.value(subject=content, predicate=RDF.type)
-
-            # Aqui realizariamos lo que pide la accion
-
-
-
-            # Por ahora simplemente retornamos un Inform-done
             gr = build_message(Graph(),
-                               ACL['inform-done'],
-                               sender=SellerAgent.uri,
-                               msgcnt=messageCount,
-                               receiver=msgdic['sender'], )
+                               ACL['not-understood'],
+                               sender=DirectoryAgent.uri,
+                               msgcnt=mss_cnt)
+        else:
+            # Extraemos el objeto del contenido que ha de ser una accion de la ontologia
+            # de registro
+            content = msgdic['content']
+            # Averiguamos el tipo de la accion
+            accion = gm.value(subject=content, predicate=RDF.type)
+
+            # Accion de busqueda
+            if accion == ECSDI.Cerca_productes:
+                list = gm.value(subject=content, predicate=ECSDI.Restringe)
+                restriccions = {}
+                for item in list:
+                    type = gm.value(subject=item, predicate=RDF.type)
+                    if type == ECSDI.Modelo:
+                        restriccions['modelo'] = gm.value(subject=item, predicate=ECSDI.Modelo)
+                    elif type == ECSDI.Nombre:
+                        restriccions['precio_max'] = gm.value(subject=item, predicate=ECSDI.Precio_max)
+                    elif type == ECSDI.Marca:
+                        restriccions['marca'] = gm.value(subject=item, predicate=ECSDI.Marca)
+                    elif type == ECSDI.Precio:
+                        restriccions['precio_min'] = gm.value(subject=item, predicate=ECSDI.Precio_min)
+
+                gr = findProducts(model=restriccions['modelo'], brand=restriccions['marca'], min_price=restriccions['precio_min'], max_price=restriccions['precio_max'])
+
+            # Accion de comprar
+            elif accion == ECSDI.Peticion_compra:
+                list = gm.value(subject=content, predicate=ECSDI.Lote_producto)
+                gr = sell_products(list)
+            # No habia ninguna accion en el mensaje
+            else:
+                gr = build_message(Graph(),
+                                   ACL['not-understood'],
+                                   sender=DirectoryAgent.uri,
+                                   msgcnt=mss_cnt)
     messageCount += 1
 
     logger.info('Respondemos a la peticion')
@@ -272,6 +292,9 @@ def sell_products(urlProductsList):
     # gr = send_message(message, FinancialAgent.address)
     # messageCount += 1
     # return gr
+
+
+
 
 
 # MAIN METHOD ----------------------------------------------------------------------------------------------
