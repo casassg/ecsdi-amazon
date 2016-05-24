@@ -99,23 +99,29 @@ def browser_cerca():
         return render_template('cerca.html')
     else:
         logger.info("Enviando peticion de busqueda")
-        subject = ECSDI['Cerca_productes_' + str(get_count())]
 
+        # Content of the message
+        content = ECSDI['Cerca_productes_' + str(get_count())]
+
+        # Graph creation
         gr = Graph()
-        gr.add((subject, RDF.type, ECSDI.Cerca_productes))
+        gr.add((content, RDF.type, ECSDI.Cerca_productes))
 
+        # Add restriccio nom
         nom = request.form['nom']
         if nom:
+            # Subject nom
             subject_nom = ECSDI['RestriccioNom' + str(get_count())]
             gr.add((subject_nom, RDF.type, ECSDI.RestriccioNom))
             gr.add((subject_nom, ECSDI.Nom, Literal(nom)))
-            gr.add((subject, ECSDI.Restringe, URIRef(subject_nom)))
+            # Add restriccio to content
+            gr.add((content, ECSDI.Restringe, URIRef(subject_nom)))
         marca = request.form['marca']
         if marca:
             subject_marca = ECSDI['Restriccion_Marca_' + str(get_count())]
             gr.add((subject_marca, RDF.type, ECSDI.Restriccion_Marca))
             gr.add((subject_marca, ECSDI.Marca, Literal(marca)))
-            gr.add((subject, ECSDI.Restringe, URIRef(subject_marca)))
+            gr.add((content, ECSDI.Restringe, URIRef(subject_marca)))
         min_price = request.form['min_price']
         max_price = request.form['max_price']
 
@@ -126,13 +132,13 @@ def browser_cerca():
                 gr.add((subject_preus, ECSDI.Precio_min, Literal(min_price)))
             if max_price:
                 gr.add((subject_preus, ECSDI.Precio_max, Literal(max_price)))
-            gr.add((subject, ECSDI.Restringe, URIRef(subject_preus)))
+            gr.add((content, ECSDI.Restringe, URIRef(subject_preus)))
 
         seller = get_agent_info(agn.SellerAgent, DirectoryAgent, UserPersonalAgent, get_count())
 
         gr = send_message(
             build_message(gr, perf=ACL.request, sender=UserPersonalAgent, receiver=seller, msgcnt=get_count(),
-                          content=subject), seller.address)
+                          content=content), seller.address)
 
         return gr.serialize()
 
