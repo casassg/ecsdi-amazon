@@ -10,13 +10,15 @@ Tiene una funcion AgentBehavior1 que se lanza como un thread concurrente
 Asume que el agente de registro esta en el puerto 9000
 """
 import time
-from flask import Flask
+from flask import Flask, request
 from multiprocessing import Process, Queue
 import socket
-from rdflib import Namespace, Graph, URIRef, RDF, Literal
+from rdflib import Namespace, Graph, URIRef, RDF, Literal, logger
+
+from utils.ACLMessages import get_message_properties, build_message
 from utils.FlaskServer import shutdown_server
 from utils.Agent import Agent
-from utils.OntologyNamespaces import ECSDI
+from utils.OntologyNamespaces import ECSDI, ACL
 
 # Author
 __author__ = 'amazadonde'
@@ -65,6 +67,51 @@ def communication():
 
     global dsGraph
     global messageCount
+    logger.info('Peticion de informacion recibida')
+
+    message = request.args['content']
+    gm = Graph()
+    gm.parse(data=message)
+
+    msgdic = get_message_properties(gm)
+
+    if msgdic is None:
+        # Si no es, respondemos que no hemos entendido el mensaje
+        gr = build_message(Graph(), ACL['not-understood'], sender=FinancialAgent.uri, msgcnt=messageCount)
+    else:
+        # Obtenemos la performativa
+        perf = msgdic['performative']
+
+        if perf != ACL.request:
+            # Si no es un request, respondemos que no hemos entendido el mensaje
+            gr = build_message(Graph(), ACL['not-understood'], sender=FinancialAgent.uri, msgcnt=messageCount)
+        else:
+            # Extraemos el objeto del contenido que ha de ser una accion de la ontologia de acciones del agente
+            # de registro
+
+            # Averiguamos el tipo de la accion
+            if 'content' in msgdic:
+                content = msgdic['content']
+                accion = gm.value(subject=content, predicate=RDF.type)
+
+            # Aqui realizariamos lo que pide la accion
+
+            payDelivery()
+            
+
+            # Por ahora simplemente retornamos un Inform-done
+            gr = build_message(Graph(),
+                               ACL['inform-done'],
+                               sender=FinancialAgent.uri,
+                               msgcnt=messageCount,
+                               receiver=msgdic['sender'], )
+    messageCount += 1
+
+    logger.info('Respondemos a la peticion')
+
+    return gr.serialize(format='xml')
+
+
     pass
 
 
