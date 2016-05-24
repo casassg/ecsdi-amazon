@@ -1,15 +1,4 @@
 # -*- coding: utf-8 -*-
-
-"""
-Agente usando los servicios web de Flask
-
-/comm es la entrada para la recepcion de mensajes del agente
-/Stop es la entrada que para el agente
-
-Tiene una funcion AgentBehavior1 que se lanza como un thread concurrente
-Asume que el agente de registro esta en el puerto 9000
-"""
-
 from flask import Flask, request
 from multiprocessing import Process, Queue
 import socket
@@ -29,7 +18,7 @@ hostname = socket.gethostname()
 port = 9010
 
 # Agent Namespace
-agn = Namespace("http://www.agentes.org#")#Revisar url -> definir nuevo espacio de nombre incluyendo agentes nuestros
+agn = Namespace("http://www.agentes.org#")
 
 # Message Count
 messageCount = 0
