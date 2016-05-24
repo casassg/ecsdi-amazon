@@ -1,6 +1,8 @@
+import time
 from rdflib import Graph, RDF, Literal, URIRef
 
 from utils.OntologyNamespaces import ECSDI
+from agents.SellerAgent import findProducts
 
 
 def create_message_restriccions_cerca():
@@ -54,9 +56,20 @@ def create_message_product_list():
     # Le asignamos nuestra ontologia
     graph.bind('ECSDI', ECSDI)
 
-    # Creacion del array de restricciones de busqueda
+    # Creacion del array de respuesta de la busqueda
     subject = ECSDI.Test
-    graph.add((subject, RDF.type, ECSDI.Cerca_productes))
+    graph.add((subject, RDF.type, ECSDI.Respuesta_busqueda))
+
+    for product in findProducts():
+        producto = ECSDI.Producto
+        graph.add((producto, RDF.type, ECSDI.Producto))
+        graph.add((producto, ECSDI.Marca, product['marca']))
+        graph.add((producto, ECSDI.Nombre, product['nombre']))
+        graph.add((producto, ECSDI.Modelo, product['marca']))
+        graph.add((producto, ECSDI.Precio, product['precio']))
+        graph.add((subject, ECSDI.lista_de_productos, Literal(producto)))
+
+    graph.serialize()
 
 
-create_message_restriccions_cerca()
+create_message_product_list()
