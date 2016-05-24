@@ -6,15 +6,17 @@ Agent que implementa la interacció amb l'usuari
 
 
 """
+from utils.OntologyNamespaces import ECSDI
 
 __author__ = ''
 
+import time
 import argparse
 import socket
 from multiprocessing import Process
 
 from flask import Flask, render_template, request
-from rdflib import Graph, Namespace
+from rdflib import Graph, Namespace, URIRef, RDF, Literal
 
 from utils.Agent import Agent
 from utils.FlaskServer import shutdown_server
@@ -80,6 +82,24 @@ DirectoryAgent = Agent('DirectoryAgent',
 dsgraph = Graph()
 
 
+def writeGraph(marca,nom,model,preu):
+    URI = "http://www.owl-ontologies.com/ECSDIAmazon.owl#"
+    n = int(round(time.time() * 1000))
+    data = URI + "Producto_" + str(n)
+
+    ontologyFile = open('../data/data')
+
+    gm = Graph()
+    gm.parse(ontologyFile, format='turtle')
+    gm.add((URIRef(data), RDF.type, ECSDI.Producto))
+    gm.add((URIRef(data), ECSDI.Nombre, Literal(nom)))
+    gm.add((URIRef(data), ECSDI.Marca, Literal(marca)))
+    gm.add((URIRef(data), ECSDI.Modelo, Literal(model)))
+    gm.add((URIRef(data), ECSDI.Precio, Literal(preu)))
+
+    gm.serialize(destination='../data/data', format='turtle')
+
+
 @app.route("/registrarProducto", methods=['GET', 'POST'])
 def browser_registrarProducto():
     """
@@ -89,9 +109,13 @@ def browser_registrarProducto():
     if request.method == 'GET':
         return render_template('registerProduct.html')
     else:
-        user = request.form['username']
-        mess = request.form['message']
-        return render_template('cerca.html', user=user, mess=mess)
+        marca = request.form['marca']
+        nom = request.form['nom']
+        model = request.form['model']
+        preu = request.form['preu']
+
+        writeGraph(marca,nom,model,preu)
+
 
 
 @app.route("/Stop")
