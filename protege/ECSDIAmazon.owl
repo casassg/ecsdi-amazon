@@ -343,6 +343,14 @@
     <Latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
     >41.398373</Latitud>
   </Ciudad>
+  <Cerca_productes rdf:ID="Cerca_productes_1">
+    <Restringe>
+      <Restriccion_Marca rdf:ID="Restriccion_Marca_2">
+        <Marca rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Garmin</Marca>
+      </Restriccion_Marca>
+    </Restringe>
+  </Cerca_productes>
 </rdf:RDF>
 
 <!-- Created with Protege (with OWL Plugin 3.5, Build 663)  http://protege.stanford.edu -->
