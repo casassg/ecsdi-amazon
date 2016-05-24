@@ -15,6 +15,7 @@ from multiprocessing import Process, Queue
 import socket
 from rdflib import Namespace, Graph, URIRef, RDF, Literal, logger
 
+from agents.ProductsAgent import mss_cnt
 from utils.ACLMessages import get_message_properties, build_message
 from utils.FlaskServer import shutdown_server
 from utils.Agent import Agent
@@ -80,31 +81,25 @@ def communication():
         gr = build_message(Graph(), ACL['not-understood'], sender=FinancialAgent.uri, msgcnt=messageCount)
     else:
         # Obtenemos la performativa
-        perf = msgdic['performative']
-
-        if perf != ACL.request:
+        if msgdic['performative'] != ACL.request:
             # Si no es un request, respondemos que no hemos entendido el mensaje
-            gr = build_message(Graph(), ACL['not-understood'], sender=FinancialAgent.uri, msgcnt=messageCount)
-        else:
-            # Extraemos el objeto del contenido que ha de ser una accion de la ontologia de acciones del agente
-            # de registro
-
-            # Averiguamos el tipo de la accion
-            if 'content' in msgdic:
-                content = msgdic['content']
-                accion = gm.value(subject=content, predicate=RDF.type)
-
-            # Aqui realizariamos lo que pide la accion
-
-            payDelivery()
-            
-
-            # Por ahora simplemente retornamos un Inform-done
             gr = build_message(Graph(),
-                               ACL['inform-done'],
-                               sender=FinancialAgent.uri,
-                               msgcnt=messageCount,
-                               receiver=msgdic['sender'], )
+                               ACL['not-understood'],
+                               sender=DirectoryAgent.uri,
+                               msgcnt=mss_cnt)
+        else:
+            # Extraemos el objeto del contenido que ha de ser una accion de la ontologia
+            # de registro
+            content = msgdic['content']
+            # Averiguamos el tipo de la accion
+            accion = gm.value(subject=content, predicate=RDF.type)
+
+            # Accion de registro
+
+            gr = build_message(Graph(),
+                                   ACL['not-understood'],
+                                   sender=DirectoryAgent.uri,
+                                   msgcnt=mss_cnt)
     messageCount += 1
 
     logger.info('Respondemos a la peticion')
