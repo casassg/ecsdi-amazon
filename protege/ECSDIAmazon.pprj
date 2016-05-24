@@ -1,4 +1,4 @@
-; Tue May 24 20:12:28 CEST 2016
+; Tue May 24 21:29:43 CEST 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -6,11 +6,11 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
-		[ECSDIAmazon_ProjectKB_Class20105]
-		[ECSDIAmazon_ProjectKB_Class20106]
-		[ECSDIAmazon_ProjectKB_Class20107]
-		[ECSDIAmazon_ProjectKB_Class20108]
-		[ECSDIAmazon_ProjectKB_Class20109]))
+		[ECSDIAmazon_ProjectKB_Class20638]
+		[ECSDIAmazon_ProjectKB_Class20639]
+		[ECSDIAmazon_ProjectKB_Class20640]
+		[ECSDIAmazon_ProjectKB_Class20641]
+		[ECSDIAmazon_ProjectKB_Class20642]))
 
 ([CLSES_TAB] of  Widget
 
@@ -80,27 +80,27 @@
 ([ECSDIAmazon_ProjectKB_Class20] of  Property_List
 )
 
-([ECSDIAmazon_ProjectKB_Class20105] of  String
+([ECSDIAmazon_ProjectKB_Class20638] of  String
 
 	(name ":INSTANCE-ANNOTATION")
 	(string_value "%3AANNOTATION-TEXT"))
 
-([ECSDIAmazon_ProjectKB_Class20106] of  String
+([ECSDIAmazon_ProjectKB_Class20639] of  String
 
 	(name "http://www.w3.org/2002/07/owl#Thing")
 	(string_value "%3ANAME"))
 
-([ECSDIAmazon_ProjectKB_Class20107] of  String
+([ECSDIAmazon_ProjectKB_Class20640] of  String
 
 	(name "http://www.w3.org/2002/07/owl#Class")
 	(string_value "%3ANAME"))
 
-([ECSDIAmazon_ProjectKB_Class20108] of  String
+([ECSDIAmazon_ProjectKB_Class20641] of  String
 
 	(name ":PAL-CONSTRAINT")
 	(string_value "%3APAL-NAME"))
 
-([ECSDIAmazon_ProjectKB_Class20109] of  String
+([ECSDIAmazon_ProjectKB_Class20642] of  String
 
 	(name ":META-CLASS")
 	(string_value "%3ANAME"))

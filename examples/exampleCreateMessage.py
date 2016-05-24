@@ -3,7 +3,7 @@ from rdflib import Graph, RDF, Literal, URIRef
 from utils.OntologyNamespaces import ECSDI
 
 
-def create_message():
+def create_message_restriccions_cerca():
     # Creamos el grafo
     graph = Graph()
     # Le asignamos nuestra ontologia
@@ -44,7 +44,19 @@ def create_message():
         elif graph.value(subject=restriccio, predicate=RDF.type) == ECSDI.Restriccion_modelo:
             print 'MODELO: ' + graph.value(subject=restriccio, predicate=ECSDI.Modelo)
         elif graph.value(subject=restriccio, predicate=RDF.type) == ECSDI.Rango_Precio:
-            print 'PRECIO: ' + graph.value(subject=restriccio, predicate=ECSDI.Precio_max) + ' - ' + graph.value(subject=restriccio, predicate=ECSDI.Precio_min)
+            print 'PRECIO: ' + graph.value(subject=restriccio, predicate=ECSDI.Precio_max) + ' - ' + graph.value(
+                subject=restriccio, predicate=ECSDI.Precio_min)
 
 
-create_message()
+def create_message_product_list():
+    # Creamos el grafo
+    graph = Graph()
+    # Le asignamos nuestra ontologia
+    graph.bind('ECSDI', ECSDI)
+
+    # Creacion del array de restricciones de busqueda
+    subject = ECSDI.Test
+    graph.add((subject, RDF.type, ECSDI.Cerca_productes))
+
+
+create_message_restriccions_cerca()
