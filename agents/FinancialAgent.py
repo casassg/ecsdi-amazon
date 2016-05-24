@@ -10,14 +10,15 @@ Tiene una funcion AgentBehavior1 que se lanza como un thread concurrente
 Asume que el agente de registro esta en el puerto 9000
 """
 import time
-from flask import Flask
+from flask import Flask, request
 from multiprocessing import Process, Queue
 import socket
-from rdflib import Namespace, Graph, URIRef, RDF, Literal
-from rdflib.namespace import FOAF
+from rdflib import Namespace, Graph, URIRef, RDF, Literal, logger
 
+from utils.ACLMessages import get_message_properties, build_message
 from utils.FlaskServer import shutdown_server
 from utils.Agent import Agent
+from utils.OntologyNamespaces import ECSDI, ACL
 
 # Author
 __author__ = 'amazadonde'
@@ -66,6 +67,51 @@ def communication():
 
     global dsGraph
     global messageCount
+    logger.info('Peticion de informacion recibida')
+
+    message = request.args['content']
+    gm = Graph()
+    gm.parse(data=message)
+
+    msgdic = get_message_properties(gm)
+
+    if msgdic is None:
+        # Si no es, respondemos que no hemos entendido el mensaje
+        gr = build_message(Graph(), ACL['not-understood'], sender=FinancialAgent.uri, msgcnt=messageCount)
+    else:
+        # Obtenemos la performativa
+        perf = msgdic['performative']
+
+        if perf != ACL.request:
+            # Si no es un request, respondemos que no hemos entendido el mensaje
+            gr = build_message(Graph(), ACL['not-understood'], sender=FinancialAgent.uri, msgcnt=messageCount)
+        else:
+            # Extraemos el objeto del contenido que ha de ser una accion de la ontologia de acciones del agente
+            # de registro
+
+            # Averiguamos el tipo de la accion
+            if 'content' in msgdic:
+                content = msgdic['content']
+                accion = gm.value(subject=content, predicate=RDF.type)
+
+            # Aqui realizariamos lo que pide la accion
+
+            payDelivery()
+            
+
+            # Por ahora simplemente retornamos un Inform-done
+            gr = build_message(Graph(),
+                               ACL['inform-done'],
+                               sender=FinancialAgent.uri,
+                               msgcnt=messageCount,
+                               receiver=msgdic['sender'], )
+    messageCount += 1
+
+    logger.info('Respondemos a la peticion')
+
+    return gr.serialize(format='xml')
+
+
     pass
 
 
@@ -86,7 +132,8 @@ def tidyUp():
     Previous actions for the agent.
     """
 
-    # TODO Actions
+    global queue
+    queue.add(0)
 
     pass
 
@@ -113,10 +160,14 @@ def payDelivery():
 
 def confirmTransfer():
     # TODO Confirm the transfer, deliver receipt and communicate with Products Agent.
+
+    productList = ['Producto_2', 'Producto_3']
+    writeSells(1, 15.30, productList, 'Ciudad_1')
+
     print("ConfirmTransfer")
 
 
-def writeSells(paid, totalPrice, productList, sendTo):
+def writeSells(paid, totalPrice, productsList, sendTo):
     URI = "http://www.owl-ontologies.com/ECSDIAmazon.owl#"
     millis = int(round(time.time() * 1000))
     URISell = URI + "Compra_" + str(millis)
@@ -125,12 +176,12 @@ def writeSells(paid, totalPrice, productList, sendTo):
 
     g = Graph()
     g.parse(ontologyFile, format='turtle')
-    g.add((URIRef(URISell), RDF.type, FOAF.Compra))
-    g.add((URIRef(URISell), FOAF.Pagat, Literal(paid)))
-    g.add((URIRef(URISell), FOAF.Precio_total, Literal(totalPrice)))
-    g.add((URIRef(URISell), FOAF.Enviar_a, URIRef(URI + sendTo)))
-    for p in productList:
-        g.add((URIRef(URISell), FOAF.Productos, URIRef(URI + p)))
+    g.add((URIRef(URISell), RDF.type, ECSDI.Compra))
+    g.add((URIRef(URISell), ECSDI.Pagat, Literal(paid)))
+    g.add((URIRef(URISell), ECSDI.Precio_total, Literal(totalPrice)))
+    g.add((URIRef(URISell), ECSDI.Enviar_a, URIRef(URI + sendTo)))
+    for p in productsList:
+        g.add((URIRef(URISell), ECSDI.Productos, URIRef(URI + p)))
 
     g.serialize(destination='../data/data', format='turtle')
 
@@ -138,16 +189,19 @@ def writeSells(paid, totalPrice, productList, sendTo):
 # MAIN METHOD ----------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
-    productList = ['Producto_1', 'Producto_2']
-    writeSells(0, 10.20, productList, 'Ciudad_1')
+
+    # ---------------------------------------------- TEST --------------------------------------------------
+    confirmTransfer()
+
+    # ------------------------------------------------------------------------------------------------------
 
     # Run behaviors
-    # ab1 = Process(target=agentBehaviour, args=(queue,))
-    # ab1.start()
+    ab1 = Process(target=agentBehaviour, args=(queue,))
+    ab1.start()
 
     # Run server
-    # app.run(host=hostname, port=port)
+    app.run(host=hostname, port=port)
 
     # Wait behaviors
-    # ab1.join()
-    # print('The End')
+    ab1.join()
+    print('The End')

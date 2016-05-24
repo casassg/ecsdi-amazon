@@ -20,11 +20,9 @@ __author__ = 'amazdonde'
 import argparse
 import socket
 from multiprocessing import Process, Queue
-
 from flask import Flask, request, render_template
 from rdflib import Graph, RDF, Namespace, RDFS
 from rdflib.namespace import FOAF
-
 from utils.ACLMessages import build_message, get_message_properties
 from utils.Agent import Agent
 from utils.FlaskServer import shutdown_server
@@ -106,7 +104,7 @@ def register():
         dsgraph.add((agn_uri, DSO.Address, agn_add))
         dsgraph.add((agn_uri, DSO.AgentType, agn_type))
 
-        logger.info('Registrado agente: '+agn_name+' - tipus:'+ agn_type)
+        logger.info('Registrado agente: ' + agn_name + ' - tipus:' + agn_type)
 
         # Generamos un mensaje de respuesta
         return build_message(Graph(),
