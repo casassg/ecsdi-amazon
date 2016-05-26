@@ -137,7 +137,20 @@ def communication():
 
             # Accion de busqueda
             if accion == ECSDI.Peticion_transferencia:
-                print ('haha')
+                # Creamos el grafo
+                graph = Graph()
+                # Le asignamos nuestra ontologia
+                graph.bind('ECSDI', ECSDI)
+
+                # Creacion del array de restricciones de busqueda
+                subject = ECSDI.Respuesta
+                graph.add((subject, RDF.type, ECSDI.Respuesta_transferencia))
+                graph.serialize()
+
+                gr = build_message(graph,
+                                   ACL.Confirm,
+                                   sender=DirectoryAgent.uri,
+                                   msgcnt=mss_cnt)
 
             # No habia ninguna accion en el mensaje
             else:

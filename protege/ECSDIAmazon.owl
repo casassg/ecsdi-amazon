@@ -62,6 +62,9 @@
   </owl:Class>
   <owl:Class rdf:ID="Transportista"/>
   <owl:Class rdf:ID="Vendedor"/>
+  <owl:Class rdf:ID="Respuesta_transferencia">
+    <rdfs:subClassOf rdf:resource="#Respuesta"/>
+  </owl:Class>
   <owl:Class rdf:ID="Ciudad"/>
   <owl:Class rdf:ID="Pedir_oferta_transporta">
     <rdfs:subClassOf rdf:resource="#Accion"/>
