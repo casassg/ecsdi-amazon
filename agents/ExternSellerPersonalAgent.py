@@ -120,6 +120,8 @@ def writeGraph(marca, nom, model, preu):
     gm.add((URIRef(data), ECSDI.Modelo, Literal(model)))
     gm.add((URIRef(data), ECSDI.Precio, Literal(preu)))
 
+    # TODO El hecho de guardarlo no lo deberia hacer el ProductsAgent?
+
     # Guardar en el fichero de productos
     return gm.serialize(destination='../data/productes', format='turtle')
 
@@ -170,7 +172,7 @@ def comunicacion():
     """
     Entrypoint de comunicacion del agente
     """
-    return "Hola"
+    return
 
 
 def tidyup():

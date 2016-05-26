@@ -11,16 +11,11 @@ import argparse
 import socket
 import sys
 from multiprocessing import Queue, Process
-
 from flask import Flask, request
 from prettytable import PrettyTable
-
-from agents.FinancialAgent import FinancialAgent
-from agents.ProductsAgent import mss_cnt
 from utils.ACLMessages import *
 from utils.Agent import Agent
 from utils.FlaskServer import shutdown_server
-# Author
 from utils.Logging import config_logger
 from utils.OntologyNamespaces import ECSDI
 
@@ -94,6 +89,12 @@ queue = Queue()
 app = Flask(__name__)
 
 
+def get_count():
+    global mss_cnt
+    mss_cnt += 1
+    return mss_cnt
+
+
 # AGENT FUNCTIONS ------------------------------------------------------------------------------------------
 
 def register_message():
@@ -108,11 +109,7 @@ def register_message():
 
     logger.info('Nos registramos')
 
-    global mss_cnt
-
-    gr = register_agent(SellerAgent, DirectoryAgent, SellerAgent.uri, messageCount)
-    messageCount += 1
-
+    gr = register_agent(SellerAgent, DirectoryAgent, SellerAgent.uri, get_count())
     return gr
 
 
@@ -124,7 +121,6 @@ def communication():
 
     logger.info('Peticion de informacion recibida')
     global dsGraph
-    global mss_cnt
 
     message = request.args['content']
     gm = Graph()
@@ -132,9 +128,11 @@ def communication():
 
     msgdic = get_message_properties(gm)
 
+    gr = None
+
     if msgdic is None:
         # Si no es, respondemos que no hemos entendido el mensaje
-        gr = build_message(Graph(), ACL['not-understood'], sender=SellerAgent.uri, msgcnt=messageCount)
+        gr = build_message(Graph(), ACL['not-understood'], sender=SellerAgent.uri, msgcnt=get_count())
     else:
         # Obtenemos la performativa
         if msgdic['performative'] != ACL.request:
@@ -142,7 +140,7 @@ def communication():
             gr = build_message(Graph(),
                                ACL['not-understood'],
                                sender=DirectoryAgent.uri,
-                               msgcnt=mss_cnt)
+                               msgcnt=get_count())
         else:
             # Extraemos el objeto del contenido que ha de ser una accion de la ontologia
             # de registro
@@ -174,16 +172,16 @@ def communication():
 
             # Accion de comprar
             elif accion == ECSDI.Peticion_compra:
-                list = gm.value(subject=content, predicate=ECSDI.Lote_producto)
+                # TODO Estudiar como hacerlo
+                productList = gm.objects(subject=content, predicate=ECSDI.Sobre)
+                sell_products(productList)
 
-                gr = sell_products()
             # No habia ninguna accion en el mensaje
             else:
                 gr = build_message(Graph(),
                                    ACL['not-understood'],
                                    sender=DirectoryAgent.uri,
-                                   msgcnt=mss_cnt)
-    messageCount += 1
+                                   msgcnt=get_count())
 
     logger.info('Respondemos a la peticion')
 
@@ -229,16 +227,6 @@ def agent_behaviour(queue):
 ontologyFile = open('../data/productes')
 
 
-def printProducts(queryResult):
-    data = PrettyTable(['Nombre', 'Modelo', 'Marca', 'Precio'])
-    for res in queryResult:
-        data.add_row([res['nombre'],
-                      res['modelo'],
-                      res['marca'],
-                      res['precio']])
-    print(data)
-
-
 def findProducts(model=None, brand=None, min_price=0.0, max_price=sys.float_info.max):
     graph = Graph()
     graph.parse(ontologyFile, format='turtle')
@@ -280,9 +268,9 @@ def findProducts(model=None, brand=None, min_price=0.0, max_price=sys.float_info
     product_count = 0
     for row in graph_query:
         nom = row.nombre
-        model=row.modelo
-        marca=row.marca
-        preu=row.precio
+        model = row.modelo
+        marca = row.marca
+        preu = row.precio
         logger.debug(nom, marca, model, preu)
         subject = ECSDI['ProducteResultatCerca' + str(product_count)]
         product_count += 1
@@ -294,35 +282,31 @@ def findProducts(model=None, brand=None, min_price=0.0, max_price=sys.float_info
     return result
 
 
-def sell_products(urlProductsList):
-    global mss_cnt
-    productList = []
-    baseURL = 'http://www.owl-ontologies.com/ECSDIAmazon.owl#'
-    for f in urlProductsList:
-        productList.append(baseURL + f)
+def sell_products(productListGraph):
+    # TODO Revisarlo todo
+    logger.info("Enviando peticion de vull comprar")
 
-    rsp_obj = agn['Productos']
+    # Content of the message
+    content = ECSDI['Lote_producto_' + str(get_count())]
 
-    # TODO Insert into message the product list
-    message = build_message(gmess=Graph(),
-                            perf=ACL.request,
-                            sender=SellerAgent.uri,
-                            receiver=FinancialAgent.uri,
-                            content=rsp_obj,
-                            msgcnt=messageCount)
-    print(get_message_properties(message))
-    gr = send_message(message, FinancialAgent.address)
-    messageCount += 1
-    return gr
+    # Graph creation
+    gr = Graph()
+    gr.add((content, RDF.type, ECSDI.Lote_producto))
+
+    # TODO Generate message
+
+    financial = get_agent_info(agn.FinancialAgent, DirectoryAgent, SellerAgent, get_count())
+
+    gr2 = send_message(
+        build_message(gr, perf=ACL.request, sender=SellerAgent.uri, receiver=financial.uri, msgcnt=get_count(),
+                      content=content), financial.address)
+
+    return gr2.serialize()
 
 
 # MAIN METHOD ----------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
-    # --------------------------------------- TEST ---------------------------------------------------------
-    # printProducts(findProducts())
-    sell_products(['Producto_1', 'Producto_2'])
-
     # ------------------------------------------------------------------------------------------------------
     # Run behaviors
     ab1 = Process(target=agent_behaviour, args=(queue,))
