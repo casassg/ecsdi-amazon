@@ -15,8 +15,6 @@ directory-service-ontology.owl
 @author: javier
 """
 
-__author__ = 'amazdonde'
-
 import argparse
 import socket
 from multiprocessing import Process, Queue
@@ -28,6 +26,8 @@ from utils.Agent import Agent
 from utils.FlaskServer import shutdown_server
 from utils.Logging import config_logger
 from utils.OntologyNamespaces import ACL, DSO
+
+__author__ = 'amazdonde'
 
 # Definimos los parametros de la linea de comandos
 parser = argparse.ArgumentParser()

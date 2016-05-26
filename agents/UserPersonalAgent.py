@@ -9,19 +9,16 @@ Agent que implementa la interacció amb l'usuari
 """
 from utils.ACLMessages import get_agent_info, send_message, build_message
 from utils.OntologyNamespaces import ECSDI, ACL
-
-__author__ = 'casassg'
-
 import argparse
 import socket
 from multiprocessing import Process
-
 from flask import Flask, render_template, request
 from rdflib import Graph, Namespace, RDF, URIRef, Literal
-
 from utils.Agent import Agent
 from utils.FlaskServer import shutdown_server
 from utils.Logging import config_logger
+
+__author__ = 'amazadonde'
 
 # Definimos los parametros de la linea de comandos
 parser = argparse.ArgumentParser()
