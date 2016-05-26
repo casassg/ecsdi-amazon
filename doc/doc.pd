@@ -7,8 +7,8 @@
 	<object type="ProjectData" id="1">
 	    <field name="name">default</field>
 	    <field name="fileNameLastSavedAs">doc.pd</field>
-	    <field name="filePathLastSavedIn">/home/victor/Projects/ecsdi-amazon/doc</field>
-	    <field name="openedAs">/home/victor/Projects/ecsdi-amazon/doc/doc.pd</field>
+	    <field name="filePathLastSavedIn">/home2/users/alumnes/1181392/git/ecsdi-amazon/doc</field>
+	    <field name="openedAs">/home2/users/alumnes/1181392/git/ecsdi-amazon/doc/doc.pd</field>
 	    <field name="applicationVersion">3.3b_internal</field>
 	</object>
     </field>
@@ -5897,44 +5897,19 @@ finish
 
 		<object type="DiagramEntitySetting" id="271">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="92"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="272">
-			    <field name="x">169</field>
-			    <field name="y">77</field>
-=======
 			<object ref="120"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="272">
 			    <field name="x">98</field>
 			    <field name="y">198</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
 
 		<object type="DiagramEntitySetting" id="273">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="129"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="274">
-			    <field name="x">249</field>
-			    <field name="y">217</field>
-			</object>
-		    </field>
-		</object>
-
-		<object type="DiagramEntitySetting" id="275">
-		    <field name="entity">
-			<object type="DataConnection" id="276">
-=======
 			<object type="DataConnection" id="274">
->>>>>>> Stashed changes
 			    <base type="Entity">
 				<field name="name">&lt;Prometheus unique entity name au.edu.rmit.cs.prometheus.datamodel.jacob.DataConnection ID=308&gt;</field>
 				<field name="uniqueId">308</field>
@@ -6124,42 +6099,24 @@ finish
 
 		<object type="DiagramEntitySetting" id="293">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="22"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="294">
-			    <field name="x">66</field>
-			    <field name="y">481</field>
-=======
 			<object ref="34"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="294">
 			    <field name="x">406</field>
 			    <field name="y">87</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
 
 		<object type="DiagramEntitySetting" id="295">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="190"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="296">
-			    <field name="x">659</field>
-			    <field name="y">252</field>
-=======
 			<object ref="205"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="296">
 			    <field name="x">646</field>
 			    <field name="y">173</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
@@ -6772,42 +6729,24 @@ finish
 
 		<object type="DiagramEntitySetting" id="393">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="99"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="394">
-			    <field name="x">716</field>
-			    <field name="y">209</field>
-=======
 			<object ref="160"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="394">
 			    <field name="x">425</field>
 			    <field name="y">252</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
 
 		<object type="DiagramEntitySetting" id="395">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="106"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="396">
-			    <field name="x">195</field>
-			    <field name="y">238</field>
-=======
 			<object ref="167"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="396">
 			    <field name="x">567</field>
 			    <field name="y">135</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
@@ -6826,37 +6765,24 @@ finish
 
 		<object type="DiagramEntitySetting" id="399">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="105"/>
-=======
 			<object ref="156"/>
->>>>>>> Stashed changes
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="400">
-			    <field name="x">425</field>
-			    <field name="y">252</field>
+			    <field name="x">823</field>
+			    <field name="y">147</field>
 			</object>
 		    </field>
 		</object>
 
 		<object type="DiagramEntitySetting" id="401">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="101"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="402">
-			    <field name="x">823</field>
-			    <field name="y">147</field>
-=======
 			<object ref="155"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="402">
 			    <field name="x">809</field>
 			    <field name="y">293</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
@@ -7089,42 +7015,24 @@ finish
 
 		<object type="DiagramEntitySetting" id="441">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="33"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="442">
-			    <field name="x">342</field>
-			    <field name="y">239</field>
-=======
 			<object ref="85"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="442">
 			    <field name="x">299</field>
 			    <field name="y">28</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
 
 		<object type="DiagramEntitySetting" id="443">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="69"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="444">
-			    <field name="x">688</field>
-			    <field name="y">99</field>
-=======
 			<object ref="22"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="444">
 			    <field name="x">611</field>
 			    <field name="y">193</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
@@ -7571,32 +7479,19 @@ finish
 
 		<object type="DiagramEntitySetting" id="519">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="198"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="520">
-			    <field name="x">220</field>
-			    <field name="y">124</field>
-=======
 			<object ref="163"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="520">
 			    <field name="x">615</field>
 			    <field name="y">128</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
 
 		<object type="DiagramEntitySetting" id="521">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="266"/>
-=======
 			<object ref="231"/>
->>>>>>> Stashed changes
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="522">
@@ -7630,42 +7525,24 @@ finish
 	    <field name="entitySettings"><list>
 		<object type="DiagramEntitySetting" id="527">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="202"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="528">
-			    <field name="x">460</field>
-			    <field name="y">91</field>
-=======
 			<object ref="5"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="528">
 			    <field name="x">804</field>
 			    <field name="y">143</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
 
 		<object type="DiagramEntitySetting" id="529">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="253"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="530">
-			    <field name="x">1101</field>
-			    <field name="y">127</field>
-=======
 			<object ref="34"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="530">
 			    <field name="x">61</field>
 			    <field name="y">250</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
@@ -7684,37 +7561,24 @@ finish
 
 		<object type="DiagramEntitySetting" id="533">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="22"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="534">
-			    <field name="x">504</field>
-			    <field name="y">260</field>
-=======
 			<object ref="205"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="534">
 			    <field name="x">1101</field>
 			    <field name="y">127</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
 
 		<object type="DiagramEntitySetting" id="535">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="190"/>
-=======
 			<object ref="172"/>
->>>>>>> Stashed changes
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="536">
-			    <field name="x">625</field>
-			    <field name="y">13</field>
+			    <field name="x">504</field>
+			    <field name="y">260</field>
 			</object>
 		    </field>
 		</object>
@@ -7757,42 +7621,24 @@ finish
 
 		<object type="DiagramEntitySetting" id="543">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="162"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="544">
-			    <field name="x">668</field>
-			    <field name="y">154</field>
-=======
 			<object ref="7"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="544">
 			    <field name="x">1276</field>
 			    <field name="y">292</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
 
 		<object type="DiagramEntitySetting" id="545">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="106"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="546">
-			    <field name="x">1295</field>
-			    <field name="y">456</field>
-=======
 			<object ref="39"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="546">
 			    <field name="x">190</field>
 			    <field name="y">308</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
@@ -8136,42 +7982,24 @@ finish
 
 		<object type="DiagramEntitySetting" id="597">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="147"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="592">
-			    <field name="x">1089</field>
-			    <field name="y">308</field>
-=======
 			<object ref="9"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="598">
 			    <field name="x">1309</field>
 			    <field name="y">130</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
 
 		<object type="DiagramEntitySetting" id="599">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="170"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="594">
-			    <field name="x">894</field>
-			    <field name="y">105</field>
-=======
 			<object ref="37"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="600">
 			    <field name="x">270</field>
 			    <field name="y">203</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
@@ -8217,42 +8045,24 @@ finish
 
 		<object type="DiagramEntitySetting" id="606">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="227"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="601">
-			    <field name="x">144</field>
-			    <field name="y">143</field>
-=======
 			<object ref="194"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="607">
 			    <field name="x">1176</field>
 			    <field name="y">255</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
 
 		<object type="DiagramEntitySetting" id="608">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="19"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="603">
-			    <field name="x">1309</field>
-			    <field name="y">130</field>
-=======
 			<object ref="276"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="609">
 			    <field name="x">684</field>
 			    <field name="y">309</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
@@ -8346,69 +8156,6 @@ finish
 		    </field>
 		</object>
 
-<<<<<<< Updated upstream
-		<object type="DiagramEntitySetting" id="611">
-		    <field name="entity">
-			<object ref="178"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="612">
-			    <field name="x">1176</field>
-			    <field name="y">255</field>
-			</object>
-		    </field>
-		</object>
-
-		<object type="DiagramEntitySetting" id="613">
-		    <field name="entity">
-			<object ref="182"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="614">
-			    <field name="x">1036</field>
-			    <field name="y">65</field>
-			</object>
-		    </field>
-		</object>
-
-		<object type="DiagramEntitySetting" id="615">
-		    <field name="entity">
-			<object ref="27"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="616">
-			    <field name="x">270</field>
-			    <field name="y">203</field>
-			</object>
-		    </field>
-		</object>
-
-		<object type="DiagramEntitySetting" id="617">
-		    <field name="entity">
-			<object ref="113"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="618">
-			    <field name="x">777</field>
-			    <field name="y">371</field>
-			</object>
-		    </field>
-		</object>
-
-		<object type="DiagramEntitySetting" id="619">
-		    <field name="entity">
-			<object ref="130"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="620">
-			    <field name="x">513</field>
-			    <field name="y">215</field>
-			</object>
-		    </field>
-		</object>
-
-=======
->>>>>>> Stashed changes
 		<object type="DiagramEntitySetting" id="621">
 		    <field name="entity">
 			<object ref="164"/>
@@ -8469,42 +8216,24 @@ finish
 
 		<object type="DiagramEntitySetting" id="631">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="110"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="632">
-			    <field name="x">513</field>
-			    <field name="y">243</field>
-=======
 			<object ref="158"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="632">
 			    <field name="x">128</field>
 			    <field name="y">202</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
 
 		<object type="DiagramEntitySetting" id="633">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="100"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="634">
-			    <field name="x">255</field>
-			    <field name="y">298</field>
-=======
 			<object ref="166"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="634">
 			    <field name="x">482</field>
 			    <field name="y">194</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
@@ -8629,42 +8358,24 @@ finish
 
 		<object type="DiagramEntitySetting" id="655">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="245"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="656">
-			    <field name="x">429</field>
-			    <field name="y">266</field>
-=======
 			<object ref="68"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="656">
 			    <field name="x">249</field>
 			    <field name="y">118</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
 
 		<object type="DiagramEntitySetting" id="657">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="23"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="658">
-			    <field name="x">55</field>
-			    <field name="y">183</field>
-=======
 			<object ref="70"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="658">
 			    <field name="x">544</field>
 			    <field name="y">231</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
@@ -8861,32 +8572,19 @@ finish
 
 		<object type="DiagramEntitySetting" id="691">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="27"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="692">
-			    <field name="x">283</field>
-			    <field name="y">77</field>
-=======
 			<object ref="231"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="692">
 			    <field name="x">198</field>
 			    <field name="y">26</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
 
 		<object type="DiagramEntitySetting" id="693">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="213"/>
-=======
 			<object ref="267"/>
->>>>>>> Stashed changes
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="694">
@@ -9454,11 +9152,7 @@ finish
 
 		<object type="DiagramEntitySetting" id="787">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="178"/>
-=======
 			<object ref="194"/>
->>>>>>> Stashed changes
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="788">
@@ -9470,11 +9164,7 @@ finish
 
 		<object type="DiagramEntitySetting" id="789">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="180"/>
-=======
 			<object ref="195"/>
->>>>>>> Stashed changes
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="790">
@@ -9842,96 +9532,6 @@ finish
 		    <field name="entity">
 			<object type="Scenario" id="826">
 			    <base type="Entity">
-				<field name="name">Negociar enviament scenario</field>
-				<field name="description">Proces de enviar </field>
-				<field name="uniqueId">112</field>
-			    </base>
-
-			    <field name="context"></field>
-			    <field name="steps"><list>
-				<object type="Step" id="827">
-				    <base type="Entity">
-					<field name="name">&lt;Prometheus unique entity name au.edu.rmit.cs.prometheus.datamodel.jacob.Step ID=148&gt;</field>
-					<field name="description">Resposta de un proveidor de transport a l'oferta demanada pel sistema</field>
-					<field name="uniqueId">148</field>
-				    </base>
-
-				    <field name="step">
-<<<<<<< Updated upstream
-					<object ref="26"/>
-				    </field>
-				    <field name="roles"><list>
-					<object ref="250"/>
-=======
-					<object ref="803"/>
-				    </field>
-				    <field name="roles"><list>
-					<object ref="220"/>
->>>>>>> Stashed changes
-					</list>
-				    </field>
-				</object>
-
-<<<<<<< Updated upstream
-				<object type="Step" id="817">
-=======
-				<object type="Step" id="828">
->>>>>>> Stashed changes
-				    <base type="Entity">
-					<field name="name">&lt;Prometheus unique entity name au.edu.rmit.cs.prometheus.datamodel.jacob.Step ID=149&gt;</field>
-					<field name="description">Acceptació oferta enviament d'alguns dels proveidors per el lot sobre el qual s'ha demanat les ofertes</field>
-					<field name="uniqueId">149</field>
-				    </base>
-
-				    <field name="step">
-					<object ref="50"/>
-				    </field>
-				    <field name="dataWritten"><list>
-					<object ref="57"/>
-					</list>
-				    </field>
-				    <field name="roles"><list>
-					<object ref="250"/>
-					</list>
-				    </field>
-				</object>
-
-				<object type="Step" id="818">
-				    <base type="Entity">
-					<field name="name">&lt;Prometheus unique entity name au.edu.rmit.cs.prometheus.datamodel.jacob.Step ID=150&gt;</field>
-					<field name="description">S'informa de la data de recepció del producte.</field>
-					<field name="uniqueId">150</field>
-				    </base>
-
-				    <field name="step">
-					<object ref="23"/>
-				    </field>
-				    <field name="roles"><list>
-					<object ref="250"/>
-					</list>
-				    </field>
-				</object>
-				</list>
-			    </field>
-			    <field name="variation"></field>
-			    <field name="linkedGoals"><list>
-				<object ref="46"/>
-				</list>
-			    </field>
-			</object>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="819">
-			    <field name="x">403</field>
-			    <field name="y">142</field>
-			</object>
-		    </field>
-		</object>
-
-		<object type="DiagramEntitySetting" id="820">
-		    <field name="entity">
-			<object type="Scenario" id="821">
-			    <base type="Entity">
 				<field name="name">Vendre producte scenario</field>
 				<field name="description">Proces de compra de un o alguns productes per l'usuari.</field>
 				<field name="uniqueId">22</field>
@@ -9939,7 +9539,7 @@ finish
 
 			    <field name="context"></field>
 			    <field name="steps"><list>
-				<object type="Step" id="822">
+				<object type="Step" id="827">
 				    <base type="Entity">
 					<field name="name">&lt;Prometheus unique entity name au.edu.rmit.cs.prometheus.datamodel.jacob.Step ID=113&gt;</field>
 					<field name="description">Proces de negociar l'enviament d'un producte</field>
@@ -9947,15 +9547,15 @@ finish
 				    </base>
 
 				    <field name="step">
-					<object ref="815"/>
+					<object ref="803"/>
 				    </field>
 				    <field name="roles"><list>
-					<object ref="261"/>
+					<object ref="220"/>
 					</list>
 				    </field>
 				</object>
 
-				<object type="Step" id="823">
+				<object type="Step" id="828">
 				    <base type="Entity">
 					<field name="name">&lt;Prometheus unique entity name au.edu.rmit.cs.prometheus.datamodel.jacob.Step ID=153&gt;</field>
 					<field name="description">Proces de pagar un producte o més d'un.</field>
@@ -9963,11 +9563,7 @@ finish
 				    </base>
 
 				    <field name="step">
-<<<<<<< Updated upstream
-					<object type="Scenario" id="824">
-=======
 					<object type="Scenario" id="829">
->>>>>>> Stashed changes
 					    <base type="Entity">
 						<field name="name">Cobrar scenario</field>
 						<field name="description">Proces de pagar un producte o més d'un</field>
@@ -9976,11 +9572,7 @@ finish
 
 					    <field name="context"></field>
 					    <field name="steps"><list>
-<<<<<<< Updated upstream
-						<object type="Step" id="825">
-=======
 						<object type="Step" id="830">
->>>>>>> Stashed changes
 						    <base type="Entity">
 							<field name="name">&lt;Prometheus unique entity name au.edu.rmit.cs.prometheus.datamodel.jacob.Step ID=152&gt;</field>
 							<field name="description">Es transfereixen els diners al sistema o al usuari.</field>
@@ -9996,11 +9588,7 @@ finish
 						    </field>
 						</object>
 
-<<<<<<< Updated upstream
-						<object type="Step" id="826">
-=======
 						<object type="Step" id="831">
->>>>>>> Stashed changes
 						    <base type="Entity">
 							<field name="name">&lt;Prometheus unique entity name au.edu.rmit.cs.prometheus.datamodel.jacob.Step ID=165&gt;</field>
 							<field name="description">Emmagatzema la transcacció realitzada.</field>
@@ -10017,11 +9605,7 @@ finish
 						    </field>
 						</object>
 
-<<<<<<< Updated upstream
-						<object type="Step" id="827">
-=======
 						<object type="Step" id="832">
->>>>>>> Stashed changes
 						    <base type="Entity">
 							<field name="name">&lt;Prometheus unique entity name au.edu.rmit.cs.prometheus.datamodel.jacob.Step ID=166&gt;</field>
 							<field name="description">S'ha de pagar el producte venut al venedor extern.</field>
@@ -10037,11 +9621,7 @@ finish
 						    </field>
 						</object>
 
-<<<<<<< Updated upstream
-						<object type="Step" id="828">
-=======
 						<object type="Step" id="833">
->>>>>>> Stashed changes
 						    <base type="Entity">
 							<field name="name">&lt;Prometheus unique entity name au.edu.rmit.cs.prometheus.datamodel.jacob.Step ID=167&gt;</field>
 							<field name="description">S'ha de poder realizar el cobrament accedint al sistema extern que s'encarregui.</field>
@@ -10057,11 +9637,7 @@ finish
 						    </field>
 						</object>
 
-<<<<<<< Updated upstream
-						<object type="Step" id="829">
-=======
 						<object type="Step" id="834">
->>>>>>> Stashed changes
 						    <base type="Entity">
 							<field name="name">&lt;Prometheus unique entity name au.edu.rmit.cs.prometheus.datamodel.jacob.Step ID=168&gt;</field>
 							<field name="description">S'ha de retornar els diners que va pagar l'usuari</field>
@@ -10080,11 +9656,7 @@ finish
 					    </field>
 					    <field name="variation"></field>
 					    <field name="linkedGoals"><list>
-<<<<<<< Updated upstream
-						<object type="Goal" id="830">
-=======
 						<object type="Goal" id="835">
->>>>>>> Stashed changes
 						    <base type="Entity">
 							<field name="name">Pagar</field>
 						    </base>
@@ -10100,11 +9672,7 @@ finish
 				    </field>
 				</object>
 
-<<<<<<< Updated upstream
-				<object type="Step" id="831">
-=======
 				<object type="Step" id="836">
->>>>>>> Stashed changes
 				    <base type="Entity">
 					<field name="name">&lt;Prometheus unique entity name au.edu.rmit.cs.prometheus.datamodel.jacob.Step ID=155&gt;</field>
 					<field name="description">S'entrega la factura a l'usuari.</field>
@@ -10124,11 +9692,7 @@ finish
 				    </field>
 				</object>
 
-<<<<<<< Updated upstream
-				<object type="Step" id="832">
-=======
 				<object type="Step" id="837">
->>>>>>> Stashed changes
 				    <base type="Entity">
 					<field name="name">&lt;Prometheus unique entity name au.edu.rmit.cs.prometheus.datamodel.jacob.Step ID=147&gt;</field>
 					<field name="description">Ho genera l'usuari.</field>
@@ -10153,20 +9717,13 @@ finish
 			</object>
 		    </field>
 		    <field name="location">
-<<<<<<< Updated upstream
-			<object type="Coordinate" id="833">
-=======
 			<object type="Coordinate" id="838">
->>>>>>> Stashed changes
 			    <field name="x">101</field>
 			    <field name="y">83</field>
 			</object>
 		    </field>
 		</object>
 
-<<<<<<< Updated upstream
-		<object type="DiagramEntitySetting" id="834">
-=======
 		<object type="DiagramEntitySetting" id="839">
 		    <field name="entity">
 			<object ref="829"/>
@@ -10180,7 +9737,6 @@ finish
 		</object>
 
 		<object type="DiagramEntitySetting" id="841">
->>>>>>> Stashed changes
 		    <field name="entity">
 			<object type="Scenario" id="842">
 			    <base type="Entity">
@@ -10228,11 +9784,7 @@ finish
 				    </base>
 
 				    <field name="step">
-<<<<<<< Updated upstream
-					<object ref="815"/>
-=======
 					<object ref="803"/>
->>>>>>> Stashed changes
 				    </field>
 				    <field name="roles"><list>
 					<object ref="259"/>
@@ -10398,21 +9950,6 @@ finish
 			</object>
 		    </field>
 		</object>
-<<<<<<< Updated upstream
-
-		<object type="DiagramEntitySetting" id="857">
-		    <field name="entity">
-			<object ref="824"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="858">
-			    <field name="x">428</field>
-			    <field name="y">66</field>
-			</object>
-		    </field>
-		</object>
-=======
->>>>>>> Stashed changes
 		</list>
 	    </field>
 	</object>
@@ -10438,84 +9975,48 @@ finish
 
 		<object type="DiagramEntitySetting" id="863">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="253"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="864">
-			    <field name="x">490</field>
-			    <field name="y">312</field>
-=======
 			<object ref="34"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="864">
 			    <field name="x">23</field>
 			    <field name="y">116</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
 
 		<object type="DiagramEntitySetting" id="865">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="265"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="866">
-			    <field name="x">52</field>
-			    <field name="y">383</field>
-=======
 			<object ref="221"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="866">
 			    <field name="x">931</field>
 			    <field name="y">357</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
 
 		<object type="DiagramEntitySetting" id="867">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="190"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="868">
-			    <field name="x">317</field>
-			    <field name="y">242</field>
-=======
 			<object ref="220"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="868">
 			    <field name="x">546</field>
 			    <field name="y">381</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
 
 		<object type="DiagramEntitySetting" id="869">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="22"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="870">
-			    <field name="x">367</field>
-			    <field name="y">418</field>
-=======
 			<object ref="205"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="870">
 			    <field name="x">490</field>
 			    <field name="y">312</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
@@ -10726,11 +10227,7 @@ finish
 
 		<object type="DiagramEntitySetting" id="905">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="208"/>
-=======
 			<object ref="217"/>
->>>>>>> Stashed changes
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="906">
@@ -10742,126 +10239,72 @@ finish
 
 		<object type="DiagramEntitySetting" id="907">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="185"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="908">
-			    <field name="x">478</field>
-			    <field name="y">173</field>
-=======
 			<object ref="259"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="908">
 			    <field name="x">228</field>
 			    <field name="y">50</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
 
 		<object type="DiagramEntitySetting" id="909">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="252"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="910">
-			    <field name="x">248</field>
-			    <field name="y">129</field>
-=======
 			<object ref="192"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="910">
 			    <field name="x">13</field>
 			    <field name="y">323</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
 
 		<object type="DiagramEntitySetting" id="911">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="250"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="912">
-			    <field name="x">228</field>
-			    <field name="y">50</field>
-=======
 			<object ref="63"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="912">
 			    <field name="x">51</field>
 			    <field name="y">66</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
 
 		<object type="DiagramEntitySetting" id="913">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="150"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="914">
-			    <field name="x">984</field>
-			    <field name="y">33</field>
-=======
 			<object ref="36"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="914">
 			    <field name="x">211</field>
 			    <field name="y">175</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
 
 		<object type="DiagramEntitySetting" id="915">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="207"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="916">
-			    <field name="x">235</field>
-			    <field name="y">445</field>
-=======
 			<object ref="254"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="916">
 			    <field name="x">248</field>
 			    <field name="y">129</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
 
 		<object type="DiagramEntitySetting" id="917">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="50"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="918">
-			    <field name="x">51</field>
-			    <field name="y">66</field>
-=======
 			<object ref="76"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="918">
 			    <field name="x">293</field>
 			    <field name="y">15</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
@@ -10904,79 +10347,48 @@ finish
 
 		<object type="DiagramEntitySetting" id="925">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="12"/>
-=======
 			<object ref="156"/>
->>>>>>> Stashed changes
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="926">
-			    <field name="x">79</field>
-			    <field name="y">432</field>
+			    <field name="x">588</field>
+			    <field name="y">29</field>
 			</object>
 		    </field>
 		</object>
 
 		<object type="DiagramEntitySetting" id="927">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="101"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="928">
-			    <field name="x">588</field>
-			    <field name="y">29</field>
-=======
 			<object ref="131"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="928">
 			    <field name="x">1007</field>
 			    <field name="y">406</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
 
 		<object type="DiagramEntitySetting" id="929">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="112"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="930">
-			    <field name="x">740</field>
-			    <field name="y">27</field>
-=======
 			<object ref="202"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="930">
 			    <field name="x">478</field>
 			    <field name="y">173</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
 
 		<object type="DiagramEntitySetting" id="931">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="175"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="932">
-			    <field name="x">21</field>
-			    <field name="y">328</field>
-=======
 			<object ref="155"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="932">
 			    <field name="x">815</field>
 			    <field name="y">128</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
@@ -11137,11 +10549,7 @@ finish
 	    <field name="entitySettings"><list>
 		<object type="DiagramEntitySetting" id="959">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="59"/>
-=======
 			<object ref="22"/>
->>>>>>> Stashed changes
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="960">
@@ -11153,21 +10561,12 @@ finish
 
 		<object type="DiagramEntitySetting" id="961">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="196"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="962">
-			    <field name="x">37</field>
-			    <field name="y">25</field>
-=======
 			<object ref="92"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="962">
 			    <field name="x">219</field>
 			    <field name="y">215</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
@@ -11280,42 +10679,24 @@ finish
 
 		<object type="DiagramEntitySetting" id="981">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="32"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="982">
-			    <field name="x">46</field>
-			    <field name="y">95</field>
-=======
 			<object ref="128"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="982">
 			    <field name="x">226</field>
 			    <field name="y">223</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
 
 		<object type="DiagramEntitySetting" id="983">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="64"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="984">
-			    <field name="x">209</field>
-			    <field name="y">95</field>
-=======
 			<object ref="37"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="984">
 			    <field name="x">2</field>
 			    <field name="y">29</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
@@ -11404,122 +10785,72 @@ finish
 
 		<object type="DiagramEntitySetting" id="999">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="144"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1000">
-			    <field name="x">264</field>
-			    <field name="y">230</field>
-=======
 			<object ref="137"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="1000">
 			    <field name="x">468</field>
 			    <field name="y">178</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
 
 		<object type="DiagramEntitySetting" id="1001">
 		    <field name="entity">
-			<object ref="136"/>
+			<object ref="144"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="1002">
-<<<<<<< Updated upstream
-			    <field name="x">679</field>
-			    <field name="y">249</field>
-=======
 			    <field name="x">497</field>
 			    <field name="y">120</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
 
 		<object type="DiagramEntitySetting" id="1003">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="122"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1004">
-			    <field name="x">497</field>
-			    <field name="y">242</field>
-=======
 			<object ref="132"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="1004">
 			    <field name="x">311</field>
 			    <field name="y">80</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
 
 		<object type="DiagramEntitySetting" id="1005">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="17"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1006">
-			    <field name="x">607</field>
-			    <field name="y">66</field>
-=======
 			<object ref="131"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="1006">
 			    <field name="x">232</field>
 			    <field name="y">354</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
 
 		<object type="DiagramEntitySetting" id="1007">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="116"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1008">
-			    <field name="x">189</field>
-			    <field name="y">173</field>
-=======
 			<object ref="149"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="1008">
 			    <field name="x">244</field>
 			    <field name="y">292</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
 
 		<object type="DiagramEntitySetting" id="1009">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="117"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1010">
-			    <field name="x">311</field>
-			    <field name="y">80</field>
-=======
 			<object ref="130"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="1010">
 			    <field name="x">607</field>
 			    <field name="y">66</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
@@ -11548,11 +10879,7 @@ finish
 
 		<object type="DiagramEntitySetting" id="1015">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="50"/>
-=======
 			<object ref="63"/>
->>>>>>> Stashed changes
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="1016">
@@ -11564,42 +10891,24 @@ finish
 
 		<object type="DiagramEntitySetting" id="1017">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="246"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1018">
-			    <field name="x">604</field>
-			    <field name="y">308</field>
-=======
 			<object ref="22"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="1018">
 			    <field name="x">617</field>
 			    <field name="y">304</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
 
 		<object type="DiagramEntitySetting" id="1019">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="222"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1020">
-			    <field name="x">225</field>
-			    <field name="y">337</field>
-=======
 			<object ref="253"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="1020">
 			    <field name="x">604</field>
 			    <field name="y">308</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
@@ -11618,21 +10927,12 @@ finish
 
 		<object type="DiagramEntitySetting" id="1023">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="219"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1024">
-			    <field name="x">208</field>
-			    <field name="y">239</field>
-=======
 			<object ref="76"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="1024">
 			    <field name="x">256</field>
 			    <field name="y">104</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
@@ -11651,37 +10951,24 @@ finish
 
 		<object type="DiagramEntitySetting" id="1027">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="23"/>
-=======
 			<object ref="74"/>
->>>>>>> Stashed changes
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="1028">
-			    <field name="x">28</field>
-			    <field name="y">298</field>
+			    <field name="x">371</field>
+			    <field name="y">146</field>
 			</object>
 		    </field>
 		</object>
 
 		<object type="DiagramEntitySetting" id="1029">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="218"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1030">
-			    <field name="x">371</field>
-			    <field name="y">146</field>
-=======
 			<object ref="68"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="1030">
 			    <field name="x">145</field>
 			    <field name="y">84</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
@@ -11870,23 +11157,7 @@ finish
 
 		<object type="DiagramEntitySetting" id="1061">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="609"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1062">
-			    <field name="x">388</field>
-			    <field name="y">72</field>
-			</object>
-		    </field>
-		</object>
-
-		<object type="DiagramEntitySetting" id="1063">
-		    <field name="entity">
-			<object type="Plan" id="1064">
-=======
 			<object type="Plan" id="1062">
->>>>>>> Stashed changes
 			    <base type="Entity">
 				<field name="name">Pla Cercar productes</field>
 				<field name="description"></field>
@@ -11921,21 +11192,12 @@ finish
 
 		<object type="DiagramEntitySetting" id="1066">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="259"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1067">
-			    <field name="x">566</field>
-			    <field name="y">264</field>
-=======
 			<object ref="204"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="1067">
 			    <field name="x">543</field>
 			    <field name="y">355</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
@@ -11992,74 +11254,43 @@ finish
 
 		<object type="DiagramEntitySetting" id="1076">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="260"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1077">
-			    <field name="x">549</field>
-			    <field name="y">365</field>
-=======
 			<object ref="210"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="1077">
 			    <field name="x">566</field>
 			    <field name="y">264</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
 
 		<object type="DiagramEntitySetting" id="1078">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="17"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1079">
-			    <field name="x">626</field>
-			    <field name="y">215</field>
-=======
 			<object ref="194"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="1079">
 			    <field name="x">355</field>
 			    <field name="y">368</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
 
 		<object type="DiagramEntitySetting" id="1080">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="254"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1081">
-			    <field name="x">543</field>
-			    <field name="y">355</field>
-=======
 			<object ref="142"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="1081">
 			    <field name="x">704</field>
 			    <field name="y">103</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
 
 		<object type="DiagramEntitySetting" id="1082">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="117"/>
-=======
 			<object ref="132"/>
->>>>>>> Stashed changes
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="1083">
@@ -12075,176 +11306,13 @@ finish
 	<object type="DiagramSettings" id="1084">
 	    <field name="diagramId">
 		<object type="DiagramId" id="1085">
-		    <field name="stringId">au.edu.rmit.cs.prometheus.gui.diagram.capabilityoverview.CapabilityOverviewDiagramModel#419</field>
+		    <field name="stringId">au.edu.rmit.cs.prometheus.gui.diagram.capabilityoverview.CapabilityOverviewDiagramModel#350</field>
 		</object>
 	    </field>
 	    <field name="entitySettings"><list>
 		<object type="DiagramEntitySetting" id="1086">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="158"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1087">
-			    <field name="x">303</field>
-			    <field name="y">109</field>
-=======
-			<object ref="5"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1087">
-			    <field name="y">167</field>
->>>>>>> Stashed changes
-			</object>
-		    </field>
-		</object>
-
-		<object type="DiagramEntitySetting" id="1088">
-		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="95"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1089">
-			    <field name="x">522</field>
-			    <field name="y">233</field>
-=======
-			<object ref="172"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1089">
-			    <field name="x">521</field>
-			    <field name="y">152</field>
->>>>>>> Stashed changes
-			</object>
-		    </field>
-		</object>
-
-		<object type="DiagramEntitySetting" id="1090">
-		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="22"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1091">
-			    <field name="x">521</field>
-			    <field name="y">152</field>
-=======
-			<object ref="173"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1091">
-			    <field name="x">305</field>
-			    <field name="y">231</field>
->>>>>>> Stashed changes
-			</object>
-		    </field>
-		</object>
-
-		<object type="DiagramEntitySetting" id="1092">
-		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="92"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1093">
-			    <field name="y">167</field>
-=======
-			<object ref="175"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1093">
-			    <field name="x">522</field>
-			    <field name="y">233</field>
->>>>>>> Stashed changes
-			</object>
-		    </field>
-		</object>
-
-		<object type="DiagramEntitySetting" id="1094">
-		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="280"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1095">
-			    <field name="x">334</field>
-			    <field name="y">161</field>
-=======
-			<object ref="180"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1095">
-			    <field name="x">303</field>
-			    <field name="y">109</field>
->>>>>>> Stashed changes
-			</object>
-		    </field>
-		</object>
-
-		<object type="DiagramEntitySetting" id="1096">
-		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="96"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1097">
-			    <field name="x">336</field>
-			    <field name="y">287</field>
-=======
-			<object ref="278"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1097">
-			    <field name="x">334</field>
-			    <field name="y">161</field>
->>>>>>> Stashed changes
-			</object>
-		    </field>
-		</object>
-
-		<object type="DiagramEntitySetting" id="1098">
-		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="93"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1099">
-			    <field name="x">305</field>
-			    <field name="y">231</field>
-=======
-			<object ref="179"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1099">
-			    <field name="x">336</field>
-			    <field name="y">287</field>
->>>>>>> Stashed changes
-			</object>
-		    </field>
-		</object>
-		</list>
-	    </field>
-	</object>
-
-	<object type="DiagramSettings" id="1100">
-	    <field name="diagramId">
-		<object type="DiagramId" id="1101">
-		    <field name="stringId">au.edu.rmit.cs.prometheus.gui.diagram.capabilityoverview.CapabilityOverviewDiagramModel#350</field>
-		</object>
-	    </field>
-	    <field name="entitySettings"><list>
-		<object type="DiagramEntitySetting" id="1102">
-		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="224"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1103">
-			    <field name="x">169</field>
-			    <field name="y">277</field>
-=======
-			<object type="MessageDistributionPair" id="1103">
+			<object type="MessageDistributionPair" id="1087">
 			    <base type="Entity">
 				<field name="name">capabilityMessagePair-352</field>
 				<field name="uniqueId">352</field>
@@ -12253,39 +11321,106 @@ finish
 			</object>
 		    </field>
 		    <field name="location">
-			<object type="Coordinate" id="1104">
+			<object type="Coordinate" id="1088">
 			    <field name="x">289</field>
 			    <field name="y">100</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
 
-		<object type="DiagramEntitySetting" id="1105">
+		<object type="DiagramEntitySetting" id="1089">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="26"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1105">
-			    <field name="x">533</field>
-			    <field name="y">325</field>
-=======
 			<object ref="75"/>
 		    </field>
 		    <field name="location">
-			<object type="Coordinate" id="1106">
+			<object type="Coordinate" id="1090">
 			    <field name="x">364</field>
 			    <field name="y">260</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
 
-		<object type="DiagramEntitySetting" id="1106">
+		<object type="DiagramEntitySetting" id="1091">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object type="DataConnection" id="1107">
+			<object type="MessageDistributionPair" id="1092">
+			    <base type="Entity">
+				<field name="name">capabilityMessagePair-353</field>
+				<field name="uniqueId">353</field>
+			    </base>
+
+			</object>
+		    </field>
+		    <field name="location">
+			<object type="Coordinate" id="1093">
+			    <field name="x">356</field>
+			    <field name="y">104</field>
+			</object>
+		    </field>
+		</object>
+
+		<object type="DiagramEntitySetting" id="1094">
+		    <field name="entity">
+			<object ref="34"/>
+		    </field>
+		    <field name="location">
+			<object type="Coordinate" id="1095">
+			    <field name="x">580</field>
+			    <field name="y">222</field>
+			</object>
+		    </field>
+		</object>
+
+		<object type="DiagramEntitySetting" id="1096">
+		    <field name="entity">
+			<object type="MessageDistributionPair" id="1097">
+			    <base type="Entity">
+				<field name="name">capabilityMessagePair-354</field>
+				<field name="uniqueId">354</field>
+			    </base>
+
+			</object>
+		    </field>
+		    <field name="location">
+			<object type="Coordinate" id="1098">
+			    <field name="x">476</field>
+			    <field name="y">105</field>
+			</object>
+		    </field>
+		</object>
+
+		<object type="DiagramEntitySetting" id="1099">
+		    <field name="entity">
+			<object type="MessageDistributionPair" id="1100">
+			    <base type="Entity">
+				<field name="name">capabilityMessagePair-355</field>
+				<field name="uniqueId">355</field>
+			    </base>
+
+			</object>
+		    </field>
+		    <field name="location">
+			<object type="Coordinate" id="1101">
+			    <field name="x">604</field>
+			    <field name="y">109</field>
+			</object>
+		    </field>
+		</object>
+
+		<object type="DiagramEntitySetting" id="1102">
+		    <field name="entity">
+			<object ref="80"/>
+		    </field>
+		    <field name="location">
+			<object type="Coordinate" id="1103">
+			    <field name="x">169</field>
+			    <field name="y">277</field>
+			</object>
+		    </field>
+		</object>
+
+		<object type="DiagramEntitySetting" id="1104">
+		    <field name="entity">
+			<object type="DataConnection" id="1105">
 			    <base type="Entity">
 				<field name="name">&lt;Prometheus unique entity name au.edu.rmit.cs.prometheus.datamodel.jacob.DataConnection ID=357&gt;</field>
 				<field name="uniqueId">357</field>
@@ -12294,17 +11429,21 @@ finish
 			</object>
 		    </field>
 		    <field name="location">
-			<object type="Coordinate" id="1108">
+			<object type="Coordinate" id="1106">
 			    <field name="x">183</field>
 			    <field name="y">208</field>
-=======
-			<object ref="34"/>
+			</object>
+		    </field>
+		</object>
+
+		<object type="DiagramEntitySetting" id="1107">
+		    <field name="entity">
+			<object ref="36"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="1108">
-			    <field name="x">580</field>
-			    <field name="y">222</field>
->>>>>>> Stashed changes
+			    <field name="x">533</field>
+			    <field name="y">325</field>
 			</object>
 		    </field>
 		</object>
@@ -12313,173 +11452,6 @@ finish
 		    <field name="entity">
 			<object type="MessageDistributionPair" id="1110">
 			    <base type="Entity">
-<<<<<<< Updated upstream
-				<field name="name">capabilityMessagePair-352</field>
-				<field name="uniqueId">352</field>
-=======
-				<field name="name">capabilityMessagePair-353</field>
-				<field name="uniqueId">353</field>
->>>>>>> Stashed changes
-			    </base>
-
-			</object>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1111">
-<<<<<<< Updated upstream
-			    <field name="x">289</field>
-			    <field name="y">100</field>
-=======
-			    <field name="x">356</field>
-			    <field name="y">104</field>
->>>>>>> Stashed changes
-			</object>
-		    </field>
-		</object>
-
-		<object type="DiagramEntitySetting" id="1112">
-		    <field name="entity">
-			<object type="MessageDistributionPair" id="1113">
-			    <base type="Entity">
-<<<<<<< Updated upstream
-				<field name="name">capabilityMessagePair-353</field>
-				<field name="uniqueId">353</field>
-=======
-				<field name="name">capabilityMessagePair-354</field>
-				<field name="uniqueId">354</field>
->>>>>>> Stashed changes
-			    </base>
-
-			</object>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1114">
-<<<<<<< Updated upstream
-			    <field name="x">356</field>
-			    <field name="y">104</field>
-=======
-			    <field name="x">476</field>
-			    <field name="y">105</field>
->>>>>>> Stashed changes
-			</object>
-		    </field>
-		</object>
-
-		<object type="DiagramEntitySetting" id="1115">
-		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="24"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1116">
-			    <field name="x">580</field>
-			    <field name="y">222</field>
-=======
-			<object type="MessageDistributionPair" id="1116">
-			    <base type="Entity">
-				<field name="name">capabilityMessagePair-355</field>
-				<field name="uniqueId">355</field>
-			    </base>
-
-			</object>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1117">
-			    <field name="x">604</field>
-			    <field name="y">109</field>
->>>>>>> Stashed changes
-			</object>
-		    </field>
-		</object>
-
-		<object type="DiagramEntitySetting" id="1117">
-		    <field name="entity">
-<<<<<<< Updated upstream
-			<object type="MessageDistributionPair" id="1118">
-			    <base type="Entity">
-				<field name="name">capabilityMessagePair-354</field>
-				<field name="uniqueId">354</field>
-			    </base>
-
-			</object>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1119">
-			    <field name="x">476</field>
-			    <field name="y">105</field>
-=======
-			<object ref="80"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1119">
-			    <field name="x">169</field>
-			    <field name="y">277</field>
->>>>>>> Stashed changes
-			</object>
-		    </field>
-		</object>
-
-		<object type="DiagramEntitySetting" id="1120">
-		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="219"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1121">
-			    <field name="x">364</field>
-			    <field name="y">260</field>
-			</object>
-		    </field>
-		</object>
-
-		<object type="DiagramEntitySetting" id="1122">
-		    <field name="entity">
-			<object type="MessageDistributionPair" id="1123">
-			    <base type="Entity">
-				<field name="name">capabilityMessagePair-355</field>
-				<field name="uniqueId">355</field>
-			    </base>
-
-			</object>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1124">
-			    <field name="x">604</field>
-			    <field name="y">109</field>
-=======
-			<object type="DataConnection" id="1121">
-			    <base type="Entity">
-				<field name="name">&lt;Prometheus unique entity name au.edu.rmit.cs.prometheus.datamodel.jacob.DataConnection ID=357&gt;</field>
-				<field name="uniqueId">357</field>
-			    </base>
-
-			</object>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1122">
-			    <field name="x">183</field>
-			    <field name="y">208</field>
-			</object>
-		    </field>
-		</object>
-
-		<object type="DiagramEntitySetting" id="1123">
-		    <field name="entity">
-			<object ref="36"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1124">
-			    <field name="x">533</field>
-			    <field name="y">325</field>
->>>>>>> Stashed changes
-			</object>
-		    </field>
-		</object>
-
-		<object type="DiagramEntitySetting" id="1125">
-		    <field name="entity">
-			<object type="MessageDistributionPair" id="1126">
-			    <base type="Entity">
 				<field name="name">capabilityMessagePair-351</field>
 				<field name="uniqueId">351</field>
 			    </base>
@@ -12487,9 +11459,102 @@ finish
 			</object>
 		    </field>
 		    <field name="location">
-			<object type="Coordinate" id="1127">
+			<object type="Coordinate" id="1111">
 			    <field name="x">191</field>
 			    <field name="y">102</field>
+			</object>
+		    </field>
+		</object>
+		</list>
+	    </field>
+	</object>
+
+	<object type="DiagramSettings" id="1112">
+	    <field name="diagramId">
+		<object type="DiagramId" id="1113">
+		    <field name="stringId">au.edu.rmit.cs.prometheus.gui.diagram.capabilityoverview.CapabilityOverviewDiagramModel#419</field>
+		</object>
+	    </field>
+	    <field name="entitySettings"><list>
+		<object type="DiagramEntitySetting" id="1114">
+		    <field name="entity">
+			<object ref="5"/>
+		    </field>
+		    <field name="location">
+			<object type="Coordinate" id="1115">
+			    <field name="y">167</field>
+			</object>
+		    </field>
+		</object>
+
+		<object type="DiagramEntitySetting" id="1116">
+		    <field name="entity">
+			<object ref="172"/>
+		    </field>
+		    <field name="location">
+			<object type="Coordinate" id="1117">
+			    <field name="x">521</field>
+			    <field name="y">152</field>
+			</object>
+		    </field>
+		</object>
+
+		<object type="DiagramEntitySetting" id="1118">
+		    <field name="entity">
+			<object ref="173"/>
+		    </field>
+		    <field name="location">
+			<object type="Coordinate" id="1119">
+			    <field name="x">305</field>
+			    <field name="y">231</field>
+			</object>
+		    </field>
+		</object>
+
+		<object type="DiagramEntitySetting" id="1120">
+		    <field name="entity">
+			<object ref="175"/>
+		    </field>
+		    <field name="location">
+			<object type="Coordinate" id="1121">
+			    <field name="x">522</field>
+			    <field name="y">233</field>
+			</object>
+		    </field>
+		</object>
+
+		<object type="DiagramEntitySetting" id="1122">
+		    <field name="entity">
+			<object ref="180"/>
+		    </field>
+		    <field name="location">
+			<object type="Coordinate" id="1123">
+			    <field name="x">303</field>
+			    <field name="y">109</field>
+			</object>
+		    </field>
+		</object>
+
+		<object type="DiagramEntitySetting" id="1124">
+		    <field name="entity">
+			<object ref="278"/>
+		    </field>
+		    <field name="location">
+			<object type="Coordinate" id="1125">
+			    <field name="x">334</field>
+			    <field name="y">161</field>
+			</object>
+		    </field>
+		</object>
+
+		<object type="DiagramEntitySetting" id="1126">
+		    <field name="entity">
+			<object ref="179"/>
+		    </field>
+		    <field name="location">
+			<object type="Coordinate" id="1127">
+			    <field name="x">336</field>
+			    <field name="y">287</field>
 			</object>
 		    </field>
 		</object>
@@ -12530,42 +11595,24 @@ finish
 
 		<object type="DiagramEntitySetting" id="1134">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="190"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1135">
-			    <field name="x">496</field>
-			    <field name="y">245</field>
-=======
 			<object ref="201"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="1135">
 			    <field name="x">644</field>
 			    <field name="y">57</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
 
 		<object type="DiagramEntitySetting" id="1136">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="183"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1137">
-			    <field name="x">404</field>
-			    <field name="y">45</field>
-=======
 			<object ref="557"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="1137">
 			    <field name="x">197</field>
 			    <field name="y">25</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		    <field name="userApproved">:false</field>
@@ -12597,32 +11644,19 @@ finish
 
 		<object type="DiagramEntitySetting" id="1142">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="167"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="1143">
-			    <field name="x">79</field>
-			    <field name="y">251</field>
-=======
 			<object ref="100"/>
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="1143">
 			    <field name="x">63</field>
 			    <field name="y">193</field>
->>>>>>> Stashed changes
 			</object>
 		    </field>
 		</object>
 
 		<object type="DiagramEntitySetting" id="1144">
 		    <field name="entity">
-<<<<<<< Updated upstream
-			<object ref="171"/>
-=======
 			<object ref="241"/>
->>>>>>> Stashed changes
 		    </field>
 		    <field name="location">
 			<object type="Coordinate" id="1145">
@@ -13254,13 +12288,7 @@ finish
 		</list>
 	    </field>
 	    <field name="scenarios"><list>
-<<<<<<< Updated upstream
-		<object ref="821"/>
-
-		<object ref="850"/>
-=======
 		<object ref="826"/>
->>>>>>> Stashed changes
 
 		<object ref="852"/>
 
@@ -13268,15 +12296,9 @@ finish
 
 		<object ref="809"/>
 
-<<<<<<< Updated upstream
-		<object ref="815"/>
-
-		<object ref="824"/>
-=======
 		<object ref="842"/>
 
 		<object ref="803"/>
->>>>>>> Stashed changes
 
 		<object ref="829"/>
 
@@ -13314,37 +12336,20 @@ finish
 
 		</object>
 
-<<<<<<< Updated upstream
-		<object ref="822"/>
-
-		<object ref="832"/>
-
-		<object ref="816"/>
-
-		<object ref="817"/>
-=======
 		<object ref="827"/>
 
 		<object ref="837"/>
->>>>>>> Stashed changes
 
 		<object ref="804"/>
 
-<<<<<<< Updated upstream
-		<object ref="825"/>
-=======
 		<object ref="805"/>
 
 		<object ref="806"/>
->>>>>>> Stashed changes
 
 		<object ref="830"/>
 
-<<<<<<< Updated upstream
-=======
 		<object ref="828"/>
 
->>>>>>> Stashed changes
 		<object type="Step" id="1165">
 		    <base type="Entity">
 			<field name="name">&lt;Prometheus unique entity name au.edu.rmit.cs.prometheus.datamodel.jacob.Step ID=154&gt;</field>
@@ -13358,11 +12363,7 @@ finish
 		    </field>
 		</object>
 
-<<<<<<< Updated upstream
-		<object ref="831"/>
-=======
 		<object ref="836"/>
->>>>>>> Stashed changes
 
 		<object type="Step" id="1166">
 		    <base type="Entity">
@@ -13393,27 +12394,15 @@ finish
 
 		<object ref="797"/>
 
-<<<<<<< Updated upstream
-		<object ref="826"/>
-=======
 		<object ref="798"/>
 
 		<object ref="799"/>
 
 		<object ref="831"/>
->>>>>>> Stashed changes
 
 		<object ref="832"/>
 
-<<<<<<< Updated upstream
-		<object ref="828"/>
-
-		<object ref="829"/>
-
-		<object ref="797"/>
-=======
 		<object ref="833"/>
->>>>>>> Stashed changes
 
 		<object ref="834"/>
 
@@ -13435,11 +12424,7 @@ finish
 		    </base>
 
 		    <field name="step">
-<<<<<<< Updated upstream
-			<object ref="815"/>
-=======
 			<object ref="803"/>
->>>>>>> Stashed changes
 		    </field>
 		</object>
 
