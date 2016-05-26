@@ -66,6 +66,9 @@
   <owl:Class rdf:ID="Pedir_oferta_transporta">
     <rdfs:subClassOf rdf:resource="#Accion"/>
   </owl:Class>
+  <owl:Class rdf:ID="Peticion_transferencia">
+    <rdfs:subClassOf rdf:resource="#Accion"/>
+  </owl:Class>
   <owl:Class rdf:ID="Enviar_lot">
     <rdfs:subClassOf rdf:resource="#Accion"/>
   </owl:Class>
