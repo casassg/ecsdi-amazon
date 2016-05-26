@@ -14,10 +14,7 @@ from flask import Flask, request
 from multiprocessing import Process, Queue
 import socket
 from rdflib import Namespace, Graph, URIRef, RDF, Literal, logger
-
-from agents import BankAgent
-from agents.ProductsAgent import ProductsAgent
-from utils.ACLMessages import get_message_properties, build_message, send_message, get_agent_info
+from utils.ACLMessages import get_message_properties, build_message, send_message, get_agent_info, register_agent
 from utils.FlaskServer import shutdown_server
 from utils.Agent import Agent
 from utils.OntologyNamespaces import ECSDI, ACL
@@ -32,11 +29,12 @@ hostname = socket.gethostname()
 port = 9015
 
 # Agent Namespace
-agn = Namespace("http://www.agentes.org#")  # Revisar url -> definir nuevo espacio de nombre incluyendo agentes nuestros
+agn = Namespace("http://www.agentes.org#")
 
 # Message Count
 mss_cnt = 0
 
+# Lista de productos a enviar
 lista_productos = []
 
 # Data Agent
@@ -69,6 +67,20 @@ def get_count():
 
 # AGENT FUNCTIONS ------------------------------------------------------------------------------------------
 
+def register_message():
+    """
+    Envia un mensaje de registro al servicio de registro
+    usando una performativa Request y una accion Register del
+    servicio de directorio
+
+    :param gmess:
+    :return:
+    """
+
+    logger.info('Nos registramos')
+
+    gr = register_agent(FinancialAgent, DirectoryAgent, FinancialAgent.uri, get_count())
+    return gr
 
 
 @app.route("/comm")
@@ -78,7 +90,6 @@ def communication():
     """
 
     global dsGraph
-    global mss_cnt
     logger.info('Peticion de informacion recibida')
 
     message = request.args['content']
@@ -87,9 +98,11 @@ def communication():
 
     msgdic = get_message_properties(gm)
 
+    gr = None
+
     if msgdic is None:
         # Si no es, respondemos que no hemos entendido el mensaje
-        gr = build_message(Graph(), ACL['not-understood'], sender=FinancialAgent.uri, msgcnt=mss_cnt)
+        gr = build_message(Graph(), ACL['not-understood'], sender=FinancialAgent.uri, msgcnt=get_count())
     else:
         # Obtenemos la performativa
         if msgdic['performative'] != ACL.request:
@@ -97,7 +110,7 @@ def communication():
             gr = build_message(Graph(),
                                ACL['not-understood'],
                                sender=DirectoryAgent.uri,
-                               msgcnt=mss_cnt)
+                               msgcnt=get_count())
         else:
             # Extraemos el objeto del contenido que ha de ser una accion de la ontologia
             # de registro
@@ -107,7 +120,9 @@ def communication():
 
             # Accion de enviar venta
             if accion == ECSDI.Peticion_compra:
+                # TODO Estudiar como tratar el listado de productos de la Peticion de compra (Mirar el predicate)
                 list = gm.value(subject=content, predicate=ECSDI.Lista_productos_seleccionados)
+
                 global lista_productos
                 for item in list:
                     lista_productos.append(gm.value(subject=content, predicate=ECSDI.Producto))
@@ -116,14 +131,14 @@ def communication():
                 payDelivery()
 
             elif accion == ECSDI.Peticion_retorno:
-                # TODO retorn compra
+                # TODO retorn compra (Aun no hace falta hacerlo. Se hara una vez acabado la compra de productos)
                 gr = build_message(Graph(),
                                    ACL['not-understood'],
                                    sender=DirectoryAgent.uri,
-                                   msgcnt=mss_cnt)
+                                   msgcnt=get_count())
 
             elif accion == ECSDI.Transferencia_comfirmada:
-
+                # TODO accion recibida del BankAgent que su funcionalidad es enviar el mensaje a Product agent para que envie los productos
                 confirmTransfer()
 
             # Ninguna accion a realizar
@@ -131,14 +146,11 @@ def communication():
                 gr = build_message(Graph(),
                                    ACL['not-understood'],
                                    sender=DirectoryAgent.uri,
-                                   msgcnt=mss_cnt)
-    mss_cnt += 1
+                                   msgcnt=get_count())
 
     logger.info('Respondemos a la peticion')
 
     return gr.serialize(format='xml')
-
-    pass
 
 
 @app.route("/Stop")
@@ -164,24 +176,20 @@ def tidyUp():
     pass
 
 
-def agentBehaviour(queue):
+def agent_behaviour(queue):
     """
     Agent Behaviour in a concurrent thread.
-
     :param queue: the queue
     :return: something
     """
 
-    # TODO Behaviour
-
-    pass
+    gr = register_message()
 
 
 # DETERMINATE AGENT FUNCTIONS ------------------------------------------------------------------------------
 
 def payDelivery():
-
-    content = ECSDI['Petcion_transferencia_' + str(get_count())]
+    content = ECSDI['Peticion_transferencia_' + str(get_count())]
 
     graph = Graph()
     subject = ECSDI.Peticion
@@ -196,42 +204,23 @@ def payDelivery():
                             content=content,
                             msgcnt=get_count())
 
-    print("PayDelivery")
     gr = send_message(message, bank.address)
     return gr
 
+
 def registerSells():
     # TODO Record the purchase.
-    productList = ['Producto_2', 'Producto_3']
-    writeSells(1, 15.30, productList, 'Ciudad_1')
+    global lista_productos
+    writeSells(1, 15.30, lista_productos, 'Ciudad_1')
 
-    pass
 
 def confirmTransfer():
     # TODO Confirm the transfer, deliver receipt and communicate with Products Agent.
-
-    rsp_obj = agn['Enviar_venta']
-
-    graph = Graph()
-    subject = ECSDI.Peticion
-    graph.add((subject, RDF.type, ECSDI.Enviar_venta))
-
-    message = build_message(gmess=graph,
-                            perf=ACL.request,
-                            sender=FinancialAgent.uri,
-                            receiver=ProductsAgent.uri,
-                            content=rsp_obj,
-                            msgcnt=mss_cnt)
-
-    print("PayDelivery")
-    gr = send_message(message, BankAgent.address)
-    mss_cnt += 1
-    return gr
-
-    print("ConfirmTransfer")
+    print('todo')
 
 
 def writeSells(paid, totalPrice, productsList, sendTo):
+    # TODO Cambiar el data a almacenar. Tiene que ser data/compras
     URI = "http://www.owl-ontologies.com/ECSDIAmazon.owl#"
     millis = int(round(time.time() * 1000))
     URISell = URI + "Compra_" + str(millis)
@@ -253,13 +242,9 @@ def writeSells(paid, totalPrice, productsList, sendTo):
 # MAIN METHOD ----------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
-    # ---------------------------------------------- TEST --------------------------------------------------
-    confirmTransfer()
-
     # ------------------------------------------------------------------------------------------------------
-
     # Run behaviors
-    ab1 = Process(target=agentBehaviour, args=(queue,))
+    ab1 = Process(target=agent_behaviour, args=(queue,))
     ab1.start()
 
     # Run server

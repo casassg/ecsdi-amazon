@@ -1,26 +1,21 @@
 # -*- coding: utf-8 -*-
 """
 filename: UserPersonalAgent
-
 Agent que implementa la interacció amb l'usuari
-
-
 """
-from utils.OntologyNamespaces import ECSDI
-
-__author__ = ''
-
+from utils.ACLMessages import get_agent_info, send_message, build_message, register_agent
+from utils.OntologyNamespaces import ECSDI, ACL
 import time
 import argparse
 import socket
-from multiprocessing import Process
-
+from multiprocessing import Process, Queue
 from flask import Flask, render_template, request
 from rdflib import Graph, Namespace, URIRef, RDF, Literal
-
 from utils.Agent import Agent
 from utils.FlaskServer import shutdown_server
 from utils.Logging import config_logger
+
+__author__ = 'amazdonde'
 
 # Definimos los parametros de la linea de comandos
 parser = argparse.ArgumentParser()
@@ -81,24 +76,52 @@ DirectoryAgent = Agent('DirectoryAgent',
 # Global dsgraph triplestore
 dsgraph = Graph()
 
+# Queue
+queue = Queue()
+
+
 def get_count():
+    global mss_cnt
     mss_cnt += 1
     return mss_cnt
 
 
-def writeGraph(marca,nom,model,preu):
+def register_message():
+    """
+    Envia un mensaje de registro al servicio de registro
+    usando una performativa Request y una accion Register del
+    servicio de directorio
+
+    :param gmess:
+    :return:
+    """
+
+    logger.info('Nos registramos')
+
+    gr = register_agent(ExternalSellerPersonalAgent, DirectoryAgent, ExternalSellerPersonalAgent.uri, get_count())
+    return gr
+
+
+def writeGraph(marca, nom, model, preu):
+    # Declarar URI del nuevo producto
     URI = "http://www.owl-ontologies.com/ECSDIAmazon.owl#"
     n = int(round(time.time() * 1000))
     data = URI + "Producto_" + str(n)
 
+    # Creacion del grafo con los datos anteriores
+    ontologyFile = open('../productes/productes')
     gm = Graph()
+    gm.parse(ontologyFile, format='turtle')
+
+    # Anadir nuevo producto externo al grafo
     gm.add((URIRef(data), RDF.type, ECSDI.Producto))
     gm.add((URIRef(data), ECSDI.Nombre, Literal(nom)))
     gm.add((URIRef(data), ECSDI.Marca, Literal(marca)))
     gm.add((URIRef(data), ECSDI.Modelo, Literal(model)))
     gm.add((URIRef(data), ECSDI.Precio, Literal(preu)))
 
-    gm.serialize(destination='../data/data', format='turtle')
+    # Guardar en el fichero de productos
+    return gm.serialize(destination='../data/productes', format='turtle')
 
 
 @app.route("/registrarProducto", methods=['GET', 'POST'])
@@ -107,7 +130,6 @@ def browser_registrarProducto():
     Permite la comunicacion con el agente via un navegador
     via un formulario
     """
-    global mss_cnt
     if request.method == 'GET':
         return render_template('registerProduct.html')
     else:
@@ -116,19 +138,19 @@ def browser_registrarProducto():
         model = request.form['model']
         preu = request.form['preu']
 
-         # Content of the message
+        # Content of the message
         content = ECSDI['Registra_productes_' + str(get_count())]
 
-        gr = writeGraph(marca,nom,model,preu)
+        gr = writeGraph(marca, nom, model, preu)
 
-        productsAg = get_agent_info(agn.AgenteProductos, DirectoryAgent,ExternalSellerPersonalAgent, get_count())
+        productsAg = get_agent_info(agn.AgenteProductos, DirectoryAgent, ExternalSellerPersonalAgent, get_count())
 
         gr = send_message(
-            build_message(gr, perf=ACL.request, sender=ExternalSellerPersonalAgent, receiver=productsAg, msgcnt=get_count(),
+            build_message(gr, perf=ACL.request, sender=ExternalSellerPersonalAgent, receiver=productsAg,
+                          msgcnt=get_count(),
                           content=content), productsAg.address)
 
         return gr.serialize()
-
 
 
 @app.route("/Stop")
@@ -159,22 +181,25 @@ def tidyup():
     pass
 
 
-def agentbehavior1():
+def agent_behaviour(queue):
     """
-    Un comportamiento del agente
+    Agent Behaviour in a concurrent thread.
+    :param queue: the queue
+    :return: something
+    """
 
-    :return:
-    """
+    gr = register_message()
 
 
 if __name__ == '__main__':
-    # Ponemos en marcha los behaviors
-    ab1 = Process(target=agentbehavior1)
+    # ------------------------------------------------------------------------------------------------------
+    # Run behaviors
+    ab1 = Process(target=agent_behaviour, args=(queue,))
     ab1.start()
 
-    # Ponemos en marcha el servidor
+    # Run server
     app.run(host=hostname, port=port)
 
-    # Esperamos a que acaben los behaviors
+    # Wait behaviors
     ab1.join()
-    logger.info('The End')
+    print('The End')
