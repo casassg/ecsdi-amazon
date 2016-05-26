@@ -173,7 +173,8 @@ def communication():
             # Accion de comprar
             elif accion == ECSDI.Peticion_compra:
                 list = gm.value(subject=content, predicate=ECSDI.Lote_producto)
-                gr = sell_products(list)
+
+                gr = sell_products()
             # No habia ninguna accion en el mensaje
             else:
                 gr = build_message(Graph(),
@@ -289,9 +290,9 @@ def sell_products(urlProductsList):
                             content=rsp_obj,
                             msgcnt=messageCount)
     print(get_message_properties(message))
-    # gr = send_message(message, FinancialAgent.address)
-    # messageCount += 1
-    # return gr
+    gr = send_message(message, FinancialAgent.address)
+    messageCount += 1
+    return gr
 
 
 

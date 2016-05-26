@@ -36,6 +36,8 @@ agn = Namespace("http://www.agentes.org#")  # Revisar url -> definir nuevo espac
 # Message Count
 messageCount = 0
 
+lista_productos = []
+
 # Data Agent
 FinancialAgent = Agent('AgenteFinanzas',
                        agn.AgenteFinanzas,
@@ -94,9 +96,34 @@ def communication():
             # Averiguamos el tipo de la accion
             accion = gm.value(subject=content, predicate=RDF.type)
 
-            # Accion de registro
+            # Accion de enviar venta
+            if accion == ECSDI.Peticion_compra:
+                list = gm.value(subject=content, predicate=ECSDI.Lista_productos_seleccionados)
+                global lista_productos
+                for item in list:
+                    lista_productos.append(gm.value(subject=content,predicate=ECSDI.Producto))
 
-            gr = build_message(Graph(),
+                payDelivery()
+
+            elif accion == ECSDI.Peticion_retorno:
+                #TODO retorn compra
+                gr = build_message(Graph(),
+                                   ACL['not-understood'],
+                                   sender=DirectoryAgent.uri,
+                                   msgcnt=mss_cnt)
+
+            elif accion == ECSDI.Transferencia_comfirmada:
+
+                confirmTransfer()
+
+                gr = build_message(Graph(),
+                                   ACL['not-understood'],
+                                   sender=DirectoryAgent.uri,
+                                   msgcnt=mss_cnt)
+
+            # Ninguna accion a realizar
+            else:
+                gr = build_message(Graph(),
                                    ACL['not-understood'],
                                    sender=DirectoryAgent.uri,
                                    msgcnt=mss_cnt)
@@ -150,16 +177,33 @@ def agentBehaviour(queue):
 
 def payDelivery():
     # TODO Record the purchase.
+    productList = ['Producto_2', 'Producto_3']
+    writeSells(1, 15.30, productList, 'Ciudad_1')
+
+    rsp_obj = agn['Productos']
+
+    message = build_message(gmess=Graph(),
+                            perf=ACL.request,
+                            sender=FinancialAgent.uri,
+                            receiver=BankAgent.uri,
+                            content=rsp_obj,
+                            msgcnt=messageCount)
+
+    gr = send_message(message, BankAgent.address)
+    messageCount += 1
+    return gr
+
+
     print("PayDelivery")
 
 
 def confirmTransfer():
     # TODO Confirm the transfer, deliver receipt and communicate with Products Agent.
 
-    productList = ['Producto_2', 'Producto_3']
-    writeSells(1, 15.30, productList, 'Ciudad_1')
+
 
     print("ConfirmTransfer")
+
 
 
 def writeSells(paid, totalPrice, productsList, sendTo):
