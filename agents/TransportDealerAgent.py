@@ -33,7 +33,7 @@ port = 9030
 agn = Namespace("http://www.agentes.org#")  # Revisar url -> definir nuevo espacio de nombre incluyendo agentes nuestros
 
 # Message Count
-messageCount = 0
+mss_cnt = 0
 
 # Data Agent
 TransportDealerAgent = Agent('AgenteNegociadorTransporte',
@@ -66,7 +66,7 @@ def communication():
     """
 
     global dsGraph
-    global messageCount
+    global mss_cnt
     pass
 
 
@@ -135,8 +135,8 @@ if __name__ == '__main__':
     ab1 = Process(target=agentBehaviour, args=(queue,))
     ab1.start()
 
-    print get_agent_info(AgentTypes.SellerAgentType, DirectoryAgent, TransportDealerAgent, messageCount)
-    messageCount += 1
+    print get_agent_info(AgentTypes.SellerAgentType, DirectoryAgent, TransportDealerAgent, mss_cnt)
+    mss_cnt += 1
 
     # Run server
     app.run(host=hostname, port=port)

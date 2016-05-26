@@ -21,7 +21,7 @@ port = 9010
 agn = Namespace("http://www.agentes.org#")
 
 # Message Count
-messageCount = 0
+mss_cnt = 0
 
 # Data Agent
 ProductsAgent = Agent('AgenteProductos',

@@ -15,8 +15,9 @@ from multiprocessing import Process, Queue
 import socket
 from rdflib import Namespace, Graph, URIRef, RDF, Literal, logger
 
-from agents.ProductsAgent import mss_cnt
-from utils.ACLMessages import get_message_properties, build_message
+from agents import BankAgent
+from agents.ProductsAgent import ProductsAgent
+from utils.ACLMessages import get_message_properties, build_message, send_message, get_agent_info
 from utils.FlaskServer import shutdown_server
 from utils.Agent import Agent
 from utils.OntologyNamespaces import ECSDI, ACL
@@ -34,7 +35,7 @@ port = 9015
 agn = Namespace("http://www.agentes.org#")  # Revisar url -> definir nuevo espacio de nombre incluyendo agentes nuestros
 
 # Message Count
-messageCount = 0
+mss_cnt = 0
 
 lista_productos = []
 
@@ -60,7 +61,15 @@ queue = Queue()
 app = Flask(__name__)
 
 
+def get_count():
+    global mss_cnt
+    mss_cnt += 1
+    return mss_cnt
+
+
 # AGENT FUNCTIONS ------------------------------------------------------------------------------------------
+
+
 
 @app.route("/comm")
 def communication():
@@ -69,7 +78,7 @@ def communication():
     """
 
     global dsGraph
-    global messageCount
+    global mss_cnt
     logger.info('Peticion de informacion recibida')
 
     message = request.args['content']
@@ -80,7 +89,7 @@ def communication():
 
     if msgdic is None:
         # Si no es, respondemos que no hemos entendido el mensaje
-        gr = build_message(Graph(), ACL['not-understood'], sender=FinancialAgent.uri, msgcnt=messageCount)
+        gr = build_message(Graph(), ACL['not-understood'], sender=FinancialAgent.uri, msgcnt=mss_cnt)
     else:
         # Obtenemos la performativa
         if msgdic['performative'] != ACL.request:
@@ -101,12 +110,13 @@ def communication():
                 list = gm.value(subject=content, predicate=ECSDI.Lista_productos_seleccionados)
                 global lista_productos
                 for item in list:
-                    lista_productos.append(gm.value(subject=content,predicate=ECSDI.Producto))
+                    lista_productos.append(gm.value(subject=content, predicate=ECSDI.Producto))
 
+                registerSells()
                 payDelivery()
 
             elif accion == ECSDI.Peticion_retorno:
-                #TODO retorn compra
+                # TODO retorn compra
                 gr = build_message(Graph(),
                                    ACL['not-understood'],
                                    sender=DirectoryAgent.uri,
@@ -116,23 +126,17 @@ def communication():
 
                 confirmTransfer()
 
-                gr = build_message(Graph(),
-                                   ACL['not-understood'],
-                                   sender=DirectoryAgent.uri,
-                                   msgcnt=mss_cnt)
-
             # Ninguna accion a realizar
             else:
                 gr = build_message(Graph(),
                                    ACL['not-understood'],
                                    sender=DirectoryAgent.uri,
                                    msgcnt=mss_cnt)
-    messageCount += 1
+    mss_cnt += 1
 
     logger.info('Respondemos a la peticion')
 
     return gr.serialize(format='xml')
-
 
     pass
 
@@ -176,34 +180,55 @@ def agentBehaviour(queue):
 # DETERMINATE AGENT FUNCTIONS ------------------------------------------------------------------------------
 
 def payDelivery():
+
+    content = ECSDI['Petcion_transferencia_' + str(get_count())]
+
+    graph = Graph()
+    subject = ECSDI.Peticion
+    graph.add((subject, RDF.type, ECSDI.Peticion_transferencia))
+
+    bank = get_agent_info(agn.BankAgent, DirectoryAgent, FinancialAgent, get_count())
+
+    message = build_message(gmess=graph,
+                            perf=ACL.request,
+                            sender=FinancialAgent,
+                            receiver=bank,
+                            content=content,
+                            msgcnt=get_count())
+
+    print("PayDelivery")
+    gr = send_message(message, bank.address)
+    return gr
+
+def registerSells():
     # TODO Record the purchase.
     productList = ['Producto_2', 'Producto_3']
     writeSells(1, 15.30, productList, 'Ciudad_1')
 
-    rsp_obj = agn['Productos']
-
-    message = build_message(gmess=Graph(),
-                            perf=ACL.request,
-                            sender=FinancialAgent.uri,
-                            receiver=BankAgent.uri,
-                            content=rsp_obj,
-                            msgcnt=messageCount)
-
-    gr = send_message(message, BankAgent.address)
-    messageCount += 1
-    return gr
-
-
-    print("PayDelivery")
-
+    pass
 
 def confirmTransfer():
     # TODO Confirm the transfer, deliver receipt and communicate with Products Agent.
 
+    rsp_obj = agn['Enviar_venta']
 
+    graph = Graph()
+    subject = ECSDI.Peticion
+    graph.add((subject, RDF.type, ECSDI.Enviar_venta))
+
+    message = build_message(gmess=graph,
+                            perf=ACL.request,
+                            sender=FinancialAgent.uri,
+                            receiver=ProductsAgent.uri,
+                            content=rsp_obj,
+                            msgcnt=mss_cnt)
+
+    print("PayDelivery")
+    gr = send_message(message, BankAgent.address)
+    mss_cnt += 1
+    return gr
 
     print("ConfirmTransfer")
-
 
 
 def writeSells(paid, totalPrice, productsList, sendTo):
@@ -228,7 +253,6 @@ def writeSells(paid, totalPrice, productsList, sendTo):
 # MAIN METHOD ----------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
-
     # ---------------------------------------------- TEST --------------------------------------------------
     confirmTransfer()
 

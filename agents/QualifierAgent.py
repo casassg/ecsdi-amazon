@@ -30,7 +30,7 @@ port = 9020
 agn = Namespace("http://www.agentes.org#") #Revisar url -> definir nuevo espacio de nombre incluyendo agentes nuestros
 
 # Message Count
-messageCount = 0
+mss_cnt = 0
 
 # Data Agent
 QualifierAgent = Agent('AgenteCalificador',
@@ -64,7 +64,7 @@ def communication():
     """
 
     global dsGraph
-    global messageCount
+    global mss_cnt
     pass
 
 

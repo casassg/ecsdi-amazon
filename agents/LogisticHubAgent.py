@@ -32,7 +32,7 @@ port = 9035
 agn = Namespace("http://www.agentes.org#")  # Revisar url -> definir nuevo espacio de nombre incluyendo agentes nuestros
 
 # Message Count
-messageCount = 0
+mss_cnt = 0
 
 # Data Agent
 LogisticsAgent = Agent('AgenteLogistics',
@@ -65,7 +65,7 @@ def communication():
     """
 
     global dsGraph
-    global messageCount
+    global mss_cnt
     pass
 
 

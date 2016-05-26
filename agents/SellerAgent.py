@@ -70,7 +70,7 @@ else:
 agn = Namespace("http://www.agentes.org#")
 
 # Message Count
-messageCount = 0
+mss_cnt = 0
 
 # Data Agent
 # Datos del Agente
@@ -109,7 +109,7 @@ def register_message():
 
     logger.info('Nos registramos')
 
-    global messageCount
+    global mss_cnt
 
     gr = register_agent(SellerAgent, DirectoryAgent, AgentTypes.SellerAgentType, messageCount)
     messageCount += 1
@@ -127,7 +127,7 @@ def communication():
 
     logger.info('Peticion de informacion recibida')
     global dsGraph
-    global messageCount
+    global mss_cnt
 
     message = request.args['content']
     gm = Graph()
@@ -274,7 +274,7 @@ def findProducts(model=None, brand=None, min_price=0.0, max_price=sys.float_info
 
 
 def sell_products(urlProductsList):
-    global messageCount
+    global mss_cnt
     productList = []
     baseURL = 'http://www.owl-ontologies.com/ECSDIAmazon.owl#'
     for f in urlProductsList:
