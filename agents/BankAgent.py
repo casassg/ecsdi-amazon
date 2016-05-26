@@ -137,6 +137,9 @@ def communication():
 
             # Accion de busqueda
             if accion == ECSDI.Peticion_transferencia:
+                # Content of the message
+                contentMessage = ECSDI['Respuesta_transferencia' + str(get_count())]
+
                 # Creamos el grafo
                 graph = Graph()
                 # Le asignamos nuestra ontologia
@@ -145,12 +148,18 @@ def communication():
                 # Creacion del array de restricciones de busqueda
                 subject = ECSDI.Respuesta
                 graph.add((subject, RDF.type, ECSDI.Respuesta_transferencia))
-                graph.serialize()
 
-                gr = build_message(graph,
-                                   ACL.Confirm,
-                                   sender=DirectoryAgent.uri,
-                                   msgcnt=mss_cnt)
+                financial = get_agent_info(agn.FinancialAgent, DirectoryAgent, BankAgent, get_count())
+
+                message = build_message(graph,
+                                        perf=ACL.Confirm,
+                                        sender=BankAgent,
+                                        receiver=financial,
+                                        content=contentMessage,
+                                        msgcnt=mss_cnt)
+                gr = send_message(message, financial.address)
+
+                return gr.serialize()
 
             # No habia ninguna accion en el mensaje
             else:
