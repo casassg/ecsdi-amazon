@@ -7,21 +7,19 @@ per tal de gestionar la transferència de diners
 
 @author: AlbertSuarez
 """
-from utils.ACLMessages import get_agent_info, send_message, build_message, get_message_properties
+
+from utils.ACLMessages import get_agent_info, send_message, build_message, get_message_properties, register_agent
 from utils.OntologyNamespaces import ECSDI, ACL
-
-__author__ = 'amazdonde'
-
 import argparse
 import socket
-from multiprocessing import Process
-
-from flask import Flask, render_template, request
-from rdflib import Graph, Namespace, RDF, URIRef, Literal
-
+from multiprocessing import Process, Queue
+from flask import Flask, request
+from rdflib import Graph, Namespace, RDF
 from utils.Agent import Agent
 from utils.FlaskServer import shutdown_server
 from utils.Logging import config_logger
+
+__author__ = 'amazdonde'
 
 # Definimos los parametros de la linea de comandos
 parser = argparse.ArgumentParser()
@@ -59,7 +57,7 @@ else:
     dhostname = args.dhost
 
 # Flask stuff
-app = Flask(__name__, template_folder='../templates')
+app = Flask(__name__)
 
 # Configuration constants and variables
 agn = Namespace("http://www.agentes.org#")
@@ -82,11 +80,30 @@ DirectoryAgent = Agent('DirectoryAgent',
 # Global dsgraph triplestore
 dsgraph = Graph()
 
+# Queue
+queue = Queue()
+
 
 def get_count():
     global mss_cnt
     mss_cnt += 1
     return mss_cnt
+
+
+def register_message():
+    """
+    Envia un mensaje de registro al servicio de registro
+    usando una performativa Request y una accion Register del
+    servicio de directorio
+
+    :param gmess:
+    :return:
+    """
+
+    logger.info('Nos registramos')
+
+    gr = register_agent(BankAgent, DirectoryAgent, BankAgent.uri, get_count())
+    return gr
 
 
 @app.route("/Stop")
@@ -109,7 +126,6 @@ def communication():
 
     logger.info('Peticion de informacion recibida')
     global dsGraph
-    global messageCount
 
     message = request.args['content']
     gm = Graph()
@@ -119,7 +135,7 @@ def communication():
 
     if msgdic is None:
         # Si no es, respondemos que no hemos entendido el mensaje
-        gr = build_message(Graph(), ACL['not-understood'], sender=BankAgent.uri, msgcnt=messageCount)
+        gr = build_message(Graph(), ACL['not-understood'], sender=BankAgent.uri, msgcnt=get_count())
     else:
         # Obtenemos la performativa
         if msgdic['performative'] != ACL.request:
@@ -127,7 +143,7 @@ def communication():
             gr = build_message(Graph(),
                                ACL['not-understood'],
                                sender=DirectoryAgent.uri,
-                               msgcnt=mss_cnt)
+                               msgcnt=get_count())
         else:
             # Extraemos el objeto del contenido que ha de ser una accion de la ontologia
             # de registro
@@ -145,7 +161,7 @@ def communication():
                 # Le asignamos nuestra ontologia
                 graph.bind('ECSDI', ECSDI)
 
-                # Creacion del array de restricciones de busqueda
+                # Creacion de la respuesta (tipo de la ontologia)
                 subject = ECSDI.Respuesta
                 graph.add((subject, RDF.type, ECSDI.Respuesta_transferencia))
 
@@ -156,7 +172,7 @@ def communication():
                                         sender=BankAgent,
                                         receiver=financial,
                                         content=contentMessage,
-                                        msgcnt=mss_cnt)
+                                        msgcnt=get_count())
                 gr = send_message(message, financial.address)
 
                 return gr.serialize()
@@ -167,7 +183,6 @@ def communication():
                                    ACL['not-understood'],
                                    sender=DirectoryAgent.uri,
                                    msgcnt=mss_cnt)
-    messageCount += 1
 
     logger.info('Respondemos a la peticion')
 
@@ -182,22 +197,25 @@ def tidyup():
     pass
 
 
-def agentbehavior1():
+def agent_behaviour(queue):
     """
-    Un comportamiento del agente
+    Agent Behaviour in a concurrent thread.
+    :param queue: the queue
+    :return: something
+    """
 
-    :return:
-    """
+    gr = register_message()
 
 
 if __name__ == '__main__':
-    # Ponemos en marcha los behaviors
-    ab1 = Process(target=agentbehavior1)
+    # ------------------------------------------------------------------------------------------------------
+    # Run behaviors
+    ab1 = Process(target=agent_behaviour, args=(queue,))
     ab1.start()
 
-    # Ponemos en marcha el servidor
+    # Run server
     app.run(host=hostname, port=port)
 
-    # Esperamos a que acaben los behaviors
+    # Wait behaviors
     ab1.join()
-    logger.info('The End')
+    print('The End')
