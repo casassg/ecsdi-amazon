@@ -81,23 +81,24 @@ DirectoryAgent = Agent('DirectoryAgent',
 # Global dsgraph triplestore
 dsgraph = Graph()
 
+def get_count():
+    mss_cnt += 1
+    return mss_cnt
+
 
 def writeGraph(marca,nom,model,preu):
     URI = "http://www.owl-ontologies.com/ECSDIAmazon.owl#"
     n = int(round(time.time() * 1000))
     data = URI + "Producto_" + str(n)
 
-    ontologyFile = open('../data/data')
-
     gm = Graph()
-    gm.parse(ontologyFile, format='turtle')
     gm.add((URIRef(data), RDF.type, ECSDI.Producto))
     gm.add((URIRef(data), ECSDI.Nombre, Literal(nom)))
     gm.add((URIRef(data), ECSDI.Marca, Literal(marca)))
     gm.add((URIRef(data), ECSDI.Modelo, Literal(model)))
     gm.add((URIRef(data), ECSDI.Precio, Literal(preu)))
-
-    gm.serialize(destination='../data/data', format='turtle')
+    
+    return gm
 
 
 @app.route("/registrarProducto", methods=['GET', 'POST'])
@@ -106,6 +107,7 @@ def browser_registrarProducto():
     Permite la comunicacion con el agente via un navegador
     via un formulario
     """
+    global mss_cnt
     if request.method == 'GET':
         return render_template('registerProduct.html')
     else:
@@ -113,8 +115,19 @@ def browser_registrarProducto():
         nom = request.form['nom']
         model = request.form['model']
         preu = request.form['preu']
+        
+         # Content of the message
+        content = ECSDI['Registra_productes_' + str(get_count())]
 
-        writeGraph(marca,nom,model,preu)
+        gr = writeGraph(marca,nom,model,preu)
+        
+        productsAg = get_agent_info(agn.AgenteProductos, DirectoryAgent,ExternalSellerPersonalAgent, get_count())
+        
+        gr = send_message(
+            build_message(gr, perf=ACL.request, sender=ExternalSellerPersonalAgent, receiver=productsAg, msgcnt=get_count(),
+                          content=content), productsAg.address)
+        
+        return gr.serialize()
 
 
 
