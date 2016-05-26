@@ -17,7 +17,6 @@ from prettytable import PrettyTable
 
 from agents.FinancialAgent import FinancialAgent
 from agents.ProductsAgent import mss_cnt
-from utils import AgentTypes
 from utils.ACLMessages import *
 from utils.Agent import Agent
 from utils.FlaskServer import shutdown_server
@@ -111,12 +110,10 @@ def register_message():
 
     global mss_cnt
 
-    gr = register_agent(SellerAgent, DirectoryAgent, AgentTypes.SellerAgentType, messageCount)
+    gr = register_agent(SellerAgent, DirectoryAgent, SellerAgent.uri, messageCount)
     messageCount += 1
 
     return gr
-
-
 
 
 @app.route("/comm")
@@ -155,20 +152,25 @@ def communication():
 
             # Accion de busqueda
             if accion == ECSDI.Cerca_productes:
-                list = gm.value(subject=content, predicate=ECSDI.Restringe)
-                restriccions = {}
-                for item in list:
-                    type = gm.value(subject=item, predicate=RDF.type)
-                    if type == ECSDI.Modelo:
-                        restriccions['modelo'] = gm.value(subject=item, predicate=ECSDI.Modelo)
-                    elif type == ECSDI.Nombre:
-                        restriccions['precio_max'] = gm.value(subject=item, predicate=ECSDI.Precio_max)
-                    elif type == ECSDI.Marca:
-                        restriccions['marca'] = gm.value(subject=item, predicate=ECSDI.Marca)
-                    elif type == ECSDI.Precio:
-                        restriccions['precio_min'] = gm.value(subject=item, predicate=ECSDI.Precio_min)
+                restriccions = gm.objects(content, ECSDI.Restringe)
+                restriccions_dict = {}
+                for restriccio in restriccions:
+                    if gm.value(subject=restriccio, predicate=RDF.type) == ECSDI.Restriccion_Marca:
+                        marca = gm.value(subject=restriccio, predicate=ECSDI.Marca)
+                        logger.info('MARCA: ' + marca)
+                        restriccions_dict['brand'] = marca
+                    elif gm.value(subject=restriccio, predicate=RDF.type) == ECSDI.Restriccion_modelo:
+                        modelo = gm.value(subject=restriccio, predicate=ECSDI.Modelo)
+                        logger.info('MODELO: ' + modelo)
+                        restriccions_dict['model'] = modelo
+                    elif gm.value(subject=restriccio, predicate=RDF.type) == ECSDI.Rango_Precio:
+                        preu_max = gm.value(subject=restriccio, predicate=ECSDI.Precio_max)
+                        preu_min = gm.value(subject=restriccio, predicate=ECSDI.Precio_min)
+                        logger.info('PRECIO: ' + preu_max + ' - ' + preu_min)
+                        restriccions_dict['max_price'] = preu_max
+                        restriccions_dict['min_price'] = preu_min
 
-                gr = findProducts(model=restriccions['modelo'], brand=restriccions['marca'], min_price=restriccions['precio_min'], max_price=restriccions['precio_max'])
+                gr = findProducts(**restriccions_dict)
 
             # Accion de comprar
             elif accion == ECSDI.Peticion_compra:
@@ -185,7 +187,8 @@ def communication():
 
     logger.info('Respondemos a la peticion')
 
-    return gr.serialize(format='xml')
+    serialize = gr.serialize(format='xml')
+    return serialize, 200
 
 
 @app.route("/Stop")
@@ -223,7 +226,7 @@ def agent_behaviour(queue):
 
 # DETERMINATE AGENT FUNCTIONS ------------------------------------------------------------------------------
 
-ontologyFile = open('../data/data')
+ontologyFile = open('../data/productes')
 
 
 def printProducts(queryResult):
@@ -239,6 +242,7 @@ def printProducts(queryResult):
 def findProducts(model=None, brand=None, min_price=0.0, max_price=sys.float_info.max):
     graph = Graph()
     graph.parse(ontologyFile, format='turtle')
+
     first = second = 0
     query = """
         prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -270,7 +274,24 @@ def findProducts(model=None, brand=None, min_price=0.0, max_price=sys.float_info
                 ?precio <= """ + str(max_price) + """  )}
                 order by asc(UCASE(str(?nombre)))"""
 
-    return graph.query(query)
+    graph_query = graph.query(query)
+    result = Graph()
+    result.bind('ECSDI', ECSDI)
+    product_count = 0
+    for row in graph_query:
+        nom = row.nombre
+        model=row.modelo
+        marca=row.marca
+        preu=row.precio
+        logger.debug(nom, marca, model, preu)
+        subject = ECSDI['ProducteResultatCerca' + str(product_count)]
+        product_count += 1
+        result.add((subject, RDF.type, ECSDI.Producte))
+        result.add((subject, ECSDI.Marca, Literal(marca)))
+        result.add((subject, ECSDI.Modelo, Literal(model)))
+        result.add((subject, ECSDI.Precio, Literal(preu)))
+        result.add((subject, ECSDI.Nombre, Literal(nom)))
+    return result
 
 
 def sell_products(urlProductsList):
@@ -293,9 +314,6 @@ def sell_products(urlProductsList):
     gr = send_message(message, FinancialAgent.address)
     messageCount += 1
     return gr
-
-
-
 
 
 # MAIN METHOD ----------------------------------------------------------------------------------------------

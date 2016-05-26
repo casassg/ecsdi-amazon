@@ -39,7 +39,7 @@ args = parser.parse_args()
 
 # Configuration stuff
 if args.port is None:
-    port = 9002
+    port = 9081
 else:
     port = args.port
 
@@ -84,6 +84,9 @@ dsgraph = Graph()
 
 
 def get_count():
+    global mss_cnt
+    if not mss_cnt:
+        mss_cnt = 0
     mss_cnt += 1
     return mss_cnt
 
@@ -129,18 +132,18 @@ def browser_cerca():
             subject_preus = ECSDI['Restriccion_Preus_' + str(get_count())]
             gr.add((subject_preus, RDF.type, ECSDI.Rango_precio))
             if min_price:
-                gr.add((subject_preus, ECSDI.Precio_min, Literal(min_price)))
+                gr.add((subject_preus, ECSDI.Precio_min, Literal(float(min_price))))
             if max_price:
-                gr.add((subject_preus, ECSDI.Precio_max, Literal(max_price)))
+                gr.add((subject_preus, ECSDI.Precio_max, Literal(float(max_price))))
             gr.add((content, ECSDI.Restringe, URIRef(subject_preus)))
 
         seller = get_agent_info(agn.SellerAgent, DirectoryAgent, UserPersonalAgent, get_count())
 
-        gr = send_message(
-            build_message(gr, perf=ACL.request, sender=UserPersonalAgent, receiver=seller, msgcnt=get_count(),
+        gr2 = send_message(
+            build_message(gr, perf=ACL.request, sender=UserPersonalAgent.uri, receiver=seller.uri, msgcnt=get_count(),
                           content=content), seller.address)
 
-        return gr.serialize()
+        return gr2.serialize()
 
 
 @app.route("/Stop")

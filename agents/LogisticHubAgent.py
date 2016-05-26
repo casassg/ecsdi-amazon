@@ -139,7 +139,7 @@ def writeSends(productList, deliverDate):
     n = int(round(time.time() * 1000))
     data = URI + "Envio_" + str(n)
 
-    ontologyFile = open('../data/data')
+    ontologyFile = open('../productes/productes')
 
     gm = Graph()
     gm.parse(ontologyFile, format='turtle')
@@ -148,12 +148,12 @@ def writeSends(productList, deliverDate):
     for a in productList:
         gm.add((URIRef(data), ECSDI.Envia, URIRef(URI + a)))
 
-    gm.serialize(destination='../data/data', format='turtle')
+    gm.serialize(destination='../productes/productes', format='turtle')
 
     # TODO Write Existences
     # def writeExistences(exists, qtt):
     #   URI = "http://www.owl-ontologies.com/ECSDIAmazon.owl#"
-    #   data = Namespace(URI)
+    #   productes = Namespace(URI)
 
     #   gm = Graph()
     #   gm.add()

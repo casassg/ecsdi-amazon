@@ -236,7 +236,7 @@ def writeSells(paid, totalPrice, productsList, sendTo):
     millis = int(round(time.time() * 1000))
     URISell = URI + "Compra_" + str(millis)
 
-    ontologyFile = open('../data/data')
+    ontologyFile = open('../data/productes')
 
     g = Graph()
     g.parse(ontologyFile, format='turtle')
@@ -247,7 +247,7 @@ def writeSells(paid, totalPrice, productsList, sendTo):
     for p in productsList:
         g.add((URIRef(URISell), ECSDI.Productos, URIRef(URI + p)))
 
-    g.serialize(destination='../data/data', format='turtle')
+    g.serialize(destination='../productes/productes', format='turtle')
 
 
 # MAIN METHOD ----------------------------------------------------------------------------------------------

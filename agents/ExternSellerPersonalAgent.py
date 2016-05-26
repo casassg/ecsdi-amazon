@@ -97,8 +97,8 @@ def writeGraph(marca,nom,model,preu):
     gm.add((URIRef(data), ECSDI.Marca, Literal(marca)))
     gm.add((URIRef(data), ECSDI.Modelo, Literal(model)))
     gm.add((URIRef(data), ECSDI.Precio, Literal(preu)))
-    
-    return gm
+
+    gm.serialize(destination='../data/data', format='turtle')
 
 
 @app.route("/registrarProducto", methods=['GET', 'POST'])
@@ -115,18 +115,18 @@ def browser_registrarProducto():
         nom = request.form['nom']
         model = request.form['model']
         preu = request.form['preu']
-        
+
          # Content of the message
         content = ECSDI['Registra_productes_' + str(get_count())]
 
         gr = writeGraph(marca,nom,model,preu)
-        
+
         productsAg = get_agent_info(agn.AgenteProductos, DirectoryAgent,ExternalSellerPersonalAgent, get_count())
-        
+
         gr = send_message(
             build_message(gr, perf=ACL.request, sender=ExternalSellerPersonalAgent, receiver=productsAg, msgcnt=get_count(),
                           content=content), productsAg.address)
-        
+
         return gr.serialize()
 
 

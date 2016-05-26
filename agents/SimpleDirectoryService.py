@@ -138,6 +138,7 @@ def register():
             gr.add((rsp_obj, DSO.Address, agn_add))
             gr.add((rsp_obj, DSO.Uri, agn_uri))
             gr.add((rsp_obj, FOAF.name, agn_name))
+            logger.info("Agente encontrado: "+agn_name)
             return build_message(gr,
                                  ACL.inform,
                                  sender=DirectoryAgent.uri,

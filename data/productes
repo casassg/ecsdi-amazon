@@ -1,0 +1,47 @@
+@prefix default: <http://www.owl-ontologies.com/ECSDIAmazon.owl#> .
+@prefix ns1: <http://xmlns.com/foaf/0.1/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix protege: <http://protege.stanford.edu/plugins/owl/protege#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix swrl: <http://www.w3.org/2003/11/swrl#> .
+@prefix swrlb: <http://www.w3.org/2003/11/swrlb#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix xsp: <http://www.owl-ontologies.com/2005/08/07/xsp.owl#> .
+
+<http://www.owl-ontologies.com/ECSDIAmaz> a owl:DatatypeProperty .
+
+<http://www.owl-ontologies.com/ECSDIAmazon.owl> a owl:Ontology .
+
+
+default:Ciudad_1 a default:Ciudad ;
+    default:Latitud "41.398373"^^xsd:float ;
+    default:Longitud "2.188247"^^xsd:float ;
+    default:Nombre "Barcelona"^^xsd:string .
+
+default:Envio a owl:Class .
+
+default:Producto_1 a default:Producto ;
+    default:Id "1"^^xsd:int ;
+    default:Marca "Nintendo"^^xsd:string ;
+    default:Modelo "Choripan 3DS"^^xsd:string ;
+    default:Nombre "Nintendo Choripan"^^xsd:string ;
+    default:Precio "100.0"^^xsd:float .
+
+default:Producto_2 a default:Producto ;
+    default:Id "2"^^xsd:int ;
+    default:Marca "Garmin"^^xsd:string ;
+    default:Modelo "325"^^xsd:string ;
+    default:Nombre "Garmin 325"^^xsd:string ;
+    default:Precio "308.0"^^xsd:float .
+
+default:Producto_3 a default:Producto ;
+    default:Id "3"^^xsd:int ;
+    default:Marca "Elephone"^^xsd:string ;
+    default:Modelo "P7000"^^xsd:string ;
+    default:Nombre "Pioneer"^^xsd:string ;
+    default:Precio "200.0"^^xsd:float .
+
+
+
