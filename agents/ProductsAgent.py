@@ -162,6 +162,17 @@ def recordExternalProduct():
 
     # TODO Record product of an external seller.
     print("RecordExternalProduct")
+    
+    ontologyFile = open('../data/data')
+    
+    g = Graph()
+    g.parse(ontologyFile, format='turtle')
+    #Aquí afegim el producte al graf
+    
+    
+    #guardem el graf
+    g.serialize(destination='../data/data', format='turtle')
+
 
 
 # MAIN METHOD ----------------------------------------------------------------------------------------------
