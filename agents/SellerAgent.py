@@ -172,9 +172,11 @@ def communication():
 
             # Accion de comprar
             elif accion == ECSDI.Peticion_compra:
-                # TODO Estudiar como hacerlo
-                productList = gm.objects(subject=content, predicate=ECSDI.Sobre)
-                sell_products(productList)
+                financial = get_agent_info(agn.FinancialAgent, DirectoryAgent, SellerAgent, get_count())
+
+                gr = send_message(
+                    build_message(gm, perf=ACL.request, sender=SellerAgent.uri, receiver=financial.uri, msgcnt=get_count(),
+                                  content=content), financial.address)
 
             # No habia ninguna accion en el mensaje
             else:
@@ -224,11 +226,10 @@ def agent_behaviour(queue):
 
 # DETERMINATE AGENT FUNCTIONS ------------------------------------------------------------------------------
 
-ontologyFile = open('../data/productes')
-
 
 def findProducts(model=None, brand=None, min_price=0.0, max_price=sys.float_info.max):
     graph = Graph()
+    ontologyFile = open('../data/productes')
     graph.parse(ontologyFile, format='turtle')
 
     first = second = 0
@@ -280,28 +281,6 @@ def findProducts(model=None, brand=None, min_price=0.0, max_price=sys.float_info
         result.add((subject, ECSDI.Precio, Literal(preu)))
         result.add((subject, ECSDI.Nombre, Literal(nom)))
     return result
-
-
-def sell_products(productListGraph):
-    # TODO Revisarlo todo
-    logger.info("Enviando peticion de vull comprar")
-
-    # Content of the message
-    content = ECSDI['Lote_producto_' + str(get_count())]
-
-    # Graph creation
-    gr = Graph()
-    gr.add((content, RDF.type, ECSDI.Lote_producto))
-
-    # TODO Generate message
-
-    financial = get_agent_info(agn.FinancialAgent, DirectoryAgent, SellerAgent, get_count())
-
-    gr2 = send_message(
-        build_message(gr, perf=ACL.request, sender=SellerAgent.uri, receiver=financial.uri, msgcnt=get_count(),
-                      content=content), financial.address)
-
-    return gr2.serialize()
 
 
 # MAIN METHOD ----------------------------------------------------------------------------------------------
