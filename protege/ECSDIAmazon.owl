@@ -60,6 +60,9 @@
   <owl:Class rdf:ID="Producto_externo">
     <rdfs:subClassOf rdf:resource="#Producto"/>
   </owl:Class>
+  <owl:Class rdf:ID="RestriccioNom">
+    <rdfs:subClassOf rdf:resource="#Restriccions"/>
+  </owl:Class>
   <owl:Class rdf:ID="Transportista"/>
   <owl:Class rdf:ID="Vendedor"/>
   <owl:Class rdf:ID="Respuesta_transferencia">
@@ -267,6 +270,10 @@
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="DatatypeProperty_23"/>
   <owl:DatatypeProperty rdf:ID="DatatypeProperty_17"/>
+  <owl:DatatypeProperty rdf:ID="Nom">
+    <rdfs:domain rdf:resource="#RestriccioNom"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="Modelo">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain>

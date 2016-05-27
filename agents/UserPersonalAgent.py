@@ -88,6 +88,71 @@ def get_count():
     return mss_cnt
 
 
+def create_sell_product(gr, marca, modelo, nombre, precio):
+    # Creacion del producto
+    subject_producto = ECSDI['Producto_' + str(get_count())]
+    gr.add((subject_producto, RDF.type, ECSDI.Producto))
+    gr.add((subject_producto, ECSDI.Marca, Literal(marca)))
+    gr.add((subject_producto, ECSDI.Modelo, Literal(modelo)))
+    gr.add((subject_producto, ECSDI.Nombre, Literal(nombre)))
+    gr.add((subject_producto, ECSDI.Precio, Literal(precio)))
+    return subject_producto
+
+
+def create_peticio_compra():
+    logger.info("Creando la peticion de compra")
+
+    # Content of the message
+    content = ECSDI['Peticion_compra_' + str(get_count())]
+
+    # Graph creation
+    gr = Graph()
+    gr.add((content, RDF.type, ECSDI.Peticion_compra))
+
+    # Asignar prioridad a la peticion (asignamos el contador de mensaje)
+    gr.add((content, ECSDI.Prioridad, Literal(get_count())))
+
+    # Creacion de la ciudad (por ahora Barcelona) ----------------------------------------------------------------------
+    subject_ciudad = ECSDI['Ciudad_' + str(get_count())]
+
+    latitud_Barcelona = 41.398373
+    longitud_Barcelona = 2.188247
+    nombre_Barcelona = 'Barcelona'
+
+    gr.add((subject_ciudad, RDF.type, ECSDI.Ciudad))
+    gr.add((subject_ciudad, ECSDI.Nombre, Literal(nombre_Barcelona)))
+    gr.add((subject_ciudad, ECSDI.Latitud, Literal(latitud_Barcelona)))
+    gr.add((subject_ciudad, ECSDI.Longitud, Literal(longitud_Barcelona)))
+
+    # Creacion del sobre (Compra) --------------------------------------------------------------------------------------
+    subject_sobre = ECSDI['Compra_' + str(get_count())]
+    gr.add((subject_sobre, RDF.type, ECSDI.Compra))
+
+    gr.add((subject_sobre, ECSDI.Pagat, Literal(0)))
+    gr.add((subject_sobre, ECSDI.Enviar_a, URIRef(subject_ciudad)))
+
+    # TODO Get attributes product list by interface
+    products = [['Nintendo', 'Choripan 3DS', 'Nintendo Choripan', 100.0],
+                ['Garmin', '325', 'Garmin 325', 308.0],
+                ['Elephone', 'P700', 'Pioneer', 200.0],
+                ['Google', 'Nexus 5', 'Google Nexus 5', 350.0]]
+
+    total_price = 0.0
+
+    for item in products:
+        total_price += item[3]
+        subject_product = create_sell_product(gr, item[0], item[1], item[2], item[3])
+        gr.add((subject_sobre, ECSDI.Productos, URIRef(subject_product)))
+
+    gr.add((subject_sobre, ECSDI.Precio_total, Literal(total_price)))
+
+    # ------------------------------------------------------------------------------------------------------------------
+
+    gr.add((content, ECSDI.Sobre, URIRef(subject_sobre)))
+
+    return gr
+
+
 @app.route("/cerca", methods=['GET', 'POST'])
 def browser_cerca():
     """

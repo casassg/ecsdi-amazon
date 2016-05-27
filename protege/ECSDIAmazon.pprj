@@ -1,4 +1,4 @@
-; Thu May 26 09:12:15 CEST 2016
+; Fri May 27 12:08:10 CEST 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -6,11 +6,11 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
-		[ECSDIAmazon_ProjectKB_Class60]
-		[ECSDIAmazon_ProjectKB_Class61]
-		[ECSDIAmazon_ProjectKB_Class62]
-		[ECSDIAmazon_ProjectKB_Class63]
-		[ECSDIAmazon_ProjectKB_Class64]))
+		[ECSDIAmazon_ProjectKB_Class120]
+		[ECSDIAmazon_ProjectKB_Class121]
+		[ECSDIAmazon_ProjectKB_Class122]
+		[ECSDIAmazon_ProjectKB_Class123]
+		[ECSDIAmazon_ProjectKB_Class124]))
 
 ([CLSES_TAB] of  Widget
 
@@ -40,6 +40,31 @@
 
 ([ECSDIAmazon_ProjectKB_Class12] of  Property_List
 )
+
+([ECSDIAmazon_ProjectKB_Class120] of  String
+
+	(name ":INSTANCE-ANNOTATION")
+	(string_value "%3AANNOTATION-TEXT"))
+
+([ECSDIAmazon_ProjectKB_Class121] of  String
+
+	(name "http://www.w3.org/2002/07/owl#Thing")
+	(string_value "%3ANAME"))
+
+([ECSDIAmazon_ProjectKB_Class122] of  String
+
+	(name "http://www.w3.org/2002/07/owl#Class")
+	(string_value "%3ANAME"))
+
+([ECSDIAmazon_ProjectKB_Class123] of  String
+
+	(name ":PAL-CONSTRAINT")
+	(string_value "%3APAL-NAME"))
+
+([ECSDIAmazon_ProjectKB_Class124] of  String
+
+	(name ":META-CLASS")
+	(string_value "%3ANAME"))
 
 ([ECSDIAmazon_ProjectKB_Class13] of  Widget
 
@@ -250,31 +275,6 @@
 
 ([ECSDIAmazon_ProjectKB_Class6] of  Property_List
 )
-
-([ECSDIAmazon_ProjectKB_Class60] of  String
-
-	(name ":INSTANCE-ANNOTATION")
-	(string_value "%3AANNOTATION-TEXT"))
-
-([ECSDIAmazon_ProjectKB_Class61] of  String
-
-	(name "http://www.w3.org/2002/07/owl#Thing")
-	(string_value "%3ANAME"))
-
-([ECSDIAmazon_ProjectKB_Class62] of  String
-
-	(name "http://www.w3.org/2002/07/owl#Class")
-	(string_value "%3ANAME"))
-
-([ECSDIAmazon_ProjectKB_Class63] of  String
-
-	(name ":PAL-CONSTRAINT")
-	(string_value "%3APAL-NAME"))
-
-([ECSDIAmazon_ProjectKB_Class64] of  String
-
-	(name ":META-CLASS")
-	(string_value "%3ANAME"))
 
 ([ECSDIAmazon_ProjectKB_Class7] of  Widget
 
@@ -1024,9 +1024,6 @@
 	(name "owl_file_name")
 	(string_value "ECSDIAmazon.owl"))
 
-([KB_391518_Class0] of  Map
-)
-
 ([KB_444675_Instance_0] of  String
 
 	(name "SwitchableClassDefinitionType")
@@ -1234,6 +1231,9 @@
 	(name "http://www.w3.org/2002/07/owl#ObjectProperty")
 	(property_list [XY_Instance_462])
 	(widget_class_name "edu.stanford.smi.protegex.owl.ui.widget.OWLFormWidget"))
+
+([KB_700127_Class0] of  Map
+)
 
 ([KB_713803_Instance_10] of  Widget
 
