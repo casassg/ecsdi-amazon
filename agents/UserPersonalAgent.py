@@ -7,6 +7,8 @@ Agent que implementa la interacció amb l'usuari
 
 @author: casassg
 """
+from werkzeug.utils import redirect
+
 from utils.ACLMessages import get_agent_info, send_message, build_message, get_message_properties
 from utils.OntologyNamespaces import ECSDI, ACL
 import argparse
@@ -165,6 +167,11 @@ def send_peticio_compra():
     return gr2.serialize()
 
 
+@app.route("/")
+def browser_root():
+    return redirect("/cerca")
+
+
 @app.route("/cerca", methods=['GET', 'POST'])
 def browser_cerca():
     """
@@ -217,16 +224,27 @@ def browser_cerca():
             build_message(gr, perf=ACL.request, sender=UserPersonalAgent.uri, receiver=seller.uri, msgcnt=get_count(),
                           content=contentResult), seller.address)
 
-        products = gr2.objects(subject=contentResult, predicate=ECSDI.Producte)
+        index = 0
+        subject_pos = {}
         product_list = []
-        for item in products:
-            single_product = {'marca': gr2.value(subject=item, predicate=ECSDI.Marca),
-                              'modelo': gr2.value(subject=item, predicate=ECSDI.Modelo),
-                              'nombre': gr2.value(subject=item, predicate=ECSDI.Nombre),
-                              'precio': gr2.value(subject=item, predicate=ECSDI.Precio)}
-            logger.info(single_product)
-            product_list.append(single_product)
-        return render_template('cerca.html', products=gr2.serialize(format='turtle'))
+        for s, p, o in gr2:
+            if s not in subject_pos:
+                subject_pos[s] = index
+                product_list.append({})
+                index += 1
+            if s in subject_pos:
+                subject_dict = product_list[subject_pos[s]]
+                if p == ECSDI.Marca:
+                    subject_dict['marca'] = o
+                elif p == ECSDI.Modelo:
+                    subject_dict['modelo'] = o
+                elif p == ECSDI.Precio:
+                    subject_dict['precio'] = o
+                elif p == ECSDI.Nombre:
+                    subject_dict['nombre'] = o
+                product_list[subject_pos[s]] = subject_dict
+
+        return render_template('cerca.html', products=product_list)
 
 
 @app.route("/Stop")

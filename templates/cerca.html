@@ -15,7 +15,26 @@
         <input type="submit" value="Cerca">
     </form>
 {% else %}
-    <a>{{ products }}</a>
+    <table cellpadding="5px">
+        <tr>
+            <th><b>NOMBRE</b></th>
+            <th><b>MARCA</b></th>
+            <th><b>MODELO</b></th>
+            <th><b>PRECIO</b></th>
+        </tr>
+        {% for item in products %}
+            <tr>
+                <td>{{ item.nombre }}</td>
+                <td>{{ item.marca }}</td>
+                <td>{{ item.modelo }}</td>
+                <td>{{ item.precio }}</td>
+                <td><input type="checkbox"></td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <input type="submit" value="Comprar">
+
 {% endif %}
 
 </body>
