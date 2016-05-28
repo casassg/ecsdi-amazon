@@ -7,7 +7,7 @@ Agent que implementa la interacció amb l'usuari
 
 @author: casassg
 """
-from utils.ACLMessages import get_agent_info, send_message, build_message
+from utils.ACLMessages import get_agent_info, send_message, build_message, get_message_properties
 from utils.OntologyNamespaces import ECSDI, ACL
 import argparse
 import socket
@@ -89,7 +89,6 @@ def get_count():
 
 
 def send_peticio_compra():
-
     content = None
 
     def create_sell_product(gr, marca, modelo, nombre, precio):
@@ -116,7 +115,7 @@ def send_peticio_compra():
         # Asignar prioridad a la peticion (asignamos el contador de mensaje)
         gr.add((content, ECSDI.Prioridad, Literal(get_count())))
 
-        # Creacion de la ciudad (por ahora Barcelona) ----------------------------------------------------------------------
+        # Creacion de la ciudad (por ahora Barcelona) ------------------------------------------------------------------
         subject_ciudad = ECSDI['Ciudad_' + str(get_count())]
 
         latitud_Barcelona = 41.398373
@@ -128,7 +127,7 @@ def send_peticio_compra():
         gr.add((subject_ciudad, ECSDI.Latitud, Literal(latitud_Barcelona)))
         gr.add((subject_ciudad, ECSDI.Longitud, Literal(longitud_Barcelona)))
 
-        # Creacion del sobre (Compra) --------------------------------------------------------------------------------------
+        # Creacion del sobre (Compra) ----------------------------------------------------------------------------------
         subject_sobre = ECSDI['Compra_' + str(get_count())]
         gr.add((subject_sobre, RDF.type, ECSDI.Compra))
 
@@ -150,7 +149,7 @@ def send_peticio_compra():
 
         gr.add((subject_sobre, ECSDI.Precio_total, Literal(total_price)))
 
-        # ------------------------------------------------------------------------------------------------------------------
+        # --------------------------------------------------------------------------------------------------------------
 
         gr.add((content, ECSDI.Sobre, URIRef(subject_sobre)))
 
@@ -174,16 +173,16 @@ def browser_cerca():
     """
     global mss_cnt
     if request.method == 'GET':
-        return render_template('cerca.html')
+        return render_template('cerca.html', products=None)
     else:
         logger.info("Enviando peticion de busqueda")
 
         # Content of the message
-        content = ECSDI['Cerca_productes_' + str(get_count())]
+        contentResult = ECSDI['Cerca_productes_' + str(get_count())]
 
         # Graph creation
         gr = Graph()
-        gr.add((content, RDF.type, ECSDI.Cerca_productes))
+        gr.add((contentResult, RDF.type, ECSDI.Cerca_productes))
 
         # Add restriccio nom
         nom = request.form['nom']
@@ -193,13 +192,13 @@ def browser_cerca():
             gr.add((subject_nom, RDF.type, ECSDI.RestriccioNom))
             gr.add((subject_nom, ECSDI.Nom, Literal(nom)))
             # Add restriccio to content
-            gr.add((content, ECSDI.Restringe, URIRef(subject_nom)))
+            gr.add((contentResult, ECSDI.Restringe, URIRef(subject_nom)))
         marca = request.form['marca']
         if marca:
             subject_marca = ECSDI['Restriccion_Marca_' + str(get_count())]
             gr.add((subject_marca, RDF.type, ECSDI.Restriccion_Marca))
             gr.add((subject_marca, ECSDI.Marca, Literal(marca)))
-            gr.add((content, ECSDI.Restringe, URIRef(subject_marca)))
+            gr.add((contentResult, ECSDI.Restringe, URIRef(subject_marca)))
         min_price = request.form['min_price']
         max_price = request.form['max_price']
 
@@ -210,15 +209,24 @@ def browser_cerca():
                 gr.add((subject_preus, ECSDI.Precio_min, Literal(float(min_price))))
             if max_price:
                 gr.add((subject_preus, ECSDI.Precio_max, Literal(float(max_price))))
-            gr.add((content, ECSDI.Restringe, URIRef(subject_preus)))
+            gr.add((contentResult, ECSDI.Restringe, URIRef(subject_preus)))
 
         seller = get_agent_info(agn.SellerAgent, DirectoryAgent, UserPersonalAgent, get_count())
 
         gr2 = send_message(
             build_message(gr, perf=ACL.request, sender=UserPersonalAgent.uri, receiver=seller.uri, msgcnt=get_count(),
-                          content=content), seller.address)
+                          content=contentResult), seller.address)
 
-        return gr2.serialize()
+        products = gr2.objects(subject=contentResult, predicate=ECSDI.Producte)
+        product_list = []
+        for item in products:
+            single_product = {'marca': gr2.value(subject=item, predicate=ECSDI.Marca),
+                              'modelo': gr2.value(subject=item, predicate=ECSDI.Modelo),
+                              'nombre': gr2.value(subject=item, predicate=ECSDI.Nombre),
+                              'precio': gr2.value(subject=item, predicate=ECSDI.Precio)}
+            logger.info(single_product)
+            product_list.append(single_product)
+        return render_template('cerca.html', products=gr2.serialize(format='turtle'))
 
 
 @app.route("/Stop")
