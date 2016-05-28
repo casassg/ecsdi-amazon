@@ -214,7 +214,7 @@ def registerSells():
     writeSells(1, 15.30, lista_productos, 'Ciudad_1')
 
 
-def readSell():
+def readSell(id):
 
     URI = "http://www.owl-ontologies.com/ECSDIAmazon.owl#"
     URISell = URI
@@ -226,12 +226,12 @@ def readSell():
 def confirmTransfer():
     # TODO Confirm the transfer, deliver receipt and communicate with Products Agent.
     # Necessito id de la compra
-    content = readSell()
+    content = readSell(id)
 
     graph = Graph()
     subject = ECSDI.Envio
 
-    graph.add((subject, RDF.type, ECSDI.Envio_venta))
+    graph.add((subject, RDF.type, ECSDI.Envio))
 
     productManeger = get_agent_info(agn.ProductsAgent, DirectoryAgent, FinancialAgent, get_count())
 
@@ -244,10 +244,6 @@ def confirmTransfer():
 
     gr = send_message(message, productManeger.address)
     return gr
-
-
-
-
 
     print('todo')
 
