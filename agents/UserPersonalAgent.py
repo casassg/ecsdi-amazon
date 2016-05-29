@@ -181,70 +181,74 @@ def browser_cerca():
     global mss_cnt
     if request.method == 'GET':
         return render_template('cerca.html', products=None)
-    else:
-        logger.info("Enviando peticion de busqueda")
+    elif request.method == 'POST':
+        if request.form['submit'] == 'Cerca':
+            logger.info("Enviando peticion de busqueda")
 
-        # Content of the message
-        contentResult = ECSDI['Cerca_productes_' + str(get_count())]
+            # Content of the message
+            contentResult = ECSDI['Cerca_productes_' + str(get_count())]
 
-        # Graph creation
-        gr = Graph()
-        gr.add((contentResult, RDF.type, ECSDI.Cerca_productes))
+            # Graph creation
+            gr = Graph()
+            gr.add((contentResult, RDF.type, ECSDI.Cerca_productes))
 
-        # Add restriccio nom
-        nom = request.form['nom']
-        if nom:
-            # Subject nom
-            subject_nom = ECSDI['RestriccioNom' + str(get_count())]
-            gr.add((subject_nom, RDF.type, ECSDI.RestriccioNom))
-            gr.add((subject_nom, ECSDI.Nom, Literal(nom)))
-            # Add restriccio to content
-            gr.add((contentResult, ECSDI.Restringe, URIRef(subject_nom)))
-        marca = request.form['marca']
-        if marca:
-            subject_marca = ECSDI['Restriccion_Marca_' + str(get_count())]
-            gr.add((subject_marca, RDF.type, ECSDI.Restriccion_Marca))
-            gr.add((subject_marca, ECSDI.Marca, Literal(marca)))
-            gr.add((contentResult, ECSDI.Restringe, URIRef(subject_marca)))
-        min_price = request.form['min_price']
-        max_price = request.form['max_price']
+            # Add restriccio nom
+            nom = request.form['nom']
+            if nom:
+                # Subject nom
+                subject_nom = ECSDI['RestriccioNom' + str(get_count())]
+                gr.add((subject_nom, RDF.type, ECSDI.RestriccioNom))
+                gr.add((subject_nom, ECSDI.Nom, Literal(nom)))
+                # Add restriccio to content
+                gr.add((contentResult, ECSDI.Restringe, URIRef(subject_nom)))
+            marca = request.form['marca']
+            if marca:
+                subject_marca = ECSDI['Restriccion_Marca_' + str(get_count())]
+                gr.add((subject_marca, RDF.type, ECSDI.Restriccion_Marca))
+                gr.add((subject_marca, ECSDI.Marca, Literal(marca)))
+                gr.add((contentResult, ECSDI.Restringe, URIRef(subject_marca)))
+            min_price = request.form['min_price']
+            max_price = request.form['max_price']
 
-        if min_price or max_price:
-            subject_preus = ECSDI['Restriccion_Preus_' + str(get_count())]
-            gr.add((subject_preus, RDF.type, ECSDI.Rango_precio))
-            if min_price:
-                gr.add((subject_preus, ECSDI.Precio_min, Literal(float(min_price))))
-            if max_price:
-                gr.add((subject_preus, ECSDI.Precio_max, Literal(float(max_price))))
-            gr.add((contentResult, ECSDI.Restringe, URIRef(subject_preus)))
+            if min_price or max_price:
+                subject_preus = ECSDI['Restriccion_Preus_' + str(get_count())]
+                gr.add((subject_preus, RDF.type, ECSDI.Rango_precio))
+                if min_price:
+                    gr.add((subject_preus, ECSDI.Precio_min, Literal(float(min_price))))
+                if max_price:
+                    gr.add((subject_preus, ECSDI.Precio_max, Literal(float(max_price))))
+                gr.add((contentResult, ECSDI.Restringe, URIRef(subject_preus)))
 
-        seller = get_agent_info(agn.SellerAgent, DirectoryAgent, UserPersonalAgent, get_count())
+            seller = get_agent_info(agn.SellerAgent, DirectoryAgent, UserPersonalAgent, get_count())
 
-        gr2 = send_message(
-            build_message(gr, perf=ACL.request, sender=UserPersonalAgent.uri, receiver=seller.uri, msgcnt=get_count(),
-                          content=contentResult), seller.address)
+            gr2 = send_message(
+                build_message(gr, perf=ACL.request, sender=UserPersonalAgent.uri, receiver=seller.uri,
+                              msgcnt=get_count(),
+                              content=contentResult), seller.address)
 
-        index = 0
-        subject_pos = {}
-        product_list = []
-        for s, p, o in gr2:
-            if s not in subject_pos:
-                subject_pos[s] = index
-                product_list.append({})
-                index += 1
-            if s in subject_pos:
-                subject_dict = product_list[subject_pos[s]]
-                if p == ECSDI.Marca:
-                    subject_dict['marca'] = o
-                elif p == ECSDI.Modelo:
-                    subject_dict['modelo'] = o
-                elif p == ECSDI.Precio:
-                    subject_dict['precio'] = o
-                elif p == ECSDI.Nombre:
-                    subject_dict['nombre'] = o
-                product_list[subject_pos[s]] = subject_dict
+            index = 0
+            subject_pos = {}
+            product_list = []
+            for s, p, o in gr2:
+                if s not in subject_pos:
+                    subject_pos[s] = index
+                    product_list.append({})
+                    index += 1
+                if s in subject_pos:
+                    subject_dict = product_list[subject_pos[s]]
+                    if p == ECSDI.Marca:
+                        subject_dict['marca'] = o
+                    elif p == ECSDI.Modelo:
+                        subject_dict['modelo'] = o
+                    elif p == ECSDI.Precio:
+                        subject_dict['precio'] = o
+                    elif p == ECSDI.Nombre:
+                        subject_dict['nombre'] = o
+                    product_list[subject_pos[s]] = subject_dict
 
-        return render_template('cerca.html', products=product_list)
+            return render_template('cerca.html', products=product_list)
+        elif request.form['submit'] == 'Comprar':
+            return 'Compra feta. Felicitats!'
 
 
 @app.route("/Stop")
