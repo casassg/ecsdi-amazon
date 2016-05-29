@@ -172,11 +172,7 @@ def communication():
 
             # Accion de comprar
             elif accion == ECSDI.Peticion_compra:
-                financial = get_agent_info(agn.FinancialAgent, DirectoryAgent, SellerAgent, get_count())
-
-                gr = send_message(
-                    build_message(gm, perf=ACL.request, sender=SellerAgent.uri, receiver=financial.uri, msgcnt=get_count(),
-                                  content=content), financial.address)
+                logger.info("He rebut la peticio de compra")
 
             # No habia ninguna accion en el mensaje
             else:

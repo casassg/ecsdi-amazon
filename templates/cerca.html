@@ -30,7 +30,7 @@
                         <td>{{ item.marca }}</td>
                         <td>{{ item.modelo }}</td>
                         <td>{{ item.precio }}</td>
-                        <td><input type="checkbox"></td>
+                        <td><input type="checkbox" name="checkbox" value="{{ products.index(item) }}"></td>
                     </tr>
                 {% endfor %}
             </table>

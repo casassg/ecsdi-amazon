@@ -81,6 +81,12 @@ DirectoryAgent = Agent('DirectoryAgent',
 # Global dsgraph triplestore
 dsgraph = Graph()
 
+# Productos enconctrados
+product_list = []
+
+# Contingut del missatge de peticio de compra
+content = None
+
 
 def get_count():
     global mss_cnt
@@ -90,81 +96,69 @@ def get_count():
     return mss_cnt
 
 
-def send_peticio_compra():
-    content = None
+def create_sell_product(gr, marca, modelo, nombre, precio):
+    # Creacion del producto
+    subject_producto = ECSDI['Producto_' + str(get_count())]
+    gr.add((subject_producto, RDF.type, ECSDI.Producto))
+    gr.add((subject_producto, ECSDI.Marca, Literal(marca)))
+    gr.add((subject_producto, ECSDI.Modelo, Literal(modelo)))
+    gr.add((subject_producto, ECSDI.Nombre, Literal(nombre)))
+    gr.add((subject_producto, ECSDI.Precio, Literal(precio)))
+    return subject_producto
 
-    def create_sell_product(gr, marca, modelo, nombre, precio):
-        # Creacion del producto
-        subject_producto = ECSDI['Producto_' + str(get_count())]
-        gr.add((subject_producto, RDF.type, ECSDI.Producto))
-        gr.add((subject_producto, ECSDI.Marca, Literal(marca)))
-        gr.add((subject_producto, ECSDI.Modelo, Literal(modelo)))
-        gr.add((subject_producto, ECSDI.Nombre, Literal(nombre)))
-        gr.add((subject_producto, ECSDI.Precio, Literal(precio)))
-        return subject_producto
 
-    def create_peticio_compra():
-        logger.info("Creando la peticion de compra")
+def create_Barcelona_city(gr):
+    subject_ciudad = ECSDI['Ciudad_' + str(get_count())]
 
-        # Content of the message
-        global content
-        content = ECSDI['Peticion_compra_' + str(get_count())]
+    latitud_Barcelona = 41.398373
+    longitud_Barcelona = 2.188247
+    nombre_Barcelona = 'Barcelona'
 
-        # Graph creation
-        gr = Graph()
-        gr.add((content, RDF.type, ECSDI.Peticion_compra))
+    gr.add((subject_ciudad, RDF.type, ECSDI.Ciudad))
+    gr.add((subject_ciudad, ECSDI.Nombre, Literal(nombre_Barcelona)))
+    gr.add((subject_ciudad, ECSDI.Latitud, Literal(latitud_Barcelona)))
+    gr.add((subject_ciudad, ECSDI.Longitud, Literal(longitud_Barcelona)))
+    return subject_ciudad
 
-        # Asignar prioridad a la peticion (asignamos el contador de mensaje)
-        gr.add((content, ECSDI.Prioridad, Literal(get_count())))
 
-        # Creacion de la ciudad (por ahora Barcelona) ------------------------------------------------------------------
-        subject_ciudad = ECSDI['Ciudad_' + str(get_count())]
+def create_peticio_compra(products):
+    logger.info("Creando la peticion de compra")
 
-        latitud_Barcelona = 41.398373
-        longitud_Barcelona = 2.188247
-        nombre_Barcelona = 'Barcelona'
+    # Content of the message
+    global content
+    content = ECSDI['Peticion_compra_' + str(get_count())]
 
-        gr.add((subject_ciudad, RDF.type, ECSDI.Ciudad))
-        gr.add((subject_ciudad, ECSDI.Nombre, Literal(nombre_Barcelona)))
-        gr.add((subject_ciudad, ECSDI.Latitud, Literal(latitud_Barcelona)))
-        gr.add((subject_ciudad, ECSDI.Longitud, Literal(longitud_Barcelona)))
+    # Graph creation
+    gr = Graph()
+    gr.add((content, RDF.type, ECSDI.Peticion_compra))
 
-        # Creacion del sobre (Compra) ----------------------------------------------------------------------------------
-        subject_sobre = ECSDI['Compra_' + str(get_count())]
-        gr.add((subject_sobre, RDF.type, ECSDI.Compra))
+    # Asignar prioridad a la peticion (asignamos el contador de mensaje)
+    gr.add((content, ECSDI.Prioridad, Literal(get_count())))
 
-        gr.add((subject_sobre, ECSDI.Pagat, Literal(0)))
-        gr.add((subject_sobre, ECSDI.Enviar_a, URIRef(subject_ciudad)))
+    # Creacion de la ciudad (por ahora Barcelona) ------------------------------------------------------------------
+    subject_ciudad = create_Barcelona_city(gr)
 
-        # TODO Get attributes product list by interface
-        products = [['Nintendo', 'Choripan 3DS', 'Nintendo Choripan', 100.0],
-                    ['Garmin', '325', 'Garmin 325', 308.0],
-                    ['Elephone', 'P700', 'Pioneer', 200.0],
-                    ['Google', 'Nexus 5', 'Google Nexus 5', 350.0]]
+    # Creacion del sobre (Compra) ----------------------------------------------------------------------------------
+    subject_sobre = ECSDI['Compra_' + str(get_count())]
+    gr.add((subject_sobre, RDF.type, ECSDI.Compra))
 
-        total_price = 0.0
+    gr.add((subject_sobre, ECSDI.Pagat, Literal(0)))
+    gr.add((subject_sobre, ECSDI.Enviar_a, URIRef(subject_ciudad)))
 
-        for item in products:
-            total_price += item[3]
-            subject_product = create_sell_product(gr, item[0], item[1], item[2], item[3])
-            gr.add((subject_sobre, ECSDI.Productos, URIRef(subject_product)))
+    total_price = 0.0
 
-        gr.add((subject_sobre, ECSDI.Precio_total, Literal(total_price)))
+    for item in products:
+        total_price += float(item[3])
+        subject_product = create_sell_product(gr, item[0], item[1], item[2], item[3])
+        gr.add((subject_sobre, ECSDI.Productos, URIRef(subject_product)))
 
-        # --------------------------------------------------------------------------------------------------------------
+    gr.add((subject_sobre, ECSDI.Precio_total, Literal(total_price)))
 
-        gr.add((content, ECSDI.Sobre, URIRef(subject_sobre)))
+    # --------------------------------------------------------------------------------------------------------------
 
-        return gr
+    gr.add((content, ECSDI.Sobre, URIRef(subject_sobre)))
 
-    message = create_peticio_compra()
-    seller = get_agent_info(agn.SellerAgent, DirectoryAgent, UserPersonalAgent, get_count())
-
-    gr2 = send_message(
-        build_message(message, perf=ACL.request, sender=UserPersonalAgent.uri, receiver=seller.uri, msgcnt=get_count(),
-                      content=content), seller.address)
-
-    return gr2.serialize()
+    return gr
 
 
 @app.route("/")
@@ -178,10 +172,12 @@ def browser_cerca():
     Permite la comunicacion con el agente via un navegador
     via un formulario
     """
-    global mss_cnt
+
+    global product_list
     if request.method == 'GET':
         return render_template('cerca.html', products=None)
     elif request.method == 'POST':
+        # Peticio de cerca
         if request.form['submit'] == 'Cerca':
             logger.info("Enviando peticion de busqueda")
 
@@ -247,8 +243,36 @@ def browser_cerca():
                     product_list[subject_pos[s]] = subject_dict
 
             return render_template('cerca.html', products=product_list)
+
+        # Peticio de compra
         elif request.form['submit'] == 'Comprar':
-            return 'Compra feta. Felicitats!'
+            products_checked = []
+            for item in request.form.getlist("checkbox"):
+                item_checked = []
+                item_map = product_list[int(item)]
+                item_checked.append(item_map['marca'])
+                item_checked.append(item_map['modelo'])
+                item_checked.append(item_map['nombre'])
+                item_checked.append(item_map['precio'])
+                products_checked.append(item_checked)
+
+            peticio_compra = create_peticio_compra(products_checked)
+            seller = get_agent_info(agn.SellerAgent, DirectoryAgent, UserPersonalAgent, get_count())
+
+            global content
+
+            # send_message(
+            #    build_message(peticio_compra, perf=ACL.request, sender=UserPersonalAgent.uri, receiver=seller.uri,
+            #                  msgcnt=get_count(),
+            #                  content=content), seller.address)
+
+            ret = 'Compra feta. Felicitats!' + '<br><br>' + 'Has seleccionado estos productos:<br>'
+            if len(products_checked) == 0:
+                ret += 'Ninguno'
+            else:
+                for item in products_checked:
+                    ret += '--- ' + item[0] + ' | ' + item[1] + ' | ' + item[2] + ' | ' + item[3] + '<br>'
+            return ret
 
 
 @app.route("/Stop")
