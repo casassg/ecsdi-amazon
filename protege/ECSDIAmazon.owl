@@ -81,6 +81,9 @@
   <owl:Class rdf:ID="Enviar_lot">
     <rdfs:subClassOf rdf:resource="#Accion"/>
   </owl:Class>
+  <owl:Class rdf:ID="Registra_productes">
+    <rdfs:subClassOf rdf:resource="#Accion"/>
+  </owl:Class>
   <owl:Class rdf:ID="Peticion_compra">
     <rdfs:subClassOf rdf:resource="#Accion"/>
   </owl:Class>
@@ -138,6 +141,10 @@
         </owl:unionOf>
       </owl:Class>
     </rdfs:domain>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="producto">
+    <rdfs:range rdf:resource="#Producto_externo"/>
+    <rdfs:domain rdf:resource="#Registra_productes"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="Productos">
     <rdfs:domain rdf:resource="#Compra"/>
