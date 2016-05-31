@@ -14,7 +14,6 @@
 
 <http://www.owl-ontologies.com/ECSDIAmazon.owl> a owl:Ontology .
 
-
 default:Ciudad_1 a default:Ciudad ;
     default:Latitud "41.398373"^^xsd:float ;
     default:Longitud "2.188247"^^xsd:float ;
@@ -43,5 +42,10 @@ default:Producto_3 a default:Producto ;
     default:Nombre "Pioneer"^^xsd:string ;
     default:Precio "200.0"^^xsd:float .
 
-
+default:Producto_externo34 a default:Producto_externo ;
+    default:Marca "Sony" ;
+    default:Modelo "v3" ;
+    default:Nombre "Televisor sony" ;
+    default:Precio "500" ;
+    default:Vendido 0 .
 
