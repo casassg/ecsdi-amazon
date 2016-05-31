@@ -75,6 +75,9 @@
   <owl:Class rdf:ID="Peticion_transferencia">
     <rdfs:subClassOf rdf:resource="#Accion"/>
   </owl:Class>
+  <owl:Class rdf:ID="Vull_comprar">
+    <rdfs:subClassOf rdf:resource="#Accion"/>
+  </owl:Class>
   <owl:Class rdf:ID="Enviar_lot">
     <rdfs:subClassOf rdf:resource="#Accion"/>
   </owl:Class>
@@ -96,6 +99,10 @@
     <rdfs:range rdf:resource="#Oferta_transporte"/>
     <rdfs:domain rdf:resource="#Contraoferta"/>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="compra">
+    <rdfs:domain rdf:resource="#Vull_comprar"/>
+    <rdfs:range rdf:resource="#Compra"/>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="productos">
     <rdfs:range rdf:resource="#Producto"/>
     <rdfs:domain rdf:resource="#Lote_producto"/>
@@ -112,6 +119,7 @@
     <rdfs:domain rdf:resource="#Producto_externo"/>
     <rdfs:range rdf:resource="#Vendedor"/>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="ObjectProperty_6"/>
   <owl:ObjectProperty rdf:ID="a_enviar">
     <rdfs:domain rdf:resource="#Enviar_lot"/>
     <rdfs:range rdf:resource="#Lote_producto"/>
