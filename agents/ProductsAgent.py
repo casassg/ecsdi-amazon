@@ -72,6 +72,7 @@ def register_message():
 @app.route("/comm")
 def communication():
     global dsgraph
+    gr = None
 
     logger.info('Peticion de informacion recibida')
 
@@ -104,8 +105,8 @@ def communication():
             # Aqui realizariamos lo que pide la accion
 
             if accion == ECSDI.Registra_productes:
-                logger.info("Recibimos la peticion de registro")
-                print(gm)
+                print(gm.serialize(format='turtle'))
+
             # No habia ninguna accion en el mensaje
             else:
                 gr = build_message(Graph(),

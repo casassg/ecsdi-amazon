@@ -144,7 +144,7 @@ def browser_registrarProducto():
                           msgcnt=get_count(),
                           content=content), productsag.address)
 
-        return gr.serialize()
+        return 'Hemos registrado el producto! <b>Que guay!</b>'
 
 
 @app.route("/Stop")
