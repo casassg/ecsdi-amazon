@@ -38,8 +38,8 @@ mss_cnt = 0
 lista_productos = []
 
 # Data Agent
-FinancialAgent = Agent('AgenteFinanzas',
-                       agn.AgenteFinanzas,
+FinancialAgent = Agent('FinancialAgent',
+                       agn.FinancialAgent,
                        'http://%s:%d/comm' % (hostname, port),
                        'http://%s:%d/Stop' % (hostname, port))
 
@@ -120,14 +120,13 @@ def communication():
 
             # Accion de enviar venta
             if accion == ECSDI.Vull_comprar:
-                # TODO Estudiar como tratar el listado de productos del Vull_comprar
-                list = gm.value(subject=content, predicate=ECSDI.Vull_comprar)
+                print("Se ha recibido el mensaje de vullComprar")
 
                 # TODO Extract sell
                 sell = None
 
-                registerSells(sell)
-                payDelivery()
+                # registerSells(sell)
+                # payDelivery()
 
             elif accion == ECSDI.Peticion_retorno:
                 # TODO retorn compra (Aun no hace falta hacerlo. Se hara una vez acabado la compra de productos)

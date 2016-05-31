@@ -13,6 +13,8 @@ import sys
 from multiprocessing import Queue, Process
 from flask import Flask, request
 from prettytable import PrettyTable
+from rdflib import URIRef
+
 from utils.ACLMessages import *
 from utils.Agent import Agent
 from utils.FlaskServer import shutdown_server
@@ -173,12 +175,26 @@ def communication():
             # Accion de comprar
             elif accion == ECSDI.Peticion_compra:
                 logger.info("He rebut la peticio de compra")
-                print(gm.serialize(format='turtle'))
-                sells = gm.subjects(RDF.type, ECSDI.Compra)
-                for item in sells:
-                    gm.value(subject=item, predicate=ECSDI.Pre)
 
-                gm.add()
+                sell = None
+                for item in gm.subjects(RDF.type, ECSDI.Compra):
+                    sell = item
+
+                gm.remove((content, None, None))
+                for item in gm.subjects(RDF.type, ACL.FipaAclMessage):
+                    gm.remove((item, None, None))
+
+                content = ECSDI['Vull_comprar_' + str(get_count())]
+                gm.add((content, RDF.type, ECSDI.Vull_comprar))
+                gm.add((content, ECSDI.compra, URIRef(sell)))
+                gr = gm
+
+                financial = get_agent_info(agn.FinancialAgent, DirectoryAgent, SellerAgent, get_count())
+
+                answer = send_message(
+                    build_message(gr, perf=ACL.request, sender=SellerAgent.uri, receiver=financial.uri,
+                                  msgcnt=get_count(),
+                                  content=content), financial.address)
 
             # No habia ninguna accion en el mensaje
             else:
