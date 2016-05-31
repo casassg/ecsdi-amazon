@@ -173,6 +173,12 @@ def communication():
             # Accion de comprar
             elif accion == ECSDI.Peticion_compra:
                 logger.info("He rebut la peticio de compra")
+                print(gm.serialize(format='turtle'))
+                sells = gm.subjects(RDF.type, ECSDI.Compra)
+                for item in sells:
+                    gm.value(subject=item, predicate=ECSDI.Pre)
+
+                gm.add()
 
             # No habia ninguna accion en el mensaje
             else:

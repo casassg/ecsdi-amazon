@@ -119,15 +119,14 @@ def communication():
             accion = gm.value(subject=content, predicate=RDF.type)
 
             # Accion de enviar venta
-            if accion == ECSDI.Peticion_compra:
-                # TODO Estudiar como tratar el listado de productos de la Peticion de compra (Mirar el predicate)
-                list = gm.value(subject=content, predicate=ECSDI.Lista_productos_seleccionados)
+            if accion == ECSDI.Vull_comprar:
+                # TODO Estudiar como tratar el listado de productos del Vull_comprar
+                list = gm.value(subject=content, predicate=ECSDI.Vull_comprar)
 
-                global lista_productos
-                for item in list:
-                    lista_productos.append(gm.value(subject=content, predicate=ECSDI.Producto))
+                # TODO Extract sell
+                sell = None
 
-                registerSells()
+                registerSells(sell)
                 payDelivery()
 
             elif accion == ECSDI.Peticion_retorno:
@@ -208,10 +207,8 @@ def payDelivery():
     return gr
 
 
-def registerSells():
-    # TODO Record the purchase.
-    global lista_productos
-    writeSells(1, 15.30, lista_productos, 'Ciudad_1')
+def registerSells(sell):
+    sell = 'todo'
 
 
 def readSell(id):
@@ -244,29 +241,6 @@ def confirmTransfer():
 
     gr = send_message(message, productManeger.address)
     return gr
-
-    print('todo')
-
-
-def writeSells(paid, totalPrice, productsList, sendTo):
-    # TODO Cambiar el data a almacenar. Tiene que ser data/compras
-    URI = "http://www.owl-ontologies.com/ECSDIAmazon.owl#"
-    millis = int(round(time.time() * 1000))
-    URISell = URI + "Compra_" + str(millis)
-
-    ontologyFile = open('../data/productes')
-
-    g = Graph()
-    g.parse(ontologyFile, format='turtle')
-    g.add((URIRef(URISell), RDF.type, ECSDI.Compra))
-    g.add((URIRef(URISell), ECSDI.Pagat, Literal(paid)))
-    g.add((URIRef(URISell), ECSDI.Precio_total, Literal(totalPrice)))
-    g.add((URIRef(URISell), ECSDI.Enviar_a, URIRef(URI + sendTo)))
-    for p in productsList:
-        g.add((URIRef(URISell), ECSDI.Productos, URIRef(URI + p)))
-
-    g.serialize(destination='../productes/productes', format='turtle')
-
 
 # MAIN METHOD ----------------------------------------------------------------------------------------------
 
