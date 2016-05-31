@@ -104,14 +104,8 @@ def communication():
             # Aqui realizariamos lo que pide la accion
 
             if accion == ECSDI.Registra_productes:
-                # Por ahora simplemente retornamos un Inform-done
-                # TODO Revisar funcionalidad. Deberia almacenar los productos.
-                gr = build_message(Graph(),
-                                   ACL['inform-done'],
-                                   sender=ProductsAgent.uri,
-                                   msgcnt=get_count(),
-                                   receiver=msgdic['sender'], )
-
+                logger.info("Recibimos la peticion de registro")
+                print(gm)
             # No habia ninguna accion en el mensaje
             else:
                 gr = build_message(Graph(),

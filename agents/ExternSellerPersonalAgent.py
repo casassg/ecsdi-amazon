@@ -102,30 +102,6 @@ def register_message():
     return gr
 
 
-def writeGraph(marca, nom, model, preu):
-    # Declarar URI del nuevo producto
-    URI = "http://www.owl-ontologies.com/ECSDIAmazon.owl#"
-    n = int(round(time.time() * 1000))
-    data = URI + "Producto_" + str(n)
-
-    # Creacion del grafo con los datos anteriores
-    ontologyFile = open('../productes/productes')
-    gm = Graph()
-    gm.parse(ontologyFile, format='turtle')
-
-    # Anadir nuevo producto externo al grafo
-    gm.add((URIRef(data), RDF.type, ECSDI.Producto))
-    gm.add((URIRef(data), ECSDI.Nombre, Literal(nom)))
-    gm.add((URIRef(data), ECSDI.Marca, Literal(marca)))
-    gm.add((URIRef(data), ECSDI.Modelo, Literal(model)))
-    gm.add((URIRef(data), ECSDI.Precio, Literal(preu)))
-
-    # TODO El hecho de guardarlo no lo deberia hacer el ProductsAgent?
-
-    # Guardar en el fichero de productos
-    return gm.serialize(destination='../data/productes', format='turtle')
-
-
 @app.route("/registrarProducto", methods=['GET', 'POST'])
 def browser_registrarProducto():
     """
@@ -139,18 +115,34 @@ def browser_registrarProducto():
         nom = request.form['nom']
         model = request.form['model']
         preu = request.form['preu']
+        vendido = 0
 
         # Content of the message
         content = ECSDI['Registra_productes_' + str(get_count())]
 
-        gr = writeGraph(marca, nom, model, preu)
+        # Graph creation
+        gr = Graph()
+        gr.add((content, RDF.type, ECSDI.Registra_productes))
 
-        productsAg = get_agent_info(agn.AgenteProductos, DirectoryAgent, ExternalSellerPersonalAgent, get_count())
+        # Anadir nuevo producto externo al grafo
+
+        subjectProd = ECSDI['Producto_externo' + str(get_count())]
+
+        gr.add((subjectProd, RDF.type, ECSDI.Producto_externo))
+        gr.add((subjectProd, ECSDI.Nombre, Literal(nom)))
+        gr.add((subjectProd, ECSDI.Marca, Literal(marca)))
+        gr.add((subjectProd, ECSDI.Modelo, Literal(model)))
+        gr.add((subjectProd, ECSDI.Precio, Literal(preu)))
+        gr.add((subjectProd, ECSDI.Vendido, Literal(vendido)))
+
+        gr.add((content, ECSDI.producto, subjectProd))
+
+        productsag = get_agent_info(agn.ProductsAgent, DirectoryAgent, ExternalSellerPersonalAgent, get_count())
 
         gr = send_message(
-            build_message(gr, perf=ACL.request, sender=ExternalSellerPersonalAgent, receiver=productsAg,
+            build_message(gr, perf=ACL.request, sender=ExternalSellerPersonalAgent.uri, receiver=productsag.uri,
                           msgcnt=get_count(),
-                          content=content), productsAg.address)
+                          content=content), productsag.address)
 
         return gr.serialize()
 
