@@ -84,9 +84,6 @@ dsgraph = Graph()
 # Productos enconctrados
 product_list = []
 
-# Contingut del missatge de peticio de compra
-content = None
-
 
 def get_count():
     global mss_cnt
@@ -94,71 +91,6 @@ def get_count():
         mss_cnt = 0
     mss_cnt += 1
     return mss_cnt
-
-
-def create_sell_product(gr, marca, modelo, nombre, precio):
-    # Creacion del producto
-    subject_producto = ECSDI['Producto_' + str(get_count())]
-    gr.add((subject_producto, RDF.type, ECSDI.Producto))
-    gr.add((subject_producto, ECSDI.Marca, Literal(marca)))
-    gr.add((subject_producto, ECSDI.Modelo, Literal(modelo)))
-    gr.add((subject_producto, ECSDI.Nombre, Literal(nombre)))
-    gr.add((subject_producto, ECSDI.Precio, Literal(precio)))
-    return subject_producto
-
-
-def create_Barcelona_city(gr):
-    subject_ciudad = ECSDI['Ciudad_' + str(get_count())]
-
-    latitud_Barcelona = 41.398373
-    longitud_Barcelona = 2.188247
-    nombre_Barcelona = 'Barcelona'
-
-    gr.add((subject_ciudad, RDF.type, ECSDI.Ciudad))
-    gr.add((subject_ciudad, ECSDI.Nombre, Literal(nombre_Barcelona)))
-    gr.add((subject_ciudad, ECSDI.Latitud, Literal(latitud_Barcelona)))
-    gr.add((subject_ciudad, ECSDI.Longitud, Literal(longitud_Barcelona)))
-    return subject_ciudad
-
-
-def create_peticio_compra(products):
-    logger.info("Creando la peticion de compra")
-
-    # Content of the message
-    global content
-    content = ECSDI['Peticion_compra_' + str(get_count())]
-
-    # Graph creation
-    gr = Graph()
-    gr.add((content, RDF.type, ECSDI.Peticion_compra))
-
-    # Asignar prioridad a la peticion (asignamos el contador de mensaje)
-    gr.add((content, ECSDI.Prioridad, Literal(get_count())))
-
-    # Creacion de la ciudad (por ahora Barcelona) ------------------------------------------------------------------
-    subject_ciudad = create_Barcelona_city(gr)
-
-    # Creacion del sobre (Compra) ----------------------------------------------------------------------------------
-    subject_sobre = ECSDI['Compra_' + str(get_count())]
-    gr.add((subject_sobre, RDF.type, ECSDI.Compra))
-
-    gr.add((subject_sobre, ECSDI.Pagat, Literal(0)))
-    gr.add((subject_sobre, ECSDI.Enviar_a, URIRef(subject_ciudad)))
-
-    total_price = 0.0
-
-    for item in products:
-        total_price += float(item[3])
-        subject_product = create_sell_product(gr, item[0], item[1], item[2], item[3])
-        gr.add((subject_sobre, ECSDI.Productos, URIRef(subject_product)))
-
-    gr.add((subject_sobre, ECSDI.Precio_total, Literal(total_price)))
-
-    # --------------------------------------------------------------------------------------------------------------
-
-    gr.add((content, ECSDI.Sobre, URIRef(subject_sobre)))
-
-    return gr
 
 
 @app.route("/")
@@ -244,6 +176,8 @@ def browser_cerca():
 
             return render_template('cerca.html', products=product_list)
 
+        # --------------------------------------------------------------------------------------------------------------
+
         # Peticio de compra
         elif request.form['submit'] == 'Comprar':
             products_checked = []
@@ -256,15 +190,56 @@ def browser_cerca():
                 item_checked.append(item_map['precio'])
                 products_checked.append(item_checked)
 
-            peticio_compra = create_peticio_compra(products_checked)
+            logger.info("Creando la peticion de compra")
+
+            # Content of the message
+            content = ECSDI['Peticion_compra_' + str(get_count())]
+
+            # Graph creation
+            gr = Graph()
+            gr.add((content, RDF.type, ECSDI.Peticion_compra))
+
+            # Asignar prioridad a la peticion (asignamos el contador de mensaje)
+            gr.add((content, ECSDI.Prioridad, Literal(get_count())))
+
+            # Creacion de la ciudad (por ahora Barcelona) --------------------------------------------------------------
+            subject_ciudad = ECSDI['Ciudad_' + str(get_count())]
+
+            gr.add((subject_ciudad, RDF.type, ECSDI.Ciudad))
+            gr.add((subject_ciudad, ECSDI.Nombre, Literal(41.398373)))
+            gr.add((subject_ciudad, ECSDI.Latitud, Literal(2.188247)))
+            gr.add((subject_ciudad, ECSDI.Longitud, Literal('Barcelona')))
+
+            # Creacion del sobre (Compra) ------------------------------------------------------------------------------
+            subject_sobre = ECSDI['Compra_' + str(get_count())]
+            gr.add((subject_sobre, RDF.type, ECSDI.Compra))
+
+            gr.add((subject_sobre, ECSDI.Pagat, Literal(0)))
+            gr.add((subject_sobre, ECSDI.Enviar_a, URIRef(subject_ciudad)))
+
+            total_price = 0.0
+
+            for item in products_checked:
+                total_price += float(item[3])
+                # Creacion del producto --------------------------------------------------------------------------------
+                subject_producto = ECSDI['Producto_' + str(get_count())]
+                gr.add((subject_producto, RDF.type, ECSDI.Producto))
+                gr.add((subject_producto, ECSDI.Marca, Literal(item[0])))
+                gr.add((subject_producto, ECSDI.Modelo, Literal(item[1])))
+                gr.add((subject_producto, ECSDI.Nombre, Literal(item[2])))
+                gr.add((subject_producto, ECSDI.Precio, Literal(item[3])))
+                gr.add((subject_sobre, ECSDI.Productos, URIRef(subject_producto)))
+
+            gr.add((subject_sobre, ECSDI.Precio_total, Literal(total_price)))
+
+            gr.add((content, ECSDI.Sobre, URIRef(subject_sobre)))
+
             seller = get_agent_info(agn.SellerAgent, DirectoryAgent, UserPersonalAgent, get_count())
 
-            global content
-
-            # send_message(
-            #    build_message(peticio_compra, perf=ACL.request, sender=UserPersonalAgent.uri, receiver=seller.uri,
-            #                  msgcnt=get_count(),
-            #                  content=content), seller.address)
+            answer = send_message(
+                build_message(gr, perf=ACL.request, sender=UserPersonalAgent.uri, receiver=seller.uri,
+                              msgcnt=get_count(),
+                              content=content), seller.address)
 
             ret = 'Compra feta. Felicitats!' + '<br><br>' + 'Has seleccionado estos productos:<br>'
             if len(products_checked) == 0:
