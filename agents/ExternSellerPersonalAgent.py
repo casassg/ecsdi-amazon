@@ -14,7 +14,7 @@ import argparse
 import socket
 from multiprocessing import Process, Queue
 from flask import Flask, render_template, request
-from rdflib import Graph, Namespace, URIRef, RDF, Literal
+from rdflib import Graph, Namespace, URIRef, RDF, Literal, XSD
 from utils.Agent import Agent
 from utils.FlaskServer import shutdown_server
 from utils.Logging import config_logger
@@ -138,10 +138,10 @@ def browser_registrarProducto():
         subjectProd = ECSDI['Producto_externo_' + str(random.randint(1, sys.float_info.max))]
 
         gr.add((subjectProd, RDF.type, ECSDI.Producto_externo))
-        gr.add((subjectProd, ECSDI.Nombre, Literal(nom)))
-        gr.add((subjectProd, ECSDI.Marca, Literal(marca)))
-        gr.add((subjectProd, ECSDI.Modelo, Literal(model)))
-        gr.add((subjectProd, ECSDI.Precio, Literal(preu)))
+        gr.add((subjectProd, ECSDI.Nombre, Literal(nom, datatype=XSD.string)))
+        gr.add((subjectProd, ECSDI.Marca, Literal(marca, datatype=XSD.string)))
+        gr.add((subjectProd, ECSDI.Modelo, Literal(model, datatype=XSD.string)))
+        gr.add((subjectProd, ECSDI.Precio, Literal(preu, datatype=XSD.float)))
         gr.add((subjectProd, ECSDI.Vendido, Literal(vendido)))
 
         gr.add((content, ECSDI.producto, subjectProd))
