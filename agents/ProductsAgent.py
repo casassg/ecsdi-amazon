@@ -105,7 +105,7 @@ def communication():
             # Aqui realizariamos lo que pide la accion
 
             if accion == ECSDI.Registra_productes:
-                recordExternalProduct(gm, content)
+                return recordExternalProduct(gm, content)
 
             # No habia ninguna accion en el mensaje
             else:
@@ -160,27 +160,22 @@ def distributeDelivery():
 
 
 def recordExternalProduct(gm, content):
-    # TODO Record product of an external seller.
-    print("RecordExternalProduct")
-
     ontologyFile = open('../data/productes')
 
     g = Graph()
     g.parse(ontologyFile, format='turtle')
+
     # Aquí afegim el producte al graf
-
     producte = gm.subjects(RDF.type, ECSDI.Producto_externo)
-
     producte = producte.next()
 
-    print(producte)
-
-    for s,p,o in gm:
+    for s, p, o in gm:
         if s == producte:
-            g.add((s,p,o))
-        print s, producte
-    # guardem el graf
+            g.add((s, p, o))
+
+    # Guardem el graf
     g.serialize(destination='../data/productes', format='turtle')
+    return 'Ok'
 
 
 # MAIN METHOD ----------------------------------------------------------------------------------------------
@@ -192,7 +187,7 @@ if __name__ == '__main__':
     ab1.start()
 
     # Run server
-    app.run(host=hostname, port=port,debug=True)
+    app.run(host=hostname, port=port, debug=True)
 
     # Wait behaviors
     ab1.join()

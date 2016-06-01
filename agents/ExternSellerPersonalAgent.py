@@ -3,6 +3,10 @@
 filename: UserPersonalAgent
 Agent que implementa la interacció amb l'usuari
 """
+import random
+
+import sys
+
 from utils.ACLMessages import get_agent_info, send_message, build_message, register_agent
 from utils.OntologyNamespaces import ECSDI, ACL
 import time
@@ -126,7 +130,7 @@ def browser_registrarProducto():
 
         # Anadir nuevo producto externo al grafo
 
-        subjectProd = ECSDI['Producto_externo' + str(get_count())]
+        subjectProd = ECSDI['Producto_externo_' + str(random.randint(1, sys.float_info.max))]
 
         gr.add((subjectProd, RDF.type, ECSDI.Producto_externo))
         gr.add((subjectProd, ECSDI.Nombre, Literal(nom)))
@@ -139,7 +143,7 @@ def browser_registrarProducto():
 
         productsag = get_agent_info(agn.ProductsAgent, DirectoryAgent, ExternalSellerPersonalAgent, get_count())
 
-        gr = send_message(
+        send_message(
             build_message(gr, perf=ACL.request, sender=ExternalSellerPersonalAgent.uri, receiver=productsag.uri,
                           msgcnt=get_count(),
                           content=content), productsag.address)
