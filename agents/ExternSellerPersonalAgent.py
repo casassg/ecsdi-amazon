@@ -106,6 +106,11 @@ def register_message():
     return gr
 
 
+@app.route("/")
+def browser_root():
+    return render_template('rootExternSellerPersonalAgent.html')
+
+
 @app.route("/registrarProducto", methods=['GET', 'POST'])
 def browser_registrarProducto():
     """
@@ -143,7 +148,7 @@ def browser_registrarProducto():
 
         productsag = get_agent_info(agn.ProductsAgent, DirectoryAgent, ExternalSellerPersonalAgent, get_count())
 
-        send_message(
+        gr = send_message(
             build_message(gr, perf=ACL.request, sender=ExternalSellerPersonalAgent.uri, receiver=productsag.uri,
                           msgcnt=get_count(),
                           content=content), productsag.address)

@@ -105,7 +105,7 @@ def communication():
             # Aqui realizariamos lo que pide la accion
 
             if accion == ECSDI.Registra_productes:
-                return recordExternalProduct(gm, content)
+                gr = recordExternalProduct(gm, content)
 
             # No habia ninguna accion en el mensaje
             else:
@@ -116,7 +116,7 @@ def communication():
 
     logger.info('Respondemos a la peticion')
 
-    return gr.serialize(format='xml')
+    return gr.serialize(format='xml'), 200
 
 
 @app.route("/Stop")
@@ -175,7 +175,7 @@ def recordExternalProduct(gm, content):
 
     # Guardem el graf
     g.serialize(destination='../data/productes', format='turtle')
-    return 'Ok'
+    return g
 
 
 # MAIN METHOD ----------------------------------------------------------------------------------------------

@@ -95,7 +95,7 @@ def get_count():
 
 @app.route("/")
 def browser_root():
-    return redirect("/cerca")
+    return render_template('rootUserPersonalAgent.html')
 
 
 @app.route("/cerca", methods=['GET', 'POST'])
