@@ -191,7 +191,7 @@ def communication():
 
                 financial = get_agent_info(agn.FinancialAgent, DirectoryAgent, SellerAgent, get_count())
 
-                answer = send_message(
+                gr = send_message(
                     build_message(gr, perf=ACL.request, sender=SellerAgent.uri, receiver=financial.uri,
                                   msgcnt=get_count(),
                                   content=content), financial.address)

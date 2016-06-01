@@ -121,6 +121,7 @@ def communication():
             # Accion de enviar venta
             if accion == ECSDI.Vull_comprar:
                 print("Se ha recibido el mensaje de vullComprar")
+                gr = Graph()
 
                 # TODO Extract sell
                 sell = None
@@ -148,7 +149,7 @@ def communication():
 
     logger.info('Respondemos a la peticion')
 
-    return gr.serialize(format='xml')
+    return gr.serialize(format='xml'), 200
 
 
 @app.route("/Stop")
@@ -211,7 +212,6 @@ def registerSells(sell):
 
 
 def readSell(id):
-
     URI = "http://www.owl-ontologies.com/ECSDIAmazon.owl#"
     URISell = URI
     ontologyFile = open('../data/productes')
@@ -240,6 +240,7 @@ def confirmTransfer():
 
     gr = send_message(message, productManeger.address)
     return gr
+
 
 # MAIN METHOD ----------------------------------------------------------------------------------------------
 
