@@ -13,7 +13,7 @@ import sys
 from multiprocessing import Queue, Process
 from flask import Flask, request
 from prettytable import PrettyTable
-from rdflib import URIRef
+from rdflib import URIRef, XSD
 
 from utils.ACLMessages import *
 from utils.Agent import Agent
@@ -294,10 +294,10 @@ def findProducts(model=None, brand=None, min_price=0.0, max_price=sys.float_info
         subject = ECSDI['ProducteResultatCerca' + str(product_count)]
         product_count += 1
         result.add((subject, RDF.type, ECSDI.Producte))
-        result.add((subject, ECSDI.Marca, Literal(marca)))
-        result.add((subject, ECSDI.Modelo, Literal(model)))
-        result.add((subject, ECSDI.Precio, Literal(preu)))
-        result.add((subject, ECSDI.Nombre, Literal(nom)))
+        result.add((subject, ECSDI.Marca, Literal(marca, datatype=XSD.string)))
+        result.add((subject, ECSDI.Modelo, Literal(model, datatype=XSD.string)))
+        result.add((subject, ECSDI.Precio, Literal(preu, datatype=XSD.float)))
+        result.add((subject, ECSDI.Nombre, Literal(nom, datatype=XSD.string)))
     return result
 
 

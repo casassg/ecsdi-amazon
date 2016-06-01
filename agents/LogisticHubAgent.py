@@ -14,7 +14,7 @@ import datetime
 from flask import Flask, request
 from multiprocessing import Process, Queue
 import socket
-from rdflib import Namespace, Graph, URIRef, RDF, Literal, logger
+from rdflib import Namespace, Graph, URIRef, RDF, Literal, logger, XSD
 from utils.ACLMessages import get_message_properties, build_message, register_agent
 from utils.FlaskServer import shutdown_server
 from utils.Agent import Agent
@@ -196,7 +196,7 @@ def writeSends(productList, deliverDate):
     gm = Graph()
     gm.parse(ontologyFile, format='turtle')
     gm.add((URIRef(data), RDF.type, ECSDI.Envio))
-    gm.add((URIRef(data), ECSDI.Fecha_de_entrega, Literal(dateToMillis(deliverDate))))
+    gm.add((URIRef(data), ECSDI.Fecha_de_entrega, Literal(dateToMillis(deliverDate), datatype=XSD.float)))
     for a in productList:
         gm.add((URIRef(data), ECSDI.Envia, URIRef(URI + a)))
 

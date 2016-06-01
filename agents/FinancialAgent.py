@@ -34,9 +34,6 @@ agn = Namespace("http://www.agentes.org#")
 # Message Count
 mss_cnt = 0
 
-# Lista de productos a enviar
-lista_productos = []
-
 # Data Agent
 FinancialAgent = Agent('FinancialAgent',
                        agn.FinancialAgent,
@@ -120,17 +117,18 @@ def communication():
 
             # Accion de enviar venta
             if accion == ECSDI.Vull_comprar:
-                print("Se ha recibido el mensaje de vullComprar")
-                gr = Graph()
+                gm.remove((content, None, None))
+                for item in gm.subjects(RDF.type, ACL.FipaAclMessage):
+                    gm.remove((item, None, None))
 
-                # TODO Extract sell
                 sell = None
+                for item in gm.subjects(RDF.type, ECSDI.Compra):
+                    sell = item
 
-                # registerSells(sell)
-                # payDelivery()
+                gr = registerSells(gm)
+                # payDelivery(sell)
 
             elif accion == ECSDI.Peticion_retorno:
-                # TODO retorn compra (Aun no hace falta hacerlo. Se hara una vez acabado la compra de productos)
                 gr = build_message(Graph(),
                                    ACL['not-understood'],
                                    sender=DirectoryAgent.uri,
@@ -187,7 +185,7 @@ def agent_behaviour(queue):
 
 # DETERMINATE AGENT FUNCTIONS ------------------------------------------------------------------------------
 
-def payDelivery():
+def payDelivery(sell_url):
     content = ECSDI['Peticion_transferencia_' + str(get_count())]
 
     graph = Graph()
@@ -207,8 +205,16 @@ def payDelivery():
     return gr
 
 
-def registerSells(sell):
-    sell = 'todo'
+def registerSells(gm):
+    ontologyFile = open('../data/compres')
+
+    g = Graph()
+    g.parse(ontologyFile, format='turtle')
+    g += gm
+
+    # Guardem el graf
+    g.serialize(destination='../data/compres', format='turtle')
+    return g
 
 
 def readSell(id):

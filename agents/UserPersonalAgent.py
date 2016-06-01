@@ -7,6 +7,9 @@ Agent que implementa la interacció amb l'usuari
 
 @author: casassg
 """
+import random
+
+import sys
 from werkzeug.utils import redirect
 
 from utils.ACLMessages import get_agent_info, send_message, build_message, get_message_properties
@@ -15,7 +18,7 @@ import argparse
 import socket
 from multiprocessing import Process
 from flask import Flask, render_template, request
-from rdflib import Graph, Namespace, RDF, URIRef, Literal
+from rdflib import Graph, Namespace, RDF, URIRef, Literal, XSD
 from utils.Agent import Agent
 from utils.FlaskServer import shutdown_server
 from utils.Logging import config_logger
@@ -126,14 +129,14 @@ def browser_cerca():
                 # Subject nom
                 subject_nom = ECSDI['RestriccioNom' + str(get_count())]
                 gr.add((subject_nom, RDF.type, ECSDI.RestriccioNom))
-                gr.add((subject_nom, ECSDI.Nom, Literal(nom)))
+                gr.add((subject_nom, ECSDI.Nom, Literal(nom, datatype=XSD.string)))
                 # Add restriccio to content
                 gr.add((contentResult, ECSDI.Restringe, URIRef(subject_nom)))
             marca = request.form['marca']
             if marca:
                 subject_marca = ECSDI['Restriccion_Marca_' + str(get_count())]
                 gr.add((subject_marca, RDF.type, ECSDI.Restriccion_Marca))
-                gr.add((subject_marca, ECSDI.Marca, Literal(marca)))
+                gr.add((subject_marca, ECSDI.Marca, Literal(marca, datatype=XSD.string)))
                 gr.add((contentResult, ECSDI.Restringe, URIRef(subject_marca)))
             min_price = request.form['min_price']
             max_price = request.form['max_price']
@@ -142,9 +145,9 @@ def browser_cerca():
                 subject_preus = ECSDI['Restriccion_Preus_' + str(get_count())]
                 gr.add((subject_preus, RDF.type, ECSDI.Rango_precio))
                 if min_price:
-                    gr.add((subject_preus, ECSDI.Precio_min, Literal(float(min_price))))
+                    gr.add((subject_preus, ECSDI.Precio_min, Literal(min_price, datatype=XSD.float)))
                 if max_price:
-                    gr.add((subject_preus, ECSDI.Precio_max, Literal(float(max_price))))
+                    gr.add((subject_preus, ECSDI.Precio_max, Literal(max_price, datatype=XSD.float)))
                 gr.add((contentResult, ECSDI.Restringe, URIRef(subject_preus)))
 
             seller = get_agent_info(agn.SellerAgent, DirectoryAgent, UserPersonalAgent, get_count())
@@ -200,21 +203,21 @@ def browser_cerca():
             gr.add((content, RDF.type, ECSDI.Peticion_compra))
 
             # Asignar prioridad a la peticion (asignamos el contador de mensaje)
-            gr.add((content, ECSDI.Prioridad, Literal(get_count())))
+            gr.add((content, ECSDI.Prioridad, Literal(get_count(), datatype=XSD.integer)))
 
             # Creacion de la ciudad (por ahora Barcelona) --------------------------------------------------------------
-            subject_ciudad = ECSDI['Ciudad_' + str(get_count())]
+            subject_ciudad = ECSDI['Ciudad_' + str(random.randint(1, sys.float_info.max))]
 
             gr.add((subject_ciudad, RDF.type, ECSDI.Ciudad))
-            gr.add((subject_ciudad, ECSDI.Nombre, Literal(41.398373)))
-            gr.add((subject_ciudad, ECSDI.Latitud, Literal(2.188247)))
-            gr.add((subject_ciudad, ECSDI.Longitud, Literal('Barcelona')))
+            gr.add((subject_ciudad, ECSDI.Nombre, Literal(41.398373, datatype=XSD.float)))
+            gr.add((subject_ciudad, ECSDI.Latitud, Literal(2.188247, datatype=XSD.float)))
+            gr.add((subject_ciudad, ECSDI.Longitud, Literal('Barcelona', datatype=XSD.string)))
 
             # Creacion del sobre (Compra) ------------------------------------------------------------------------------
-            subject_sobre = ECSDI['Compra_' + str(get_count())]
+            subject_sobre = ECSDI['Compra_' + str(random.randint(1, sys.float_info.max))]
             gr.add((subject_sobre, RDF.type, ECSDI.Compra))
 
-            gr.add((subject_sobre, ECSDI.Pagat, Literal(0)))
+            gr.add((subject_sobre, ECSDI.Pagat, Literal(0, datatype=XSD.integer)))
             gr.add((subject_sobre, ECSDI.Enviar_a, URIRef(subject_ciudad)))
 
             total_price = 0.0
@@ -222,15 +225,15 @@ def browser_cerca():
             for item in products_checked:
                 total_price += float(item[3])
                 # Creacion del producto --------------------------------------------------------------------------------
-                subject_producto = ECSDI['Producto_' + str(get_count())]
+                subject_producto = ECSDI['Producto_' + str(random.randint(1, sys.float_info.max))]
                 gr.add((subject_producto, RDF.type, ECSDI.Producto))
-                gr.add((subject_producto, ECSDI.Marca, Literal(item[0])))
-                gr.add((subject_producto, ECSDI.Modelo, Literal(item[1])))
-                gr.add((subject_producto, ECSDI.Nombre, Literal(item[2])))
-                gr.add((subject_producto, ECSDI.Precio, Literal(item[3])))
+                gr.add((subject_producto, ECSDI.Marca, Literal(item[0], datatype=XSD.string)))
+                gr.add((subject_producto, ECSDI.Modelo, Literal(item[1], datatype=XSD.string)))
+                gr.add((subject_producto, ECSDI.Nombre, Literal(item[2], datatype=XSD.string)))
+                gr.add((subject_producto, ECSDI.Precio, Literal(item[3], datatype=XSD.float)))
                 gr.add((subject_sobre, ECSDI.Productos, URIRef(subject_producto)))
 
-            gr.add((subject_sobre, ECSDI.Precio_total, Literal(total_price)))
+            gr.add((subject_sobre, ECSDI.Precio_total, Literal(total_price, datatype=XSD.float)))
 
             gr.add((content, ECSDI.Sobre, URIRef(subject_sobre)))
 
