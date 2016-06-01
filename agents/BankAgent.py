@@ -161,28 +161,10 @@ def communication():
                 # Accion de busqueda
                 if accion == ECSDI.Peticion_transferencia:
                     # Content of the message
-                    contentMessage = ECSDI['Respuesta_transferencia' + str(get_count())]
-
-                    # Creamos el grafo
-                    graph = Graph()
-                    # Le asignamos nuestra ontologia
-                    graph.bind('ECSDI', ECSDI)
-
-                    # Creacion de la respuesta (tipo de la ontologia)
-                    subject = ECSDI.Respuesta
-                    graph.add((subject, RDF.type, ECSDI.Respuesta_transferencia))
-
-                    financial = get_agent_info(agn.FinancialAgent, DirectoryAgent, BankAgent, get_count())
-
-                    message = build_message(graph,
-                                            perf=ACL.Confirm,
-                                            sender=BankAgent,
-                                            receiver=financial,
-                                            content=contentMessage,
-                                            msgcnt=get_count())
-                    gr = send_message(message, financial.address)
-
-                    return gr.serialize()
+                    for item in gm.subjects(RDF.type, ACL.FipaAclMessage):
+                        gm.remove((item, None, None))
+                    gr = gm
+                    logger.info('Se acepta la transferencia')
 
                 # No habia ninguna accion en el mensaje
                 else:
@@ -193,7 +175,7 @@ def communication():
 
     logger.info('Respondemos a la peticion')
 
-    return gr.serialize(format='xml')
+    return gr.serialize(format='xml'), 200
 
 
 def tidyup():

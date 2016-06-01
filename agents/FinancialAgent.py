@@ -125,18 +125,18 @@ def communication():
                 for item in gm.subjects(RDF.type, ECSDI.Compra):
                     sell = item
 
-                gr = registerSells(gm)
-                # payDelivery(sell)
+                registerSells(gm)
+                payDelivery(sell)
 
+                deliverReceipt(sell)
+                gr = sendSell(sell)
+
+            # Accion de retorno
             elif accion == ECSDI.Peticion_retorno:
                 gr = build_message(Graph(),
                                    ACL['not-understood'],
                                    sender=DirectoryAgent.uri,
                                    msgcnt=get_count())
-
-            elif accion == ECSDI.Transferencia_comfirmada:
-                # TODO accion recibida del BankAgent que su funcionalidad es enviar el mensaje a Product agent para que envie los productos
-                confirmTransfer()
 
             # Ninguna accion a realizar
             else:
@@ -187,21 +187,16 @@ def agent_behaviour(queue):
 
 def payDelivery(sell_url):
     content = ECSDI['Peticion_transferencia_' + str(get_count())]
-
     graph = Graph()
-    subject = ECSDI.Peticion
-    graph.add((subject, RDF.type, ECSDI.Peticion_transferencia))
+    graph.add((content, RDF.type, ECSDI.Peticion_transferencia))
+    graph.add((content, ECSDI.idCompra, URIRef(sell_url)))
 
     bank = get_agent_info(agn.BankAgent, DirectoryAgent, FinancialAgent, get_count())
 
-    message = build_message(gmess=graph,
-                            perf=ACL.request,
-                            sender=FinancialAgent,
-                            receiver=bank,
-                            content=content,
-                            msgcnt=get_count())
-
-    gr = send_message(message, bank.address)
+    gr = send_message(
+        build_message(graph, perf=ACL.request, sender=FinancialAgent.uri, receiver=bank.uri,
+                      msgcnt=get_count(),
+                      content=content), bank.address)
     return gr
 
 
@@ -217,35 +212,23 @@ def registerSells(gm):
     return g
 
 
+def deliverReceipt(sell):
+    logger.info('Envio la factura de la venda con id ' + sell + 'al usuario comprador.')
+
+
+def sendSell(sell):
+    logger.info('Nos comunicamos con el ProductsAgent')
+    gr = Graph()
+
+    return gr
+
+
 def readSell(id):
     URI = "http://www.owl-ontologies.com/ECSDIAmazon.owl#"
     URISell = URI
     ontologyFile = open('../data/productes')
 
     return 0
-
-
-def confirmTransfer():
-    # TODO Confirm the transfer, deliver receipt and communicate with Products Agent.
-    # Necessito id de la compra
-    content = readSell(id)
-
-    graph = Graph()
-    subject = ECSDI.Envio
-
-    graph.add((subject, RDF.type, ECSDI.Envio))
-
-    productManeger = get_agent_info(agn.ProductsAgent, DirectoryAgent, FinancialAgent, get_count())
-
-    message = build_message(gmess=graph,
-                            perf=ACL.request,
-                            sender=FinancialAgent,
-                            receiver=productManeger,
-                            content=content,
-                            msgcnt=get_count())
-
-    gr = send_message(message, productManeger.address)
-    return gr
 
 
 # MAIN METHOD ----------------------------------------------------------------------------------------------
