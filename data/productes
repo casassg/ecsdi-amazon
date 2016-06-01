@@ -43,37 +43,37 @@ default:Producto_3 a default:Producto ;
     default:Precio "200.0"^^xsd:float .
 
 default:Producto_externo_115428347600348546611708885287357554387422889887036496502353168313560344548081260713399182460041496510930891168398361179836230251551843652275120481965601127219781550247153524053258716662316881229833785513404344905345654316234110391873892634067519956834094126096416932488428164403081370313268318200060218234749 a default:Producto_externo ;
-    default:Marca "Asus" ;
-    default:Modelo "X555L" ;
-    default:Nombre "Asus X555L" ;
-    default:Precio "490" ;
+    default:Marca "Asus"^^xsd:string ;
+    default:Modelo "X555L"^^xsd:string ;
+    default:Nombre "Asus X555L"^^xsd:string ;
+    default:Precio "490"^^xsd:float ;
     default:Vendido 0 .
 
 default:Producto_externo_119455062207959399930315186790169833988503261303922640674142991245048252299327572087137390499720609989971955558868932008054470658569701528995592802702087540592820864921262848898557476289183360999125814038493002452440659622255391790944824033926329658544076229328612474378571088626775312356321718928197970323009 a default:Producto_externo ;
-    default:Marca "BQ" ;
-    default:Modelo "Aquaris" ;
-    default:Nombre "BQ Aquaris E5 HD" ;
-    default:Precio "200" ;
+    default:Marca "BQ"^^xsd:string ;
+    default:Modelo "Aquaris"^^xsd:string ;
+    default:Nombre "BQ Aquaris E5 HD"^^xsd:string ;
+    default:Precio "200"^^xsd:float ;
     default:Vendido 0 .
 
 default:Producto_externo_163662240321013392431726993584858813196535835424998904209329141060249118118314716603156730073716013056609708800344042690627499827898237200059297093652486527587742534123396036922080006299309045444957473218006028876574207127266880736355738921832282694838407564779599066459854016242870719444353181112374342841098 a default:Producto_externo ;
-    default:Marca "PackardBell" ;
-    default:Modelo "Slow" ;
-    default:Nombre "PackardBell Slow" ;
-    default:Precio "900" ;
+    default:Marca "PackardBell"^^xsd:string ;
+    default:Modelo "Slow"^^xsd:string ;
+    default:Nombre "PackardBell Slow"^^xsd:string ;
+    default:Precio "900"^^xsd:float ;
     default:Vendido 0 .
 
 default:Producto_externo_34 a default:Producto_externo ;
-    default:Marca "Sony" ;
-    default:Modelo "v3" ;
-    default:Nombre "Televisor sony" ;
-    default:Precio "500" ;
+    default:Marca "Sony"^^xsd:string ;
+    default:Modelo "v3"^^xsd:string ;
+    default:Nombre "Televisor sony"^^xsd:string ;
+    default:Precio "500"^^xsd:float ;
     default:Vendido 0 .
 
 default:Producto_externo_36353922699385427457455809128841833193227872976238413787298893536593803123631934761665482357524798673391591283954166871943100079784760139455810396126815363036056080241183366561182804225907748720203443047742363008041020119808787309063309542266594555829073070065898052985884904233977257439378219132904232985040 a default:Producto_externo ;
-    default:Marca "Lenovo" ;
-    default:Modelo "568" ;
-    default:Nombre "Lenovo i7" ;
-    default:Precio "500" ;
+    default:Marca "Lenovo"^^xsd:string ;
+    default:Modelo "568"^^xsd:string ;
+    default:Nombre "Lenovo i7"^^xsd:string ;
+    default:Precio "500"^^xsd:float ;
     default:Vendido 0 .
 

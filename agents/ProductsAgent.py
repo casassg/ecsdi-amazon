@@ -105,7 +105,7 @@ def communication():
             # Aqui realizariamos lo que pide la accion
 
             if accion == ECSDI.Registra_productes:
-                gr = recordExternalProduct(gm, content)
+                gr = recordExternalProduct(gm)
 
             # No habia ninguna accion en el mensaje
             else:
@@ -159,7 +159,7 @@ def distributeDelivery():
     print("Distribute Delivery")
 
 
-def recordExternalProduct(gm, content):
+def recordExternalProduct(gm):
     ontologyFile = open('../data/productes')
 
     g = Graph()

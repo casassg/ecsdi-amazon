@@ -258,7 +258,7 @@ def findProducts(model=None, brand=None, min_price=0.0, max_price=sys.float_info
         prefix owl:<http://www.w3.org/2002/07/owl#>
         SELECT DISTINCT ?nombre ?marca ?modelo ?precio
         where {
-            ?producto a default:Producto .
+            { ?producto rdf:type default:Producto } UNION { ?producto rdf:type default:Producto_externo } .
             ?producto default:Nombre ?nombre .
             ?producto default:Marca ?marca .
             ?producto default:Modelo ?modelo .
