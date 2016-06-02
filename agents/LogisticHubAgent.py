@@ -119,6 +119,11 @@ def communication():
                 # TODO Tratar accion deseada
                 return
 
+            elif accion == ECSDI.Pedir_disponibilidad:
+                print("llega")
+
+                gr = Graph()
+
             # No habia ninguna accion en el mensaje
             else:
                 gr = build_message(Graph(),

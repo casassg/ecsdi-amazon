@@ -2,8 +2,9 @@
 from flask import Flask, request
 from multiprocessing import Process, Queue
 import socket
-from rdflib import Namespace, Graph, logger, RDF
-from utils.ACLMessages import get_message_properties, build_message, register_agent
+
+from rdflib import Namespace, Graph, logger, RDF, XSD, Literal
+from utils.ACLMessages import get_message_properties, build_message, register_agent, get_agent_info, send_message
 from utils.FlaskServer import shutdown_server
 from utils.Agent import Agent
 from utils.Logging import config_logger
@@ -166,6 +167,18 @@ def agent_behaviour(queue):
 
 def requestAvailability():
     logger.info('Comprobamos disponibilidad')
+    content = ECSDI['Pedir_disponibilidad' + str(get_count())]
+    graph = Graph()
+    graph.add((content, RDF.type, ECSDI.Pedir_disponibilidad))
+    graph.add((content, ECSDI.Cantidad, Literal(1, datatype=XSD.integer)))
+
+    logistic = get_agent_info(agn.LogisticHubAgent, DirectoryAgent, ProductsAgent, get_count())
+
+    gr = send_message(
+        build_message(graph, perf=ACL.request, sender=ProductsAgent.uri, receiver=logistic.uri,
+                      msgcnt=get_count(),
+                      content=content), logistic.address)
+    return gr
 
 
 def sendProducts():
