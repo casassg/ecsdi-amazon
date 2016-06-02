@@ -11,7 +11,6 @@
     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
   xml:base="http://www.owl-ontologies.com/ECSDIAmazon.owl">
   <owl:Ontology rdf:about=""/>
-  <rdfs:Datatype rdf:about="http://www.w3.org/2001/XMLSchema#date"/>
   <owl:Class rdf:ID="Valoracion"/>
   <owl:Class rdf:ID="Centro_logistico"/>
   <owl:Class rdf:ID="Lote_producto"/>
@@ -35,9 +34,6 @@
     <rdfs:subClassOf rdf:resource="#Restriccions"/>
   </owl:Class>
   <owl:Class rdf:ID="Compra"/>
-  <owl:Class rdf:ID="Enviar_venta">
-    <rdfs:subClassOf rdf:resource="#Accion"/>
-  </owl:Class>
   <owl:Class rdf:ID="Contraoferta">
     <rdfs:subClassOf>
       <owl:Class rdf:ID="Oferta_transporte"/>
@@ -63,6 +59,9 @@
   </owl:Class>
   <owl:Class rdf:ID="Producto_externo">
     <rdfs:subClassOf rdf:resource="#Producto"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Enviar_venda">
+    <rdfs:subClassOf rdf:resource="#Accion"/>
   </owl:Class>
   <owl:Class rdf:ID="RestriccioNom">
     <rdfs:subClassOf rdf:resource="#Restriccions"/>
@@ -97,6 +96,10 @@
   <owl:ObjectProperty rdf:ID="Enviar_a">
     <rdfs:range rdf:resource="#Ciudad"/>
     <rdfs:domain rdf:resource="#Compra"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="identificador_Compra">
+    <rdfs:range rdf:resource="#Compra"/>
+    <rdfs:domain rdf:resource="#Enviar_venda"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="Tiene">
     <rdfs:range rdf:resource="#Producto"/>
@@ -140,8 +143,8 @@
     <rdfs:domain>
       <owl:Class>
         <owl:unionOf rdf:parseType="Collection">
-          <owl:Class rdf:about="#Oferta_transporte"/>
           <owl:Class rdf:about="#Pedir_oferta_transporta"/>
+          <owl:Class rdf:about="#Oferta_transporte"/>
         </owl:unionOf>
       </owl:Class>
     </rdfs:domain>
@@ -222,8 +225,8 @@
     <rdfs:domain>
       <owl:Class>
         <owl:unionOf rdf:parseType="Collection">
-          <owl:Class rdf:about="#Lote_producto"/>
           <owl:Class rdf:about="#Peticion_compra"/>
+          <owl:Class rdf:about="#Lote_producto"/>
         </owl:unionOf>
       </owl:Class>
     </rdfs:domain>
@@ -254,8 +257,8 @@
       <owl:Class>
         <owl:unionOf rdf:parseType="Collection">
           <owl:Class rdf:about="#Ciudad"/>
-          <owl:Class rdf:about="#Producto"/>
           <owl:Class rdf:about="#Vendedor"/>
+          <owl:Class rdf:about="#Producto"/>
         </owl:unionOf>
       </owl:Class>
     </rdfs:domain>
@@ -335,8 +338,7 @@
     <rdfs:domain rdf:resource="#Existencia"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="DatatypeProperty_101"/>
-  <owl:NamedIndividual rdf:ID="Producto_2">
-    <rdf:type rdf:resource="#Producto"/>
+  <Producto rdf:ID="Producto_2">
     <Nombre rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Garmin 325</Nombre>
     <Marca rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -346,32 +348,30 @@
     <Modelo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >325</Modelo>
     <Id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2</Id>
-  </owl:NamedIndividual>
-  <owl:NamedIndividual rdf:ID="Producto_3">
+  </Producto>
+  <Producto rdf:ID="Producto_3">
     <Nombre rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Pioneer</Nombre>
     <Precio rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
     >200.0</Precio>
-    <rdf:type rdf:resource="#Producto"/>
     <Id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">3</Id>
     <Marca rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Elephone</Marca>
     <Modelo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >P7000</Modelo>
-  </owl:NamedIndividual>
-  <owl:NamedIndividual rdf:ID="Producto_4">
+  </Producto>
+  <Producto rdf:ID="Producto_4">
     <Modelo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Nexus 5</Modelo>
     <Nombre rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Google Nexus 5</Nombre>
     <Id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">4</Id>
-    <rdf:type rdf:resource="#Producto"/>
     <Precio rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
     >350.0</Precio>
     <Marca rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Google</Marca>
-  </owl:NamedIndividual>
-  <owl:NamedIndividual rdf:ID="Producto_1">
+  </Producto>
+  <Producto rdf:ID="Producto_1">
     <Marca rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Nintendo</Marca>
     <Id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</Id>
@@ -381,27 +381,23 @@
     >Nintendo Choripan</Nombre>
     <Precio rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
     >100.0</Precio>
-    <rdf:type rdf:resource="#Producto"/>
-  </owl:NamedIndividual>
-  <owl:NamedIndividual rdf:ID="Ciudad_1">
+  </Producto>
+  <Ciudad rdf:ID="Ciudad_1">
     <Longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
     >2.188247</Longitud>
     <Nombre rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Barcelona</Nombre>
     <Latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
     >41.398373</Latitud>
-    <rdf:type rdf:resource="#Ciudad"/>
-  </owl:NamedIndividual>
-  <owl:NamedIndividual rdf:ID="Cerca_productes_1">
-    <rdf:type rdf:resource="#Cerca_productes"/>
+  </Ciudad>
+  <Cerca_productes rdf:ID="Cerca_productes_1">
     <Restringe>
-      <owl:NamedIndividual rdf:ID="Restriccion_Marca_2">
+      <Restriccion_Marca rdf:ID="Restriccion_Marca_2">
         <Marca rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >Garmin</Marca>
-        <rdf:type rdf:resource="#Restriccion_Marca"/>
-      </owl:NamedIndividual>
+      </Restriccion_Marca>
     </Restringe>
-  </owl:NamedIndividual>
+  </Cerca_productes>
 </rdf:RDF>
 
 <!-- Created with Protege (with OWL Plugin 3.5, Build 663)  http://protege.stanford.edu -->

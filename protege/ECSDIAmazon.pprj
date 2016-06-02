@@ -1,4 +1,4 @@
-; Thu Jun 02 11:04:25 CEST 2016
+; Thu Jun 02 11:12:32 CEST 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -6,11 +6,11 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
-		[ECSDIAmazon_ProjectKB_Class20096]
-		[ECSDIAmazon_ProjectKB_Class20097]
-		[ECSDIAmazon_ProjectKB_Class20098]
-		[ECSDIAmazon_ProjectKB_Class20099]
-		[ECSDIAmazon_ProjectKB_Class20100]))
+		[ECSDIAmazon_ProjectKB_Class55]
+		[ECSDIAmazon_ProjectKB_Class56]
+		[ECSDIAmazon_ProjectKB_Class57]
+		[ECSDIAmazon_ProjectKB_Class58]
+		[ECSDIAmazon_ProjectKB_Class59]))
 
 ([CLSES_TAB] of  Widget
 
@@ -79,31 +79,6 @@
 
 ([ECSDIAmazon_ProjectKB_Class20] of  Property_List
 )
-
-([ECSDIAmazon_ProjectKB_Class20096] of  String
-
-	(name ":INSTANCE-ANNOTATION")
-	(string_value "%3AANNOTATION-TEXT"))
-
-([ECSDIAmazon_ProjectKB_Class20097] of  String
-
-	(name "http://www.w3.org/2002/07/owl#Thing")
-	(string_value "%3ANAME"))
-
-([ECSDIAmazon_ProjectKB_Class20098] of  String
-
-	(name "http://www.w3.org/2002/07/owl#Class")
-	(string_value "%3ANAME"))
-
-([ECSDIAmazon_ProjectKB_Class20099] of  String
-
-	(name ":PAL-CONSTRAINT")
-	(string_value "%3APAL-NAME"))
-
-([ECSDIAmazon_ProjectKB_Class20100] of  String
-
-	(name ":META-CLASS")
-	(string_value "%3ANAME"))
 
 ([ECSDIAmazon_ProjectKB_Class21] of  Widget
 
@@ -272,6 +247,31 @@
 
 ([ECSDIAmazon_ProjectKB_Class54] of  Property_List
 )
+
+([ECSDIAmazon_ProjectKB_Class55] of  String
+
+	(name ":INSTANCE-ANNOTATION")
+	(string_value "%3AANNOTATION-TEXT"))
+
+([ECSDIAmazon_ProjectKB_Class56] of  String
+
+	(name "http://www.w3.org/2002/07/owl#Thing")
+	(string_value "%3ANAME"))
+
+([ECSDIAmazon_ProjectKB_Class57] of  String
+
+	(name "http://www.w3.org/2002/07/owl#Class")
+	(string_value "%3ANAME"))
+
+([ECSDIAmazon_ProjectKB_Class58] of  String
+
+	(name ":PAL-CONSTRAINT")
+	(string_value "%3APAL-NAME"))
+
+([ECSDIAmazon_ProjectKB_Class59] of  String
+
+	(name ":META-CLASS")
+	(string_value "%3ANAME"))
 
 ([ECSDIAmazon_ProjectKB_Class6] of  Property_List
 )
@@ -3278,15 +3278,15 @@
 ([KB_713803_Instance_981] of  Property_List
 )
 
+([KB_761125_Class0] of  Map
+)
+
 ([KB_764103_Instance_545] of  Widget
 
 	(is_hidden FALSE)
 	(name "http://www.w3.org/2002/07/owl#Ontology")
 	(property_list [XY_Instance_195])
 	(widget_class_name "edu.stanford.smi.protegex.owl.ui.widget.OWLFormWidget"))
-
-([KB_858048_Class0] of  Map
-)
 
 ([KB_865583_Instance_10] of  Widget
 
@@ -5821,7 +5821,6 @@
 		"http://www.w3.org/2002/07/owl#backwardCompatibleWith"
 		"http://www.w3.org/2001/XMLSchema#gMonth"
 		"http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom"
-		"http://www.w3.org/2002/07/owl#NamedIndividual"
 		"http://www.w3.org/2003/11/swrl#Atom"
 		"http://www.w3.org/2002/07/owl#valuesFrom"
 		"http://www.w3.org/2003/11/swrl#Variable"

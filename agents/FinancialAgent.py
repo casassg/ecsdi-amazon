@@ -221,7 +221,7 @@ def sendSell(gm, sell):
     content = ECSDI['Enviar_venta_' + str(get_count())]
 
     gm.add((content, RDF.type, ECSDI.Enviar_venta))
-    gm.add((content, ECSDI.Compra, URIRef(sell)))
+    gm.add((content, ECSDI.identificador_Compra, URIRef(sell)))
 
     products = get_agent_info(agn.ProductsAgent, DirectoryAgent, FinancialAgent, get_count())
 
