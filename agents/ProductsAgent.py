@@ -3,9 +3,7 @@ from flask import Flask, request
 from multiprocessing import Process, Queue
 import socket
 
-from rdflib import Namespace, Graph, logger, RDF, XSD, Literal
-from uriref import URIRef
-
+from rdflib import Namespace, Graph, logger, RDF, XSD, Literal, URIRef
 from utils.ACLMessages import get_message_properties, build_message, register_agent, get_agent_info, send_message
 from utils.FlaskServer import shutdown_server
 from utils.Agent import Agent
@@ -22,7 +20,6 @@ hostname = socket.gethostname()
 port = 9010
 
 logger = config_logger(level=1)
-
 
 # Agent Namespace
 agn = Namespace("http://www.agentes.org#")
@@ -118,7 +115,7 @@ def communication():
                 logger.info("Recibe comunicación del FinancialAgent")
                 gr = obtainProducts(gm)
                 requestAvailability(gr)
-                # sendProducts()
+                gr = sendProducts(gr)
 
             # No habia ninguna accion en el mensaje
             else:
@@ -208,7 +205,6 @@ def requestAvailability(g):
     for item in graph.subjects(RDF.type, ECSDI.Producto):
         graph.add((subjectExiste, ECSDI.tiene, URIRef(item)))
 
-
     logistic = get_agent_info(agn.LogisticHubAgent, DirectoryAgent, ProductsAgent, get_count())
 
     gr = send_message(
@@ -218,8 +214,22 @@ def requestAvailability(g):
     return gr
 
 
-def sendProducts():
+def sendProducts(gr):
     logger.info('Enviamos los productos')
+
+    content = ECSDI['Enviar_lot' + str(get_count())]
+    gr.add((content, RDF.type, ECSDI.Enviar_lot))
+
+    subjectLoteProducto = ECSDI['Lote_producto' + str(get_count())]
+    gr.add((subjectLoteProducto, RDF.type, ECSDI.Lote_producto))
+    gr.add((subjectLoteProducto, ECSDI.Prioridad, Literal(1, datatype=XSD.integer)))
+
+    for item in gr.subjects(RDF.type, ECSDI.Producto):
+        gr.add((subjectLoteProducto, ECSDI.productos, URIRef(item)))
+
+    print(gr.serialize(format='turtle'))
+
+    return gr
 
 
 def recordExternalProduct(gm):
