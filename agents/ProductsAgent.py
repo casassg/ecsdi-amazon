@@ -113,8 +113,9 @@ def communication():
 
             elif accion == ECSDI.Enviar_venta:
                 logger.info("Recibe comunicación del FinancialAgent")
-
                 gr = Graph()
+                requestAvailability()
+                sendProducts()
 
             # No habia ninguna accion en el mensaje
             else:
@@ -163,9 +164,12 @@ def agent_behaviour(queue):
 
 # DETERMINATE AGENT FUNCTIONS ------------------------------------------------------------------------------
 
-def distributeDelivery():
-    # TODO Get products availability and send them.
-    print("Distribute Delivery")
+def requestAvailability():
+    logger.info('Comprobamos disponibilidad')
+
+
+def sendProducts():
+    logger.info('Enviamos los productos')
 
 
 def recordExternalProduct(gm):
