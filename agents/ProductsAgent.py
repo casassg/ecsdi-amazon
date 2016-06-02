@@ -4,6 +4,8 @@ from multiprocessing import Process, Queue
 import socket
 
 from rdflib import Namespace, Graph, logger, RDF, XSD, Literal
+from uriref import URIRef
+
 from utils.ACLMessages import get_message_properties, build_message, register_agent, get_agent_info, send_message
 from utils.FlaskServer import shutdown_server
 from utils.Agent import Agent
@@ -115,8 +117,7 @@ def communication():
             elif accion == ECSDI.Enviar_venta:
                 logger.info("Recibe comunicación del FinancialAgent")
                 gr = obtainProducts(gm)
-                print(gr.serialize(format='turtle'))
-                # requestAvailability()
+                requestAvailability(gr)
                 # sendProducts()
 
             # No habia ninguna accion en el mensaje
@@ -192,12 +193,21 @@ def obtainProducts(gm):
     return products
 
 
-def requestAvailability():
+def requestAvailability(g):
     logger.info('Comprobamos disponibilidad')
     content = ECSDI['Pedir_disponibilidad' + str(get_count())]
-    graph = Graph()
+
+    graph = g
+
     graph.add((content, RDF.type, ECSDI.Pedir_disponibilidad))
-    graph.add((content, ECSDI.Cantidad, Literal(1, datatype=XSD.integer)))
+
+    subjectExiste = ['Existe_' + str(get_count())]
+    graph.add((subjectExiste, RDF.type, ECSDI.Existe))
+    graph.add((subjectExiste, ECSDI.Cantidad, Literal(1, datatype=XSD.integer)))
+
+    for item in graph.subjects(RDF.type, ECSDI.Producto):
+        graph.add((subjectExiste, ECSDI.tiene, URIRef(item)))
+
 
     logistic = get_agent_info(agn.LogisticHubAgent, DirectoryAgent, ProductsAgent, get_count())
 
