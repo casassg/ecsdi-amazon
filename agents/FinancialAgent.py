@@ -125,11 +125,15 @@ def communication():
                 for item in gm.subjects(RDF.type, ECSDI.Compra):
                     sell = item
 
+                print("vaaaaaaa")
                 registerSells(gm)
+                print("registra")
                 payDelivery(sell)
+                print("paga")
 
                 deliverReceipt(sell)
-                gr = sendSell(sell)
+                print("deliver")
+                gr = sendSell(gm, sell)
 
             # Accion de retorno
             elif accion == ECSDI.Peticion_retorno:
@@ -216,9 +220,22 @@ def deliverReceipt(sell):
     logger.info('Envio la factura de la venda con id ' + sell + 'al usuario comprador.')
 
 
-def sendSell(sell):
+def sendSell(gm, sell):
     logger.info('Nos comunicamos con el ProductsAgent')
-    gr = Graph()
+    print("entra sendSell")
+    content = ECSDI['Enviar_venta_' + str(get_count())]
+
+    gm.add((content, RDF.type, ECSDI.Enviar_venta))
+    gm.add((content, ECSDI.Compra, URIRef(sell)))
+
+    print("add")
+
+    products = get_agent_info(agn.ProductsAgent, DirectoryAgent, FinancialAgent, get_count())
+
+    gr = send_message(
+        build_message(gm, perf=ACL.request, sender=FinancialAgent.uri, receiver=products.uri,
+                      msgcnt=get_count(),
+                      content=content), products.address)
 
     return gr
 

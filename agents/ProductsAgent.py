@@ -6,6 +6,7 @@ from rdflib import Namespace, Graph, logger, RDF
 from utils.ACLMessages import get_message_properties, build_message, register_agent
 from utils.FlaskServer import shutdown_server
 from utils.Agent import Agent
+from utils.Logging import config_logger
 from utils.OntologyNamespaces import ACL, ECSDI
 
 # Author
@@ -16,6 +17,9 @@ __author__ = 'amazadonde'
 # Configuration stuff
 hostname = socket.gethostname()
 port = 9010
+
+logger = config_logger(level=1)
+
 
 # Agent Namespace
 agn = Namespace("http://www.agentes.org#")
@@ -106,6 +110,11 @@ def communication():
 
             if accion == ECSDI.Registra_productes:
                 gr = recordExternalProduct(gm)
+
+            elif accion == ECSDI.Enviar_venta:
+                logger.info("Recibe comunicación del FinancialAgent")
+
+                gr = Graph()
 
             # No habia ninguna accion en el mensaje
             else:

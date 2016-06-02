@@ -158,7 +158,7 @@ def communication():
                 # Averiguamos el tipo de la accion
                 accion = gm.value(subject=content, predicate=RDF.type)
 
-                # Accion de busqueda
+                # Accion de transferencia
                 if accion == ECSDI.Peticion_transferencia:
                     # Content of the message
                     for item in gm.subjects(RDF.type, ACL.FipaAclMessage):
