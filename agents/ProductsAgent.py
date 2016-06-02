@@ -114,9 +114,10 @@ def communication():
 
             elif accion == ECSDI.Enviar_venta:
                 logger.info("Recibe comunicación del FinancialAgent")
-                gr = Graph()
-                requestAvailability()
-                sendProducts()
+                gr = obtainProducts(gm)
+                print(gr.serialize(format='turtle'))
+                # requestAvailability()
+                # sendProducts()
 
             # No habia ninguna accion en el mensaje
             else:
@@ -164,6 +165,32 @@ def agent_behaviour(queue):
 
 
 # DETERMINATE AGENT FUNCTIONS ------------------------------------------------------------------------------
+
+def obtainProducts(gm):
+    logger.info("Obtenemos los productos")
+
+    products = Graph()
+
+    sell = None
+    for item in gm.subjects(RDF.type, ECSDI.Compra):
+        sell = item
+
+    sellsGraph = Graph()
+    sellsGraph.parse(open('../data/compres'), format='turtle')
+
+    for item in sellsGraph.objects(sell, ECSDI.Productos):
+        marca = sellsGraph.value(subject=item, predicate=ECSDI.Marca)
+        nombre = sellsGraph.value(subject=item, predicate=ECSDI.Nombre)
+        modelo = sellsGraph.value(subject=item, predicate=ECSDI.Modelo)
+        precio = sellsGraph.value(subject=item, predicate=ECSDI.Precio)
+        products.add((item, RDF.type, ECSDI.Producto))
+        products.add((item, ECSDI.Marca, Literal(marca, datatype=XSD.string)))
+        products.add((item, ECSDI.Nombre, Literal(nombre, datatype=XSD.string)))
+        products.add((item, ECSDI.Modelo, Literal(modelo, datatype=XSD.string)))
+        products.add((item, ECSDI.Precio, Literal(precio, datatype=XSD.float)))
+
+    return products
+
 
 def requestAvailability():
     logger.info('Comprobamos disponibilidad')
