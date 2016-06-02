@@ -114,7 +114,7 @@ def communication():
             elif accion == ECSDI.Enviar_venta:
                 logger.info("Recibe comunicación del FinancialAgent")
                 gr = obtainProducts(gm)
-                requestAvailability(gr)
+                # requestAvailability(gr)
                 gr = sendProducts(gr)
 
             # No habia ninguna accion en el mensaje
@@ -227,7 +227,14 @@ def sendProducts(gr):
     for item in gr.subjects(RDF.type, ECSDI.Producto):
         gr.add((subjectLoteProducto, ECSDI.productos, URIRef(item)))
 
-    print(gr.serialize(format='turtle'))
+    gr.add((content, ECSDI.a_enviar, URIRef(subjectLoteProducto)))
+
+    logistic = get_agent_info(agn.LogisticHubAgent, DirectoryAgent, ProductsAgent, get_count())
+
+    gr = send_message(
+        build_message(gr, perf=ACL.request, sender=ProductsAgent.uri, receiver=logistic.uri,
+                      msgcnt=get_count(),
+                      content=content), logistic.address)
 
     return gr
 
