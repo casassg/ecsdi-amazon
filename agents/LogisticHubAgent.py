@@ -120,9 +120,10 @@ def communication():
                 return
 
             elif accion == ECSDI.Pedir_disponibilidad:
-                print("llega")
-
-                gr = Graph()
+                for item in gm.subjects(RDF.type, ACL.FipaAclMessage):
+                    gm.remove((item, None, None))
+                gr = gm
+                logger.info('Productos disponibles')
 
             # No habia ninguna accion en el mensaje
             else:
@@ -133,7 +134,7 @@ def communication():
 
     logger.info('Respondemos a la peticion')
 
-    return gr.serialize(format='xml')
+    return gr.serialize(format='xml'), 200
 
 
 @app.route("/Stop")

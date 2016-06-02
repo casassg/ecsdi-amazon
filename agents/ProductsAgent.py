@@ -205,6 +205,8 @@ def requestAvailability(g):
     for item in graph.subjects(RDF.type, ECSDI.Producto):
         graph.add((subjectExiste, ECSDI.tiene, URIRef(item)))
 
+    graph.add((content, ECSDI.Existe, URIRef(subjectExiste)))
+
     logistic = get_agent_info(agn.LogisticHubAgent, DirectoryAgent, ProductsAgent, get_count())
 
     gr = send_message(
