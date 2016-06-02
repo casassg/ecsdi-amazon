@@ -114,7 +114,7 @@ def communication():
             elif accion == ECSDI.Enviar_venta:
                 logger.info("Recibe comunicación del FinancialAgent")
                 gr = obtainProducts(gm)
-                # requestAvailability(gr)
+                requestAvailability(gr)
                 gr = sendProducts(gr)
 
             # No habia ninguna accion en el mensaje
@@ -198,7 +198,7 @@ def requestAvailability(g):
 
     graph.add((content, RDF.type, ECSDI.Pedir_disponibilidad))
 
-    subjectExiste = ['Existe_' + str(get_count())]
+    subjectExiste = ECSDI['Existe_' + str(get_count())]
     graph.add((subjectExiste, RDF.type, ECSDI.Existe))
     graph.add((subjectExiste, ECSDI.Cantidad, Literal(1, datatype=XSD.integer)))
 

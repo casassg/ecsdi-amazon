@@ -18,6 +18,7 @@ from rdflib import Namespace, Graph, URIRef, RDF, Literal, logger, XSD
 from utils.ACLMessages import get_message_properties, build_message, register_agent
 from utils.FlaskServer import shutdown_server
 from utils.Agent import Agent
+from utils.Logging import config_logger
 from utils.OntologyNamespaces import ECSDI, ACL
 
 # Author
@@ -28,6 +29,8 @@ __author__ = 'amazadonde'
 # Configuration stuff
 hostname = socket.gethostname()
 port = 9035
+
+logger = config_logger(level=1)
 
 # Agent Namespace
 agn = Namespace("http://www.agentes.org#")
@@ -90,6 +93,8 @@ def communication():
     logger.info('Peticion de informacion recibida')
     global dsGraph
 
+    gr = None
+
     message = request.args['content']
     gm = Graph()
     gm.parse(data=message)
@@ -114,16 +119,16 @@ def communication():
             # Averiguamos el tipo de la accion
             accion = gm.value(subject=content, predicate=RDF.type)
 
-            # Accion de busqueda
-            if accion == ECSDI.todo_accion:
-                # TODO Tratar accion deseada
-                return
-
-            elif accion == ECSDI.Pedir_disponibilidad:
+            # Accion de disponibilidad
+            if accion == ECSDI.Pedir_disponibilidad:
                 for item in gm.subjects(RDF.type, ACL.FipaAclMessage):
                     gm.remove((item, None, None))
                 gr = gm
                 logger.info('Productos disponibles')
+
+            elif accion == ECSDI.Enviar_lot:
+                logger.info('Se envia el lote de productos')
+                gr = Graph()
 
             # No habia ninguna accion en el mensaje
             else:
