@@ -9,8 +9,11 @@ Agente usando los servicios web de Flask
 Tiene una funcion AgentBehavior1 que se lanza como un thread concurrente
 Asume que el agente de registro esta en el puerto 9000
 """
+import random
 import time
 import datetime
+
+import sys
 from flask import Flask, request
 from multiprocessing import Process, Queue
 import socket
@@ -128,7 +131,10 @@ def communication():
 
             elif accion == ECSDI.Enviar_lot:
                 logger.info('Se envia el lote de productos')
-                gr = Graph()
+
+                tomorrow = datetime.date.today() + datetime.timedelta(days=1)
+
+                gr = writeSends(gm, tomorrow, content)
 
             # No habia ninguna accion en el mensaje
             else:
@@ -196,23 +202,29 @@ def dateToMillis(date):
     return int(round((date - datetime.datetime(1970, 1, 1)).total_seconds())) * 1000.0
 
 
-def writeSends(productList, deliverDate):
-    # TODO Cambiar el dato en que se guarda por data/envios
-    URI = "http://www.owl-ontologies.com/ECSDIAmazon.owl#"
-    n = int(round(time.time() * 1000))
-    data = URI + "Envio_" + str(n)
+def writeSends(gr, deliverDate, content):
+    ontologyFile = open('../data/enviaments')
 
-    ontologyFile = open('../productes/productes')
+    g = Graph()
+    gr.remove((content, None, None))
+    for item in gr.subjects(RDF.type, ACL.FipaAclMessage):
+        gr.remove((item, None, None))
 
-    gm = Graph()
-    gm.parse(ontologyFile, format='turtle')
-    gm.add((URIRef(data), RDF.type, ECSDI.Envio))
-    gm.add((URIRef(data), ECSDI.Fecha_de_entrega, Literal(dateToMillis(deliverDate), datatype=XSD.float)))
-    for a in productList:
-        gm.add((URIRef(data), ECSDI.Envia, URIRef(URI + a)))
+    subjectEnvio = ECSDI['Envio_' + str(random.randint(1, sys.float_info.max))]
 
-    gm.serialize(destination='../productes/productes', format='turtle')
+    g.parse(ontologyFile, format='turtle')
 
+    gr.add((subjectEnvio, RDF.type, ECSDI.Envio))
+    gr.add((subjectEnvio, ECSDI.Fecha_de_entrega, Literal(dateToMillis(deliverDate), datatype=XSD.float)))
+    for a in gr.subjects(RDF.type, ECSDI.Lote_Producto):
+        gr.add((subjectEnvio, ECSDI.Envia, URIRef(a)))
+
+
+    gr += g
+
+    gr.serialize(destination='../data/enviaments', format='turtle')
+
+    return gr
 
 # MAIN METHOD ----------------------------------------------------------------------------------------------
 
