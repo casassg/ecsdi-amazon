@@ -140,8 +140,12 @@ def communication():
                 for item in gm.subjects(RDF.type, ECSDI.Pedir_disponibilidad):
                     gm.remove((item, None, None))
 
-                tomorrow = dateToMillis(datetime.date.today() + datetime.timedelta(days=1))
-                gr = writeSends(gm, tomorrow)
+                date = dateToMillis(datetime.datetime.utcnow())
+                writeSends(gm, date)
+
+                requestTransport(date)
+
+                gr = prepareResponse()
 
             # No habia ninguna accion en el mensaje
             else:
@@ -190,44 +194,30 @@ def agent_behaviour(queue):
 
 # DETERMINATE AGENT FUNCTIONS ------------------------------------------------------------------------------
 
-def sendProducts():
-    # TODO Receive communication of send something and send it.
-    print("Send Products")
-
-
-def recordDeliveries():
-    # TODO Record Receive communication of availability discussion and record deliveries.
-    print("Record Deliveries")
-
-
-def requestTransport():
-    # TODO Discuss with Transport Dealer.
-    print("Request Transport")
-
-
 def dateToMillis(date):
-    return int(round((date - datetime.datetime(1970, 1, 1)).total_seconds())) * 1000.0
+    return (date - datetime.datetime.utcfromtimestamp(0)).total_seconds() * 1000.0
 
 
 def writeSends(gr, deliverDate):
     subjectEnvio = ECSDI['Envio_' + str(random.randint(1, sys.float_info.max))]
 
-    print(gr.serialize(format='turtle'))
-
     gr.add((subjectEnvio, RDF.type, ECSDI.Envio))
     gr.add((subjectEnvio, ECSDI.Fecha_de_entrega, Literal(deliverDate, datatype=XSD.float)))
-    for item in gr.subjects(RDF.type, ECSDI.Lote_Producto):
+    for item in gr.subjects(RDF.type, ECSDI.Lote_producto):
         gr.add((subjectEnvio, ECSDI.Envia, URIRef(item)))
-
-    print(gr.serialize(format='turtle'))
 
     g = Graph()
     gr += g.parse(open('../data/enviaments'), format='turtle')
 
     gr.serialize(destination='../data/enviaments', format='turtle')
 
-    return gr
 
+def requestTransport(date):
+    logger.info('Pedimos el transporte')
+
+
+def prepareResponse():
+    return Graph()
 
 # MAIN METHOD ----------------------------------------------------------------------------------------------
 

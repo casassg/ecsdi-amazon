@@ -113,9 +113,12 @@ def communication():
 
             elif accion == ECSDI.Enviar_venta:
                 logger.info("Recibe comunicación del FinancialAgent")
-                gr = obtainProducts(gm)
-                requestAvailability(gr)
-                gr = sendProducts(gr)
+
+                products = obtainProducts(gm)
+                requestAvailability(products)
+
+                products = obtainProducts(gm)
+                gr = sendProducts(products)
 
             # No habia ninguna accion en el mensaje
             else:
@@ -190,11 +193,9 @@ def obtainProducts(gm):
     return products
 
 
-def requestAvailability(g):
+def requestAvailability(graph):
     logger.info('Comprobamos disponibilidad')
     content = ECSDI['Pedir_disponibilidad' + str(get_count())]
-
-    graph = g
 
     graph.add((content, RDF.type, ECSDI.Pedir_disponibilidad))
 
@@ -209,11 +210,10 @@ def requestAvailability(g):
 
     logistic = get_agent_info(agn.LogisticHubAgent, DirectoryAgent, ProductsAgent, get_count())
 
-    gr = send_message(
+    send_message(
         build_message(graph, perf=ACL.request, sender=ProductsAgent.uri, receiver=logistic.uri,
                       msgcnt=get_count(),
                       content=content), logistic.address)
-    return gr
 
 
 def sendProducts(gr):
