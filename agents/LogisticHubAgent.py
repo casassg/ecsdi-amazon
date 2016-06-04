@@ -225,7 +225,7 @@ def requestTransport(date):
     gr.add((content, RDF.type, ECSDI.Peticiona_transport))
 
     # Anadir fecha
-    gr.add((content, ECSDI.Fecha, date))
+    gr.add((content, ECSDI.Fecha,Literal(date, datatype=XSD.float)))
 
     TransportAg = get_agent_info(agn.TransportDealerAgent, DirectoryAgent, LogisticHubAgent, get_count())
 

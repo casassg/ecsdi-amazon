@@ -113,8 +113,8 @@ def communication():
             accion = gm.value(subject=content, predicate=RDF.type)
 
             # Accion de busqueda
-            if accion == ECSDI.todo_accion:
-                # TODO Tratar accion deseada
+            if accion == ECSDI.Peticiona_transport:
+                responPeticio()
                 return
 
             # No habia ninguna accion en el mensaje
@@ -182,6 +182,10 @@ def valueOffer():
 def acceptOffer():
     # TODO Accept Offer.
     print("Accept Offer")
+
+def responPeticio():
+    acceptOffer()
+
 
 
 # MAIN METHOD ----------------------------------------------------------------------------------------------
