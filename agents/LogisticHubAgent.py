@@ -18,7 +18,7 @@ from flask import Flask, request
 from multiprocessing import Process, Queue
 import socket
 from rdflib import Namespace, Graph, URIRef, RDF, Literal, logger, XSD
-from utils.ACLMessages import get_message_properties, build_message, register_agent
+from utils.ACLMessages import get_message_properties, build_message, register_agent, get_agent_info, send_message
 from utils.FlaskServer import shutdown_server
 from utils.Agent import Agent
 from utils.Logging import config_logger
@@ -214,6 +214,28 @@ def writeSends(gr, deliverDate):
 
 def requestTransport(date):
     logger.info('Pedimos el transporte')
+
+    # Content of the message
+    content = ECSDI['Peticiona_transport_' + str(get_count())]
+
+    # Graph creation
+    gr = Graph()
+    gr.add((content, RDF.type, ECSDI.Peticiona_transport))
+
+    # Anadir fecha
+    gr.add((content, ECSDI.Fecha, date))
+
+    TransportAg = get_agent_info(agn.TransportDealerAgent, DirectoryAgent, LogisticHubAgent, get_count())
+
+    gr = send_message(
+        build_message(gr, perf=ACL.request, sender=LogisticHubAgent.uri, receiver=TransportAg.uri,
+                      msgcnt=get_count(),
+                      content=content), TransportAg.address)
+
+
+
+
+
 
 
 def prepareResponse():
