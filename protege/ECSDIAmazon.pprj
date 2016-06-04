@@ -1,4 +1,4 @@
-; Thu Jun 02 11:12:32 CEST 2016
+; Sat Jun 04 16:18:35 CEST 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -6,11 +6,11 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
-		[ECSDIAmazon_ProjectKB_Class55]
-		[ECSDIAmazon_ProjectKB_Class56]
-		[ECSDIAmazon_ProjectKB_Class57]
-		[ECSDIAmazon_ProjectKB_Class58]
-		[ECSDIAmazon_ProjectKB_Class59]))
+		[ECSDIAmazon_ProjectKB_Class60]
+		[ECSDIAmazon_ProjectKB_Class61]
+		[ECSDIAmazon_ProjectKB_Class62]
+		[ECSDIAmazon_ProjectKB_Class63]
+		[ECSDIAmazon_ProjectKB_Class64]))
 
 ([CLSES_TAB] of  Widget
 
@@ -18,6 +18,9 @@
 	(label "Classes")
 	(property_list [Instance_47])
 	(widget_class_name "edu.stanford.smi.protege.widget.ClsesTab"))
+
+([ECSDIAmazon_ProjectKB_Class0] of  Map
+)
 
 ([ECSDIAmazon_ProjectKB_Class1] of  Widget
 
@@ -28,15 +31,11 @@
 ([ECSDIAmazon_ProjectKB_Class10] of  Property_List
 )
 
-([ECSDIAmazon_ProjectKB_Class10091] of  String
-
-	(name "RenameAcrossFiles"))
-
 ([ECSDIAmazon_ProjectKB_Class11] of  Widget
 
 	(is_hidden TRUE)
 	(property_list [ECSDIAmazon_ProjectKB_Class12])
-	(widget_class_name "edu.stanford.smi.protegex.server_changes.prompt.UsersTab"))
+	(widget_class_name "edu.stanford.smi.protege.query.LuceneQueryPlugin"))
 
 ([ECSDIAmazon_ProjectKB_Class12] of  Property_List
 )
@@ -84,7 +83,7 @@
 
 	(is_hidden TRUE)
 	(property_list [ECSDIAmazon_ProjectKB_Class22])
-	(widget_class_name "ca.uvic.csr.shrimp.jambalaya.JambalayaTab"))
+	(widget_class_name "edu.stanford.smi.protegex.changes.ChangesTab"))
 
 ([ECSDIAmazon_ProjectKB_Class22] of  Property_List
 )
@@ -93,7 +92,7 @@
 
 	(is_hidden TRUE)
 	(property_list [ECSDIAmazon_ProjectKB_Class24])
-	(widget_class_name "edu.stanford.smi.protegex.changes.ChangesTab"))
+	(widget_class_name "org.protege.owl.axiome.ui.AxiomeTab"))
 
 ([ECSDIAmazon_ProjectKB_Class24] of  Property_List
 )
@@ -102,7 +101,7 @@
 
 	(is_hidden TRUE)
 	(property_list [ECSDIAmazon_ProjectKB_Class26])
-	(widget_class_name "org.protege.owl.axiome.ui.AxiomeTab"))
+	(widget_class_name "ca.uvic.csr.shrimp.jambalaya.JambalayaTab"))
 
 ([ECSDIAmazon_ProjectKB_Class26] of  Property_List
 )
@@ -120,7 +119,7 @@
 
 	(is_hidden TRUE)
 	(property_list [ECSDIAmazon_ProjectKB_Class30])
-	(widget_class_name "edu.stanford.smi.protege.widget.instance_tree.InstanceTreeTab"))
+	(widget_class_name "edu.stanford.smi.protegex.evaluation.MetaAnalysis"))
 
 ([ECSDIAmazon_ProjectKB_Class3] of  Widget
 
@@ -135,7 +134,7 @@
 
 	(is_hidden TRUE)
 	(property_list [ECSDIAmazon_ProjectKB_Class32])
-	(widget_class_name "edu.stanford.smi.protegex.evaluation.MetaAnalysis"))
+	(widget_class_name "edu.stanford.smi.protege.widget.instance_tree.InstanceTreeTab"))
 
 ([ECSDIAmazon_ProjectKB_Class32] of  Property_List
 )
@@ -248,33 +247,33 @@
 ([ECSDIAmazon_ProjectKB_Class54] of  Property_List
 )
 
-([ECSDIAmazon_ProjectKB_Class55] of  String
+([ECSDIAmazon_ProjectKB_Class6] of  Property_List
+)
+
+([ECSDIAmazon_ProjectKB_Class60] of  String
 
 	(name ":INSTANCE-ANNOTATION")
 	(string_value "%3AANNOTATION-TEXT"))
 
-([ECSDIAmazon_ProjectKB_Class56] of  String
+([ECSDIAmazon_ProjectKB_Class61] of  String
 
 	(name "http://www.w3.org/2002/07/owl#Thing")
 	(string_value "%3ANAME"))
 
-([ECSDIAmazon_ProjectKB_Class57] of  String
+([ECSDIAmazon_ProjectKB_Class62] of  String
 
 	(name "http://www.w3.org/2002/07/owl#Class")
 	(string_value "%3ANAME"))
 
-([ECSDIAmazon_ProjectKB_Class58] of  String
+([ECSDIAmazon_ProjectKB_Class63] of  String
 
 	(name ":PAL-CONSTRAINT")
 	(string_value "%3APAL-NAME"))
 
-([ECSDIAmazon_ProjectKB_Class59] of  String
+([ECSDIAmazon_ProjectKB_Class64] of  String
 
 	(name ":META-CLASS")
 	(string_value "%3ANAME"))
-
-([ECSDIAmazon_ProjectKB_Class6] of  Property_List
-)
 
 ([ECSDIAmazon_ProjectKB_Class7] of  Widget
 
@@ -289,7 +288,7 @@
 
 	(is_hidden TRUE)
 	(property_list [ECSDIAmazon_ProjectKB_Class10])
-	(widget_class_name "edu.stanford.smi.protege.query.LuceneQueryPlugin"))
+	(widget_class_name "edu.stanford.smi.protegex.server_changes.prompt.UsersTab"))
 
 ([empty.owl_ProjectKB_Class5] of  String
 
@@ -3278,9 +3277,6 @@
 ([KB_713803_Instance_981] of  Property_List
 )
 
-([KB_761125_Class0] of  Map
-)
-
 ([KB_764103_Instance_545] of  Widget
 
 	(is_hidden FALSE)
@@ -5888,8 +5884,7 @@
 		[KB_632156_Instance_0]
 		[KB_325529_Class4]
 		[empty.owl_ProjectKB_Class5]
-		[empty.owl_ProjectKB_Class6]
-		[ECSDIAmazon_ProjectKB_Class10091]))
+		[empty.owl_ProjectKB_Class6]))
 
 ([STANDARD_CLASS_FORM_WIDGET] of  Widget
 
@@ -6275,6 +6270,19 @@
 
 	(name "vertical_stretcher")
 	(string_value "http://www.w3.org/2002/07/owl#imports"))
+
+([XY_Instance_217] of  Widget
+
+	(height 0)
+	(is_hidden FALSE)
+	(name ":OWL-ONTOLOGY-PREFIXES")
+	(property_list [XY_Instance_218])
+	(width 0)
+	(x 0)
+	(y 0))
+
+([XY_Instance_218] of  Property_List
+)
 
 ([XY_Instance_235] of  Widget
 
