@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+import random
+
+import sys
 from flask import Flask, request
 from multiprocessing import Process, Queue
 import socket
@@ -222,7 +225,7 @@ def sendProducts(gr):
     content = ECSDI['Enviar_lot' + str(get_count())]
     gr.add((content, RDF.type, ECSDI.Enviar_lot))
 
-    subjectLoteProducto = ECSDI['Lote_producto' + str(get_count())]
+    subjectLoteProducto = ECSDI['Lote_producto' + str(random.randint(1, sys.float_info.max))]
     gr.add((subjectLoteProducto, RDF.type, ECSDI.Lote_producto))
     gr.add((subjectLoteProducto, ECSDI.Prioridad, Literal(1, datatype=XSD.integer)))
 

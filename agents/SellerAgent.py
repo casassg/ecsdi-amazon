@@ -47,7 +47,6 @@ if args.open is None:
     hostname = '0.0.0.0'
 else:
     hostname = socket.gethostname()
-    print(hostname)
 
 if args.dport is None:
     dport = 9000
@@ -56,7 +55,6 @@ else:
 
 if args.dhost is None:
     dhostname = socket.gethostname()
-    print(dhostname)
 else:
     dhostname = args.dhost
 
@@ -258,7 +256,7 @@ def findProducts(model=None, brand=None, min_price=0.0, max_price=sys.float_info
         prefix xsd:<http://www.w3.org/2001/XMLSchema#>
         prefix default:<http://www.owl-ontologies.com/ECSDIAmazon.owl#>
         prefix owl:<http://www.w3.org/2002/07/owl#>
-        SELECT DISTINCT ?nombre ?marca ?modelo ?precio
+        SELECT DISTINCT ?producto ?nombre ?marca ?modelo ?precio
         where {
             { ?producto rdf:type default:Producto } UNION { ?producto rdf:type default:Producto_externo } .
             ?producto default:Nombre ?nombre .
@@ -293,7 +291,7 @@ def findProducts(model=None, brand=None, min_price=0.0, max_price=sys.float_info
         marca = row.marca
         preu = row.precio
         logger.debug(nom, marca, model, preu)
-        subject = ECSDI['ProducteResultatCerca' + str(product_count)]
+        subject = row.producto
         product_count += 1
         result.add((subject, RDF.type, ECSDI.Producte))
         result.add((subject, ECSDI.Marca, Literal(marca, datatype=XSD.string)))

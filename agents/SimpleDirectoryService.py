@@ -240,10 +240,7 @@ def agentbehavior1(cola):
             pass
         v = cola.get()
         if v == 0:
-            print(v)
             return 0
-        else:
-            print(v)
 
 
 if __name__ == '__main__':
