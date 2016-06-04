@@ -247,13 +247,15 @@ def browser_cerca():
                               msgcnt=get_count(),
                               content=content), seller.address)
 
-            ret = 'Compra feta. Felicitats!' + '<br><br>' + 'Has seleccionado estos productos:<br>'
-            if len(products_checked) == 0:
-                ret += 'Ninguno'
-            else:
-                for item in products_checked:
-                    ret += '--- ' + item[0] + ' | ' + item[1] + ' | ' + item[2] + ' | ' + item[3] + '<br>'
-            return ret
+            products_matrix = []
+            for item in answer.subjects(RDF.type, ECSDI.Producto):
+                product = [answer.value(subject=item, predicate=ECSDI.Marca),
+                           answer.value(subject=item, predicate=ECSDI.Modelo),
+                           answer.value(subject=item, predicate=ECSDI.Nombre),
+                           answer.value(subject=item, predicate=ECSDI.Precio)]
+                products_matrix.append(product)
+
+            return render_template('endSell.html', products=products_matrix)
 
 
 @app.route("/Stop")

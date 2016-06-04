@@ -141,11 +141,11 @@ def communication():
                     gm.remove((item, None, None))
 
                 date = dateToMillis(datetime.datetime.utcnow())
-                writeSends(gm, date)
+                urlSend = writeSends(gm, date)
 
                 requestTransport(date)
 
-                gr = prepareResponse()
+                gr = prepareResponse(urlSend)
 
             # No habia ninguna accion en el mensaje
             else:
@@ -211,6 +211,8 @@ def writeSends(gr, deliverDate):
 
     gr.serialize(destination='../data/enviaments', format='turtle')
 
+    return subjectEnvio
+
 
 def requestTransport(date):
     logger.info('Pedimos el transporte')
@@ -238,8 +240,33 @@ def requestTransport(date):
 
 
 
-def prepareResponse():
-    return Graph()
+def prepareResponse(urlSend):
+    g = Graph()
+
+    enviaments = Graph()
+    enviaments.parse(open('../data/enviaments'), format='turtle')
+
+    urlProducts = []
+    for item in enviaments.objects(subject=urlSend, predicate=ECSDI.Envia):
+        for product in enviaments.objects(subject=item, predicate=ECSDI.productos):
+            urlProducts.append(product)
+
+    products = Graph()
+    products.parse(open('../data/productes'), format='turtle')
+
+    for item in urlProducts:
+        marca = products.value(subject=item, predicate=ECSDI.Marca)
+        modelo = products.value(subject=item, predicate=ECSDI.Modelo)
+        nombre = products.value(subject=item, predicate=ECSDI.Nombre)
+        precio = products.value(subject=item, predicate=ECSDI.Precio)
+
+        g.add((item, RDF.type, ECSDI.Producto))
+        g.add((item, ECSDI.Marca, Literal(marca, datatype=XSD.string)))
+        g.add((item, ECSDI.Modelo, Literal(modelo, datatype=XSD.string)))
+        g.add((item, ECSDI.Precio, Literal(precio, datatype=XSD.float)))
+        g.add((item, ECSDI.Nombre, Literal(nombre, datatype=XSD.string)))
+
+    return g
 
 # MAIN METHOD ----------------------------------------------------------------------------------------------
 
