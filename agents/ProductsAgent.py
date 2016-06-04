@@ -198,12 +198,12 @@ def requestAvailability(g):
 
     graph.add((content, RDF.type, ECSDI.Pedir_disponibilidad))
 
-    subjectExiste = ECSDI['Existe_' + str(get_count())]
-    graph.add((subjectExiste, RDF.type, ECSDI.Existe))
+    subjectExiste = ECSDI['Existencia_' + str(get_count())]
+    graph.add((subjectExiste, RDF.type, ECSDI.Existencia))
     graph.add((subjectExiste, ECSDI.Cantidad, Literal(1, datatype=XSD.integer)))
 
     for item in graph.subjects(RDF.type, ECSDI.Producto):
-        graph.add((subjectExiste, ECSDI.tiene, URIRef(item)))
+        graph.add((subjectExiste, ECSDI.Tiene, URIRef(item)))
 
     graph.add((content, ECSDI.Existe, URIRef(subjectExiste)))
 

@@ -124,6 +124,7 @@ def communication():
 
             # Accion de disponibilidad
             if accion == ECSDI.Pedir_disponibilidad:
+                gm.remove((content, None, None))
                 for item in gm.subjects(RDF.type, ACL.FipaAclMessage):
                     gm.remove((item, None, None))
                 gr = gm
@@ -131,10 +132,16 @@ def communication():
 
             elif accion == ECSDI.Enviar_lot:
                 logger.info('Se envia el lote de productos')
+                gm.remove((content, None, None))
+                for item in gm.subjects(RDF.type, ACL.FipaAclMessage):
+                    gm.remove((item, None, None))
+                for item in gm.subjects(RDF.type, ECSDI.Existencia):
+                    gm.remove((item, None, None))
+                for item in gm.subjects(RDF.type, ECSDI.Pedir_disponibilidad):
+                    gm.remove((item, None, None))
 
-                tomorrow = datetime.date.today() + datetime.timedelta(days=1)
-
-                gr = writeSends(gm, tomorrow, content)
+                tomorrow = dateToMillis(datetime.date.today() + datetime.timedelta(days=1))
+                gr = writeSends(gm, tomorrow)
 
             # No habia ninguna accion en el mensaje
             else:
@@ -202,29 +209,25 @@ def dateToMillis(date):
     return int(round((date - datetime.datetime(1970, 1, 1)).total_seconds())) * 1000.0
 
 
-def writeSends(gr, deliverDate, content):
-    ontologyFile = open('../data/enviaments')
-
-    g = Graph()
-    gr.remove((content, None, None))
-    for item in gr.subjects(RDF.type, ACL.FipaAclMessage):
-        gr.remove((item, None, None))
-
+def writeSends(gr, deliverDate):
     subjectEnvio = ECSDI['Envio_' + str(random.randint(1, sys.float_info.max))]
 
-    g.parse(ontologyFile, format='turtle')
+    print(gr.serialize(format='turtle'))
 
     gr.add((subjectEnvio, RDF.type, ECSDI.Envio))
-    gr.add((subjectEnvio, ECSDI.Fecha_de_entrega, Literal(dateToMillis(deliverDate), datatype=XSD.float)))
-    for a in gr.subjects(RDF.type, ECSDI.Lote_Producto):
-        gr.add((subjectEnvio, ECSDI.Envia, URIRef(a)))
+    gr.add((subjectEnvio, ECSDI.Fecha_de_entrega, Literal(deliverDate, datatype=XSD.float)))
+    for item in gr.subjects(RDF.type, ECSDI.Lote_Producto):
+        gr.add((subjectEnvio, ECSDI.Envia, URIRef(item)))
 
+    print(gr.serialize(format='turtle'))
 
-    gr += g
+    g = Graph()
+    gr += g.parse(open('../data/enviaments'), format='turtle')
 
     gr.serialize(destination='../data/enviaments', format='turtle')
 
     return gr
+
 
 # MAIN METHOD ----------------------------------------------------------------------------------------------
 
