@@ -167,7 +167,9 @@ def browser_cerca():
                     index += 1
                 if s in subject_pos:
                     subject_dict = product_list[subject_pos[s]]
-                    if p == ECSDI.Marca:
+                    if p == RDF.type:
+                        subject_dict['url'] = s
+                    elif p == ECSDI.Marca:
                         subject_dict['marca'] = o
                     elif p == ECSDI.Modelo:
                         subject_dict['modelo'] = o
@@ -191,6 +193,7 @@ def browser_cerca():
                 item_checked.append(item_map['modelo'])
                 item_checked.append(item_map['nombre'])
                 item_checked.append(item_map['precio'])
+                item_checked.append(item_map['url'])
                 products_checked.append(item_checked)
 
             logger.info("Creando la peticion de compra")
@@ -225,7 +228,7 @@ def browser_cerca():
             for item in products_checked:
                 total_price += float(item[3])
                 # Creacion del producto --------------------------------------------------------------------------------
-                subject_producto = ECSDI['Producto_' + str(random.randint(1, sys.float_info.max))]
+                subject_producto = item[4]
                 gr.add((subject_producto, RDF.type, ECSDI.Producto))
                 gr.add((subject_producto, ECSDI.Marca, Literal(item[0], datatype=XSD.string)))
                 gr.add((subject_producto, ECSDI.Modelo, Literal(item[1], datatype=XSD.string)))
