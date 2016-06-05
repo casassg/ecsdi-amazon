@@ -9,17 +9,22 @@ Agente usando los servicios web de Flask
 Tiene una funcion AgentBehavior1 que se lanza como un thread concurrente
 Asume que el agente de registro esta en el puerto 9000
 """
-
-from flask import Flask, request
-from multiprocessing import Process, Queue
 import socket
-from rdflib import Namespace, Graph, logger, RDF
-from utils.ACLMessages import register_agent, get_message_properties, build_message, get_bag_agent_info
-from utils.FlaskServer import shutdown_server
+from multiprocessing import Process, Queue
+
+import datetime
+from flask import Flask, request
+from rdflib import Namespace, Graph, RDF, Literal
+
+from utils.ACLMessages import register_agent, get_message_properties, build_message, get_bag_agent_info, send_message
 from utils.Agent import Agent
+from utils.FlaskServer import shutdown_server
+from utils.Logging import config_logger
 from utils.OntologyNamespaces import ACL, ECSDI
 
 __author__ = 'amazadonde'
+
+logger = config_logger(level=1)
 
 # AGENT ATTRIBUTES ----------------------------------------------------------------------------------------
 
@@ -45,9 +50,9 @@ DirectoryAgent = Agent('DirectoryAgent',
                        'http://%s:9000/Register' % hostname,
                        'http://%s:9000/Stop' % hostname)
 ExternalTransportDirectory = Agent('ExternalTransportDirectory',
-                       agn.Directory,
-                       'http://%s:8000/Register' % hostname,
-                       'http://%s:8000/Stop' % hostname)
+                                   agn.Directory,
+                                   'http://%s:8000/Register' % hostname,
+                                   'http://%s:8000/Stop' % hostname)
 
 # Global triplestore graph
 dsGraph = Graph()
@@ -63,6 +68,10 @@ def get_count():
     global mss_cnt
     mss_cnt += 1
     return mss_cnt
+
+
+def dateToMillis(date):
+    return (date - datetime.datetime.utcfromtimestamp(0)).total_seconds() * 1000.0
 
 
 # AGENT FUNCTIONS ------------------------------------------------------------------------------------------
@@ -118,7 +127,7 @@ def communication():
 
             # Accion de busqueda
             if accion == ECSDI.Peticiona_transport:
-                responPeticio()
+                responPeticio(gm, content)
                 return
 
             # No habia ninguna accion en el mensaje
@@ -168,37 +177,115 @@ def agent_behaviour(queue):
 
 # DETERMINATE AGENT FUNCTIONS ------------------------------------------------------------------------------
 
-def requestOffer():
-    # TODO Request Offer.
-    print("Request Offer")
 
 
-def sendCounterOffer():
-    # TODO Send Counter Offer.
-    print("Send Counter Offer")
+def requestOffer(agent, peso, fecha, destino):
+    gr = Graph()
+    subject = ECSDI['peticion-oferta']
+    gr.add((subject, RDF.type, ECSDI.Pedir_oferta_transporte))
+    gr.add((subject, ECSDI.Destino, Literal(destino)))
+    gr.add((subject, ECSDI.Plazo_maximo_entrega, Literal(fecha)))
+    gr.add((subject, ECSDI.Peso_envio, Literal(peso)))
+    resp = send_message(build_message(gr, ACL['call-for-proposal'], content=subject, receiver=agent.uri,
+                                      sender=TransportDealerAgent.uri), agent.address)
+    msg = get_message_properties(resp)
+    if 'performative' not in msg or msg['performative'] == ACL.refuse:
+        logger.warn('An agent rejected us :(')
+        return None
+    elif msg['performative'] == ACL.propose:
+        precio = resp.value(msg['content'], ECSDI.Precio_envio)
+        return Offer(address=agent.address, price=precio.toPython())
+    logger.error('I can\'t understand:(')
+    return None
 
 
-def valueOffer():
-    # TODO Value Offer.
-    print("Value Offer")
+def acceptOffer(offer):
+    resp = send_message(build_message(Graph(), ACL['accept-proposal'], sender=TransportDealerAgent.uri),
+                        offer.address)
+    msg = get_message_properties(resp)
+    return msg['performative'] == ACL.inform
 
 
-def acceptOffer():
-    # TODO Accept Offer.
-    print("Accept Offer")
+def counter_offer(offer):
+    logger.info('Asking counter-offer to ' + offer.address)
+    gr = Graph()
+    subject = ECSDI['contra-oferta']
+    gr.add((subject, RDF.type, ECSDI.Contraoferta))
+    gr.add((subject, ECSDI.Precio_envio, Literal(offer.price - 2)))
+    resp = send_message(build_message(gr, ACL['counter-proposal'], content=subject, sender=TransportDealerAgent.uri),
+                        offer.address)
+    msg = get_message_properties(resp)
+    if 'performative' not in msg or msg['performative'] == ACL.refuse:
+        logger.warn('An agent rejected us :(')
+        return None
+    elif msg['performative'] == ACL.propose:
+        precio = resp.value(msg['content'], ECSDI.Precio_envio)
+        return Offer(address=offer.address, price=precio)
+    logger.error('I can\'t understand:(')
+    return None
+
+
+def rejectOffer(offer):
+    resp = send_message(build_message(Graph(), ACL['reject-proposal'], sender=TransportDealerAgent.uri),
+                        offer.address)
+    msg = get_message_properties(resp)
+
 
 @app.route('/test')
 def requestTransports():
-    agents = get_bag_agent_info(agn.ExternalTransportAgent,ExternalTransportDirectory,TransportDealerAgent,192310291)
-    print agents
+    peso = 12
+    fecha = datetime.datetime.today() + datetime.timedelta(days=9)
+    destino = 'Barcelona'
+    agents = get_bag_agent_info(agn.ExternalTransportAgent, ExternalTransportDirectory, TransportDealerAgent, 192310291)
+    offers = []
+    for agent in agents:
+        print agent.address
+        offer = requestOffer(agent, peso, fecha, destino)
+        logger.info('Offer received of ' + str(offer.price))
+        if offer:
+            offers += [offer]
+    offers2 = []
+    for i, offer in enumerate(offers):
+        offer2 = counter_offer(offer)
+        if offer2:
+            logger.info('Counter offer accepted at ' + str(offer2.price))
+            offers2 += [offer2]
+        else:
+            logger.info('Counter offer rejected by ' + str(offer.address))
+            offers2 += [offer]
+
+    best_offer = min(offers2, key=lambda a: a.price)
+    logger.info('Best offer is at ' + str(best_offer.price) + '€')
+    end = False
+    for offer in offers2:
+        if offer == best_offer:
+            end = acceptOffer(best_offer)
+        else:
+            rejectOffer(offer)
+    if end:
+        logger.info('YAY! The conversation is succesfull!')
+        return best_offer
+    else:
+        return None
 
 
-def responPeticio():
-    agents = requestTransports()
-    requestOffer()
+class Offer(object):
+    def __init__(self, price, address):
+        self.price = price
+        self.address = address
 
-    acceptOffer()
 
+def responPeticio(gm, content):
+    peso = gm.value(subject=content, predicate=ECSDI.Peso_envio)
+    destino = gm.value(subject=content, predicate=ECSDI.Destino)
+    fecha = gm.value(subject=content, predicate=ECSDI.Fecha)
+    fecha = datetime.datetime.fromtimestamp(fecha / 1000.0)
+
+    offer = requestTransports(peso, fecha, destino)
+
+    if offer:
+        return 'TEST'
+    return 'NOOOOO'
 
 
 # MAIN METHOD ----------------------------------------------------------------------------------------------

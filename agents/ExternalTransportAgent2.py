@@ -7,7 +7,6 @@ import argparse
 import socket
 from multiprocessing import Process
 
-import datetime
 from flask import Flask, request
 from rdflib import Graph, Namespace, RDF
 
@@ -36,7 +35,7 @@ args = parser.parse_args()
 
 # Configuration stuff
 if args.port is None:
-    port = 9005
+    port = 9006
 else:
     port = args.port
 
@@ -65,10 +64,10 @@ agn = Namespace("http://www.agentes.org#")
 mss_cnt = 0
 
 # Datos del Agente
-ExternalTransportAgent1 = ExternalTransportAgent('ExternalTransportAgent1',
-                                                 agn.ExternalTransportAgent,
+ExternalTransportAgent2 = ExternalTransportAgent('ExternalTransportAgent2',
+                                                 agn.ExternalTransportAgent2,
                                                  'http://%s:%d/comm' % (hostname, port),
-                                                 'http://%s:%d/Stop' % (hostname, port), 5)
+                                                 'http://%s:%d/Stop' % (hostname, port), 2)
 
 # Directory agent address
 ExternalTransportDirectory = Agent('ExternalTransportDirectory',
@@ -98,7 +97,7 @@ def register_message():
 
     logger.info('Nos registramos')
 
-    gr = register_agent(ExternalTransportAgent1, ExternalTransportDirectory, ExternalTransportAgent1.uri, get_count())
+    gr = register_agent(ExternalTransportAgent2, ExternalTransportDirectory, agn.ExternalTransportAgent, get_count())
     return gr
 
 
@@ -116,14 +115,13 @@ def stop():
 def proposal(graph, content):
     peso = graph.value(subject=content, predicate=ECSDI.Peso_envio)
     data = graph.value(subject=content, predicate=ECSDI.Plazo_maximo_entrega)
-    data = datetime.datetime.fromtimestamp(data / 1000.0)
     city = graph.value(subject=content, predicate=ECSDI.Destino)
-    return ExternalTransportAgent1.proposal(data, peso, city)
+    return ExternalTransportAgent2.proposal(data.toPython(), peso.toPython(), city.toPython())
 
 
 def counterproposal(gm, content):
     precio = gm.value(subject=content, predicate=ECSDI.Precio_envio)
-    return ExternalTransportAgent1.answer_couter_proposal(precio)
+    return ExternalTransportAgent2.answer_couter_proposal(precio)
 
 
 @app.route("/comm")
@@ -143,29 +141,33 @@ def comunicacion():
         # Si no es, respondemos que no hemos entendido el mensaje
         gr = build_message(Graph(),
                            ACL['not-understood'],
-                           sender=ExternalTransportAgent1.uri,
+                           sender=ExternalTransportAgent2.uri,
                            msgcnt=mss_cnt)
     else:
-        # Obtenemos la performativa
         if msgdic['performative'] == ACL['accept-proposal']:
-            return build_message(Graph(), perf=ACL.inform, sender=ExternalTransportAgent1.uri).serialize()
+            logger.info('YEAH! Our offer has been acccepted! :D')
+            return build_message(Graph(), perf=ACL.inform, sender=ExternalTransportAgent2.uri).serialize()
 
         if msgdic['performative'] == ACL['reject-proposal']:
-            ExternalTransportAgent1.reset()
+            logger.info('Our offer has been rejected!')
+            ExternalTransportAgent2.reset()
+            return build_message(Graph(), perf=ACL.inform, sender=ExternalTransportAgent2.uri).serialize()
 
-        if msgdic['performative'] == ACL['counterproposal']:
-            return counterproposal(gm, msgdic.content).serialize()
+        if msgdic['performative'] == ACL['counter-proposal']:
+            logger.info('Ask for counter proposal!')
+            return counterproposal(gm, msgdic['content']).serialize()
 
         if msgdic['performative'] == ACL['call-for-proposal']:
-            return proposal(gm, msgdic.content).serialize()
-
+            logger.info('Ask for proposal!')
+            return proposal(gm, msgdic['content']).serialize()
 
         else:
             # Extraemos el objeto del contenido que ha de ser una accion de la ontologia
             # de registro
-            content = msgdic['content']
-            # Averiguamos el tipo de la accion
-            accion = gm.value(subject=content, predicate=RDF.type)
+            return build_message(Graph(),
+                                 ACL['not-understood'],
+                                 sender=ExternalTransportAgent2.uri).serialize()
+
     return
 
 
@@ -186,7 +188,7 @@ if __name__ == '__main__':
     ab1.start()
 
     # Run server
-    app.run(host=hostname, port=port)
+    app.run(host=hostname, port=port, debug=True)
 
     # Wait behaviors
     ab1.join()

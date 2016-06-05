@@ -1,9 +1,12 @@
-from datetime import datetime
+import datetime
 from rdflib import Graph, Literal
 
 from ACLMessages import build_message
 from OntologyNamespaces import ECSDI, ACL
 from utils.Agent import Agent
+from utils.Logging import config_logger
+
+logger = config_logger(level=1)
 
 def dateToMillis(date):
     return (date - datetime.datetime.utcfromtimestamp(0)).total_seconds() * 1000.0
@@ -16,9 +19,9 @@ class ExternalTransportAgent(Agent):
         self.random_seed = abs(random_seed) + 1
 
     def proposal(self, due_date, weight, city):
-        delivery_date = datetime.now() + datetime.timedelta(days=5)
+        delivery_date = datetime.datetime.now() + datetime.timedelta(days=5)
         if due_date < delivery_date:
-            self.last_price = None
+            self.reset()
             return build_message(Graph(), ACL.refuse, sender=self.uri)
         gr = Graph()
         gr.bind('ecsdi', ECSDI)
@@ -28,11 +31,12 @@ class ExternalTransportAgent(Agent):
         gr.add((oferta, ECSDI.Precio_envio, Literal(preu)))
         gr.add((oferta, ECSDI.Entrega, Literal(dateToMillis(delivery_date))))
         gr = build_message(gr, ACL.propose, sender=self.uri, content=oferta)
+        logger.info('Sending proposal for '+str(preu))
         return gr
 
     def accept_couterproposal(self, new_price):
         if self.last_price:
-            return new_price >= self.last_price - self.random_seed / 10
+            return new_price >= self.last_price - 5
         else:
             return False
 
@@ -42,6 +46,7 @@ class ExternalTransportAgent(Agent):
             oferta = ECSDI.Oferta_transporte
             gr.add((oferta, ECSDI.Precio_envio, Literal(new_price)))
             gr = build_message(gr, ACL.propose, sender=self.uri, content=oferta)
+            logger.info('Sending counter-proposal for '+str(new_price))
             return gr
         else:
             gr = build_message(Graph(), ACL.reject, sender=self.uri)
