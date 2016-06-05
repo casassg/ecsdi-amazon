@@ -147,7 +147,6 @@
     <rdfs:domain rdf:resource="#Producto_externo"/>
     <rdfs:range rdf:resource="#Vendedor"/>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="ObjectProperty_6"/>
   <owl:ObjectProperty rdf:ID="a_enviar">
     <rdfs:domain rdf:resource="#Enviar_lot"/>
     <rdfs:range rdf:resource="#Lote_producto"/>
@@ -175,9 +174,6 @@
     <rdfs:domain rdf:resource="#Compra"/>
     <rdfs:range rdf:resource="#Producto"/>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="ObjectProperty_83"/>
-  <owl:ObjectProperty rdf:ID="ObjectProperty_87"/>
-  <owl:ObjectProperty rdf:ID="ObjectProperty_11"/>
   <owl:ObjectProperty rdf:ID="Anunciado_por"/>
   <owl:ObjectProperty rdf:ID="Envia">
     <rdfs:range rdf:resource="#Lote_producto"/>
@@ -187,7 +183,6 @@
     <rdfs:range rdf:resource="#Ciudad"/>
     <rdfs:domain rdf:resource="#Centro_logistico"/>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="ObjectProperty_16"/>
   <owl:ObjectProperty rdf:ID="Sobre">
     <rdfs:range rdf:resource="#Compra"/>
     <rdfs:domain rdf:resource="#Peticion_compra"/>
@@ -199,7 +194,6 @@
   <owl:ObjectProperty rdf:ID="Anuncia">
     <rdfs:range rdf:resource="#Producto"/>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="ObjectProperty_5"/>
   <owl:ObjectProperty rdf:ID="idCompra">
     <rdfs:range rdf:resource="#Compra"/>
     <rdfs:domain rdf:resource="#Peticion_transferencia"/>
@@ -212,12 +206,10 @@
     <rdfs:domain rdf:resource="#Pedir_oferta_transporte"/>
     <rdfs:range rdf:resource="#Ciudad"/>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="ObjectProperty_3"/>
   <owl:DatatypeProperty rdf:ID="Longitud">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
     <rdfs:domain rdf:resource="#Ciudad"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="http://www.owl-ontologies.com/ECSDIAmaz"/>
   <owl:DatatypeProperty rdf:ID="Fecha_de_entrega">
     <rdfs:domain rdf:resource="#Envio"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
@@ -229,7 +221,6 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
     <rdfs:domain rdf:resource="#Rango_precio"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="DatatypeProperty_9"/>
   <owl:DatatypeProperty rdf:ID="Precio_envio">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
     <rdfs:domain rdf:resource="#Oferta_transporte"/>
@@ -249,8 +240,6 @@
       </owl:Class>
     </rdfs:domain>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="DatatypeProperty_3"/>
-  <owl:DatatypeProperty rdf:ID="DatatypeProperty_104"/>
   <owl:DatatypeProperty rdf:ID="Precio_max">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
     <rdfs:domain rdf:resource="#Rango_precio"/>
@@ -289,7 +278,6 @@
     <rdfs:domain rdf:resource="#Ciudad"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="DatatypeProperty_120"/>
   <owl:DatatypeProperty rdf:ID="Entrega">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
     <rdfs:domain rdf:resource="#Oferta_transporte"/>
@@ -297,6 +285,11 @@
   <owl:DatatypeProperty rdf:ID="Fecha_maxima">
     <rdfs:domain rdf:resource="#Plazos_entrega"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#"/>
+  <owl:DatatypeProperty rdf:ID="Peso">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#Producto"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="Prio"/>
   <owl:DatatypeProperty rdf:ID="Fecha_minima">
@@ -318,8 +311,6 @@
   <owl:DatatypeProperty rdf:ID="Precio_base">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="DatatypeProperty_23"/>
-  <owl:DatatypeProperty rdf:ID="DatatypeProperty_17"/>
   <owl:DatatypeProperty rdf:ID="Nom">
     <rdfs:domain rdf:resource="#RestriccioNom"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
@@ -337,7 +328,14 @@
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="Peso_envio">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
-    <rdfs:domain rdf:resource="#Pedir_oferta_transporte"/>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Pedir_oferta_transporte"/>
+          <owl:Class rdf:about="#Peticiona_transport"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="Propuesta_precio"/>
   <owl:DatatypeProperty rdf:ID="Precio">
@@ -348,7 +346,6 @@
     <rdfs:domain rdf:resource="#Compra"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="DatatypeProperty_31"/>
   <owl:DatatypeProperty rdf:ID="Existe_existencias">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <rdfs:domain rdf:resource="#Respuesta_disponibilidad"/>
@@ -361,7 +358,6 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:domain rdf:resource="#Existencia"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="DatatypeProperty_101"/>
   <Producto rdf:ID="Producto_2">
     <Nombre rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Garmin 325</Nombre>
@@ -424,4 +420,4 @@
   </Cerca_productes>
 </rdf:RDF>
 
-<!-- Created with Protege (with OWL Plugin 3.5, Build 663)  http://protege.stanford.edu -->
+<!-- Created with Protege (with OWL Plugin 3.4.8, Build 629)  http://protege.stanford.edu -->
