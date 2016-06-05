@@ -262,12 +262,10 @@ def browser_cerca():
 def browser_retorna():
     if request.method == 'GET':
         logger.info('Mostramos las compras realizadas')
-        compres = get_all_sells()
-        print(compres)
-        return render_template('retorna.html', compres=compres)
+        compres, count, counts = get_all_sells()
+        return render_template('retorna.html', compres=compres, count=count, sizes=counts)
     else:
         logger.info('Empezamos el proceso de devolucion')
-
 
 
 @app.route("/Stop")
@@ -310,23 +308,28 @@ def get_all_sells():
     # [0] = url / [1] = [{producte}] / [2] = precio_total
     compres = []
 
+    biggest_sell = 0
+    counts = []
+
     graph_compres = Graph()
     graph_compres.parse(open('../data/compres'), format='turtle')
 
     for compraUrl in graph_compres.subjects(RDF.type, ECSDI.Compra):
+        sell_count = 0
         single_sell = [compraUrl]
         products = []
         for productUrl in graph_compres.objects(subject=compraUrl, predicate=ECSDI.Productos):
-            products.append({'marca': graph_compres.value(subject=productUrl, predicate=ECSDI.Marca),
-                              'modelo': graph_compres.value(subject=productUrl, predicate=ECSDI.Modelo),
-                              'nombre': graph_compres.value(subject=productUrl, predicate=ECSDI.Nombre),
-                              'precio': graph_compres.value(subject=productUrl, predicate=ECSDI.Precio)})
+            sell_count += 1
+            products.append(graph_compres.value(subject=productUrl, predicate=ECSDI.Nombre))
         single_sell.append(products)
         for precio_total in graph_compres.objects(subject=compraUrl, predicate=ECSDI.Precio_total):
             single_sell.append(precio_total)
         compres.append(single_sell)
+        counts.append(sell_count)
+        if sell_count > biggest_sell:
+            biggest_sell = sell_count
 
-    return compres
+    return compres, biggest_sell, counts
 
 
 if __name__ == '__main__':
@@ -335,7 +338,7 @@ if __name__ == '__main__':
     ab1.start()
 
     # Ponemos en marcha el servidor
-    app.run(host=hostname, port=port)
+    app.run(host=hostname, port=port, debug=True)
 
     # Esperamos a que acaben los behaviors
     ab1.join()
