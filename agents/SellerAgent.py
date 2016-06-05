@@ -194,8 +194,6 @@ def communication():
                                   msgcnt=get_count(),
                                   content=content), financial.address)
 
-
-
             # No habia ninguna accion en el mensaje
             else:
                 gr = build_message(Graph(),

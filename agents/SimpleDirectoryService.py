@@ -70,6 +70,7 @@ DirectoryAgent = Agent('DirectoryAgent',
 app = Flask(__name__)
 mss_cnt = 0
 
+
 @app.route("/Register")
 def register():
     """
@@ -135,7 +136,7 @@ def register():
             gr.add((rsp_obj, DSO.Address, agn_add))
             gr.add((rsp_obj, DSO.Uri, agn_uri))
             gr.add((rsp_obj, FOAF.name, agn_name))
-            logger.info("Agente encontrado: "+agn_name)
+            logger.info("Agente encontrado: " + agn_name)
             return build_message(gr,
                                  ACL.inform,
                                  sender=DirectoryAgent.uri,
@@ -224,8 +225,7 @@ def tidyup():
     """
 
 
-
-def agentbehavior1(cola):
+def agentbehavior1():
     """
     Behaviour que simplemente espera mensajes de una cola y los imprime
     hasta que llega un 0 a la cola
@@ -234,7 +234,7 @@ def agentbehavior1(cola):
 
 if __name__ == '__main__':
     # Ponemos en marcha los behaviours como procesos
-    ab1 = Process(target=agentbehavior1, args=(cola1,))
+    ab1 = Process(target=agentbehavior1)
     ab1.start()
 
     # Ponemos en marcha el servidor Flask

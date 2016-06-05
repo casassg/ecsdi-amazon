@@ -10,8 +10,6 @@ Agent que implementa la interacció amb l'usuari
 import random
 
 import sys
-from werkzeug.utils import redirect
-
 from utils.ACLMessages import get_agent_info, send_message, build_message, get_message_properties
 from utils.OntologyNamespaces import ECSDI, ACL
 import argparse
@@ -86,6 +84,9 @@ dsgraph = Graph()
 
 # Productos enconctrados
 product_list = []
+
+# Compras enconctrados
+compres = []
 
 
 def get_count():
@@ -260,12 +261,32 @@ def browser_cerca():
 
 @app.route("/retorna", methods=['GET', 'POST'])
 def browser_retorna():
+    global compres
     if request.method == 'GET':
         logger.info('Mostramos las compras realizadas')
-        compres, count, counts = get_all_sells()
+        count, counts = get_all_sells()
         return render_template('retorna.html', compres=compres, count=count, sizes=counts)
     else:
         logger.info('Empezamos el proceso de devolucion')
+        sells_checked = []
+        for item in request.form.getlist("checkbox"):
+            sells_checked.append(compres[int(item)][0])
+
+        logger.info("Creando la peticion de compra")
+        g = Graph()
+        content = ECSDI['Peticion_retorno_' + str(get_count())]
+        g.add((content, RDF.type, ECSDI.Peticion_retorno))
+        for item in sells_checked:
+            g.add((content, ECSDI.CompraRetornada, URIRef(item)))
+
+        seller = get_agent_info(agn.SellerAgent, DirectoryAgent, UserPersonalAgent, get_count())
+
+        answer = send_message(
+            build_message(g, perf=ACL.request, sender=UserPersonalAgent.uri, receiver=seller.uri,
+                          msgcnt=get_count(),
+                          content=content), seller.address)
+
+        return 'La teva petició sha complert correctament!'
 
 
 @app.route("/Stop")
@@ -306,7 +327,7 @@ def agentbehavior1():
 
 def get_all_sells():
     # [0] = url / [1] = [{producte}] / [2] = precio_total
-    compres = []
+    global compres
 
     biggest_sell = 0
     counts = []
@@ -329,7 +350,7 @@ def get_all_sells():
         if sell_count > biggest_sell:
             biggest_sell = sell_count
 
-    return compres, biggest_sell, counts
+    return biggest_sell, counts
 
 
 if __name__ == '__main__':
