@@ -80,6 +80,9 @@ def register_message():
     return gr
 
 
+
+
+
 @app.route("/comm")
 def communication():
     """
@@ -133,6 +136,18 @@ def communication():
 
             # Accion de retorno
             elif accion == ECSDI.Peticion_retorno:
+
+                gm.remove((content, None, None))
+                for item in gm.subjects(RDF.type, ACL.FipaAclMessage):
+                    gm.remove((item, None, None))
+
+                sell = None
+                for item in gm.subjects(RDF.type, ECSDI.Compra):
+                    sell = item
+
+                payDelivery(sell)
+                gr = returnSell(gm, sell)
+
                 gr = build_message(Graph(),
                                    ACL['not-understood'],
                                    sender=DirectoryAgent.uri,
@@ -230,6 +245,21 @@ def sendSell(gm, sell):
                       msgcnt=get_count(),
                       content=content), products.address)
 
+    return gr
+
+def returnSell(gm, sell):
+    logger.info('Nos comunicamos con el ProductsAgent')
+    content = ECSDI['Recoger_venta_' + str(get_count())]
+
+    gm.add((content, RDF.type, ECSDI.Retornar_venda))
+    gm.add((content, ECSDI.identificador_Compra, URIRef(sell)))
+
+    logistic = get_agent_info(agn.LogisticHubAgent, DirectoryAgent, FinancialAgent, get_count())
+
+    gr = send_message(
+        build_message(gm, perf=ACL.request, sender=FinancialAgent.uri, receiver=logistic.uri,
+                      msgcnt=get_count(),
+                      content=content), logistic.address)
     return gr
 
 

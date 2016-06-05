@@ -194,6 +194,29 @@ def communication():
                                   msgcnt=get_count(),
                                   content=content), financial.address)
 
+            elif accion == ECSDI.Peticion_retorno:
+                logger.info("He rebut la peticio de retorn")
+
+                sell = None
+                for item in gm.subjects(RDF.type, ECSDI.Compra):
+                    sell = item
+
+                gm.remove((content, None, None))
+                for item in gm.subjects(RDF.type, ACL.FipaAclMessage):
+                    gm.remove((item, None, None))
+
+                gm.add((content, RDF.type, ECSDI.Peticion_retorno))
+                gm.add((content, ECSDI.Compra, URIRef(sell)))
+
+                gr = gm
+
+                financial = get_agent_info(agn.FinancialAgent, DirectoryAgent, SellerAgent, get_count())
+
+                gr = send_message(
+                    build_message(gr, perf=ACL.request, sender=SellerAgent.uri, receiver=financial.uri,
+                                  msgcnt=get_count(),
+                                  content=content), financial.address)
+
             # No habia ninguna accion en el mensaje
             else:
                 gr = build_message(Graph(),
@@ -297,6 +320,34 @@ def findProducts(model=None, brand=None, min_price=0.0, max_price=sys.float_info
         result.add((subject, ECSDI.Precio, Literal(preu, datatype=XSD.float)))
         result.add((subject, ECSDI.Nombre, Literal(nom, datatype=XSD.string)))
     return result
+
+
+def getProducts(sell):
+        g = Graph()
+        compres = Graph()
+        compres.parse(open('../data/compres'), format='turtle')
+
+        urlProducts = []
+        for item in compres.objects(subject=sell, predicate=ECSDI.Compra):
+            for product in compres.objects(subject=item, predicate=ECSDI.productos):
+                urlProducts.append(product)
+
+        products = Graph()
+        products.parse(open('../data/productes'), format='turtle')
+
+        for item in urlProducts:
+            marca = products.value(subject=item, predicate=ECSDI.Marca)
+            modelo = products.value(subject=item, predicate=ECSDI.Modelo)
+            nombre = products.value(subject=item, predicate=ECSDI.Nombre)
+            precio = products.value(subject=item, predicate=ECSDI.Precio)
+
+            g.add((item, RDF.type, ECSDI.Producto))
+            g.add((item, ECSDI.Marca, Literal(marca, datatype=XSD.string)))
+            g.add((item, ECSDI.Modelo, Literal(modelo, datatype=XSD.string)))
+            g.add((item, ECSDI.Precio, Literal(precio, datatype=XSD.float)))
+            g.add((item, ECSDI.Nombre, Literal(nombre, datatype=XSD.string)))
+
+        return g
 
 
 # MAIN METHOD ----------------------------------------------------------------------------------------------

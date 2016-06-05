@@ -147,6 +147,9 @@ def communication():
 
                 gr = prepareResponse(urlSend)
 
+            elif accion == ECSDI.Retornar_venda:
+                logger.info('Rep la venda a retornar del financial agent')
+
             # No habia ninguna accion en el mensaje
             else:
                 gr = build_message(Graph(),
