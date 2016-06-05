@@ -262,7 +262,8 @@ def browser_cerca():
 def browser_retorna():
     if request.method == 'GET':
         logger.info('Mostramos las compras realizadas')
-        compres = []
+        compres = get_all_sells()
+        print(compres)
         return render_template('retorna.html', compres=compres)
     else:
         logger.info('Empezamos el proceso de devolucion')
@@ -303,6 +304,29 @@ def agentbehavior1():
 
     :return:
     """
+
+
+def get_all_sells():
+    # [0] = url / [1] = [{producte}] / [2] = precio_total
+    compres = []
+
+    graph_compres = Graph()
+    graph_compres.parse(open('../data/compres'), format='turtle')
+
+    for compraUrl in graph_compres.subjects(RDF.type, ECSDI.Compra):
+        single_sell = [compraUrl]
+        products = []
+        for productUrl in graph_compres.objects(subject=compraUrl, predicate=ECSDI.Productos):
+            products.append({'marca': graph_compres.value(subject=productUrl, predicate=ECSDI.Marca),
+                              'modelo': graph_compres.value(subject=productUrl, predicate=ECSDI.Modelo),
+                              'nombre': graph_compres.value(subject=productUrl, predicate=ECSDI.Nombre),
+                              'precio': graph_compres.value(subject=productUrl, predicate=ECSDI.Precio)})
+        single_sell.append(products)
+        for precio_total in graph_compres.objects(subject=compraUrl, predicate=ECSDI.Precio_total):
+            single_sell.append(precio_total)
+        compres.append(single_sell)
+
+    return compres
 
 
 if __name__ == '__main__':
