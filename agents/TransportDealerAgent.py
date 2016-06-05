@@ -14,7 +14,7 @@ from flask import Flask, request
 from multiprocessing import Process, Queue
 import socket
 from rdflib import Namespace, Graph, logger, RDF
-from utils.ACLMessages import register_agent, get_message_properties, build_message
+from utils.ACLMessages import register_agent, get_message_properties, build_message, get_bag_agent_info
 from utils.FlaskServer import shutdown_server
 from utils.Agent import Agent
 from utils.OntologyNamespaces import ACL, ECSDI
@@ -44,6 +44,10 @@ DirectoryAgent = Agent('DirectoryAgent',
                        agn.Directory,
                        'http://%s:9000/Register' % hostname,
                        'http://%s:9000/Stop' % hostname)
+ExternalTransportDirectory = Agent('ExternalTransportDirectory',
+                       agn.Directory,
+                       'http://%s:8000/Register' % hostname,
+                       'http://%s:8000/Stop' % hostname)
 
 # Global triplestore graph
 dsGraph = Graph()
@@ -183,7 +187,16 @@ def acceptOffer():
     # TODO Accept Offer.
     print("Accept Offer")
 
+@app.route('/test')
+def requestTransports():
+    agents = get_bag_agent_info(agn.ExternalTransportAgent,ExternalTransportDirectory,TransportDealerAgent,192310291)
+    print agents
+
+
 def responPeticio():
+    agents = requestTransports()
+    requestOffer()
+
     acceptOffer()
 
 
@@ -197,7 +210,7 @@ if __name__ == '__main__':
     ab1.start()
 
     # Run server
-    app.run(host=hostname, port=port)
+    app.run(host=hostname, port=port, debug=True)
 
     # Wait behaviors
     ab1.join()

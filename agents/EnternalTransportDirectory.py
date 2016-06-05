@@ -18,9 +18,11 @@ directory-service-ontology.owl
 import argparse
 import socket
 from multiprocessing import Process, Queue
+
 from flask import Flask, request, render_template
-from rdflib import Graph, RDF, Namespace, RDFS
+from rdflib import Graph, RDF, Namespace, RDFS, BNode, URIRef
 from rdflib.namespace import FOAF
+
 from utils.ACLMessages import build_message, get_message_properties
 from utils.Agent import Agent
 from utils.FlaskServer import shutdown_server
@@ -43,7 +45,7 @@ args = parser.parse_args()
 
 # Configuration stuff
 if args.port is None:
-    port = 9000
+    port = 8000
 else:
     port = args.port
 
@@ -69,6 +71,9 @@ DirectoryAgent = Agent('DirectoryAgent',
                        'http://%s:%d/Stop' % (hostname, port))
 app = Flask(__name__)
 mss_cnt = 0
+
+cola1 = Queue()  # Cola de comunicacion entre procesos
+
 
 @app.route("/Register")
 def register():
@@ -125,23 +130,30 @@ def register():
 
         agn_type = gm.value(subject=content, predicate=DSO.AgentType)
         rsearch = dsgraph.triples((None, DSO.AgentType, agn_type))
-        if rsearch is not None:
-            agn_uri = rsearch.next()[0]
-            agn_add = dsgraph.value(subject=agn_uri, predicate=DSO.Address)
-            agn_name = dsgraph.value(subject=agn_uri, predicate=FOAF.name)
-            gr = Graph()
-            gr.bind('dso', DSO)
-            rsp_obj = agn['Directory-response']
+        gr = Graph()
+        gr.bind('dso', DSO)
+        bag = BNode()
+        gr.add((bag, RDF.type, RDF.Bag))
+        i = 0
+        for agn_uri in rsearch:
+            agn_add = dsgraph.value(subject=agn_uri[0], predicate=DSO.Address)
+            agn_name = dsgraph.value(subject=agn_uri[0], predicate=FOAF.name)
+            print(agn_add,agn_name)
+
+            rsp_obj = agn['Directory-response' + str(i)]
             gr.add((rsp_obj, DSO.Address, agn_add))
-            gr.add((rsp_obj, DSO.Uri, agn_uri))
+            gr.add((rsp_obj, DSO.Uri, agn_uri[0]))
             gr.add((rsp_obj, FOAF.name, agn_name))
-            logger.info("Agente encontrado: "+agn_name)
+            gr.add((bag, URIRef(u'http://www.w3.org/1999/02/22-rdf-syntax-ns#_' + str(i)), rsp_obj))
+            i += 1
+            logger.info("Agente encontrado: " + agn_name)
+
+        if rsearch is not None:
             return build_message(gr,
                                  ACL.inform,
                                  sender=DirectoryAgent.uri,
                                  msgcnt=mss_cnt,
-                                 receiver=agn_uri,
-                                 content=rsp_obj)
+                                 content=bag)
         else:
             # Si no encontramos nada retornamos un inform sin contenido
             return build_message(Graph(),
@@ -204,7 +216,7 @@ def info():
     global dsgraph
     global mss_cnt
 
-    return render_template('info.html', nmess=mss_cnt, graph=dsgraph.serialize(format='turtle'))
+    return dsgraph.serialize(format='turtle')
 
 
 @app.route("/Stop")
@@ -222,7 +234,6 @@ def tidyup():
     Acciones previas a parar el agente
 
     """
-
 
 
 def agentbehavior1(cola):

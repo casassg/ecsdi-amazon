@@ -112,6 +112,34 @@ def get_agent_info(type_, directory_agent, sender, msgcnt):
     return Agent(name, url, address, None)
 
 
+def get_bag_agent_info(type_, directory_agent, sender, msgcnt):
+    gmess = Graph()
+    # Construimos el mensaje de registro
+    gmess.bind('foaf', FOAF)
+    gmess.bind('dso', DSO)
+    ask_obj = agn[sender.name + '-Search']
+
+    gmess.add((ask_obj, RDF.type, DSO.Search))
+    gmess.add((ask_obj, DSO.AgentType, type_))
+    gr = send_message(
+        build_message(gmess, perf=ACL.request, sender=sender.uri, receiver=directory_agent.uri, msgcnt=msgcnt,
+                      content=ask_obj),
+        directory_agent.address
+    )
+    dic = get_message_properties(gr)
+    content = dic['content']
+    agents = []
+    for (s, p, o) in gr.triples((content, None, None)):
+        if str(p).startswith('http://www.w3.org/1999/02/22-rdf-syntax-ns#_'):
+            address = gr.value(subject=o, predicate=DSO.Address)
+            url = gr.value(subject=o, predicate=DSO.Uri)
+            name = gr.value(subject=o, predicate=FOAF.name)
+            agent = Agent(name, url, address, None)
+            agents += [agent]
+
+    return agents
+
+
 def register_agent(origin_agent, directory_agent, type_, msg_cnt):
     gmess = Graph()
     # Construimos el mensaje de registro
