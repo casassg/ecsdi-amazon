@@ -10227,36 +10227,36 @@ finish</field>
 
 		<object type="DiagramEntitySetting" id="905">
 		    <field name="entity">
-			<object ref="208"/>
-		    </field>
-		    <field name="location">
-			<object type="Coordinate" id="906">
-			    <field name="x">477</field>
-			    <field name="y">251</field>
-			</object>
-		    </field>
-		</object>
-
-		<object type="DiagramEntitySetting" id="907">
-		    <field name="entity">
 			<object ref="185"/>
 		    </field>
 		    <field name="location">
-			<object type="Coordinate" id="908">
+			<object type="Coordinate" id="906">
 			    <field name="x">478</field>
 			    <field name="y">173</field>
 			</object>
 		    </field>
 		</object>
 
-		<object type="DiagramEntitySetting" id="909">
+		<object type="DiagramEntitySetting" id="907">
 		    <field name="entity">
 			<object ref="252"/>
 		    </field>
 		    <field name="location">
-			<object type="Coordinate" id="910">
+			<object type="Coordinate" id="908">
 			    <field name="x">248</field>
 			    <field name="y">129</field>
+			</object>
+		    </field>
+		</object>
+
+		<object type="DiagramEntitySetting" id="909">
+		    <field name="entity">
+			<object ref="208"/>
+		    </field>
+		    <field name="location">
+			<object type="Coordinate" id="910">
+			    <field name="x">477</field>
+			    <field name="y">251</field>
 			</object>
 		    </field>
 		</object>
