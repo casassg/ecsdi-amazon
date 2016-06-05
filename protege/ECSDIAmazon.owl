@@ -96,6 +96,9 @@
   <owl:Class rdf:ID="Respuesta_busqueda">
     <rdfs:subClassOf rdf:resource="#Respuesta"/>
   </owl:Class>
+  <owl:Class rdf:ID="Peticion_retorno">
+    <rdfs:subClassOf rdf:resource="#Accion"/>
+  </owl:Class>
   <owl:ObjectProperty rdf:ID="Enviar_a">
     <rdfs:range rdf:resource="#Ciudad"/>
     <rdfs:domain rdf:resource="#Compra"/>
@@ -115,6 +118,10 @@
   <owl:ObjectProperty rdf:ID="fecha"/>
   <owl:ObjectProperty rdf:ID="compra">
     <rdfs:domain rdf:resource="#Vull_comprar"/>
+    <rdfs:range rdf:resource="#Compra"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="CompraRetornada">
+    <rdfs:domain rdf:resource="#Peticion_retorno"/>
     <rdfs:range rdf:resource="#Compra"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="productos">

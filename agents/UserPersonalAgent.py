@@ -258,6 +258,17 @@ def browser_cerca():
             return render_template('endSell.html', products=products_matrix)
 
 
+@app.route("/retorna", methods=['GET', 'POST'])
+def browser_retorna():
+    if request.method == 'GET':
+        logger.info('Mostramos las compras realizadas')
+        compres = []
+        return render_template('retorna.html', compres=compres)
+    else:
+        logger.info('Empezamos el proceso de devolucion')
+
+
+
 @app.route("/Stop")
 def stop():
     """
