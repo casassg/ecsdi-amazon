@@ -197,6 +197,7 @@ def communication():
             elif accion == ECSDI.Peticion_retorno:
                 logger.info("He rebut la peticio de retorn")
 
+
                 sell = None
                 for item in gm.subjects(RDF.type, ECSDI.Compra):
                     sell = item
