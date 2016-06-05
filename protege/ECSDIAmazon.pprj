@@ -1,4 +1,4 @@
-; Sun Jun 05 12:46:48 CEST 2016
+; Sun Jun 05 18:24:31 CEST 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -906,6 +906,9 @@
 	(y 0))
 
 ([KB_221055_Instance_71] of  Property_List
+)
+
+([KB_230489_Class0] of  Map
 )
 
 ([KB_301165_Instance_1013] of  Widget
@@ -3280,9 +3283,6 @@
 	(name "http://www.w3.org/2002/07/owl#Ontology")
 	(property_list [XY_Instance_195])
 	(widget_class_name "edu.stanford.smi.protegex.owl.ui.widget.OWLFormWidget"))
-
-([KB_794063_Class0] of  Map
-)
 
 ([KB_865583_Instance_10] of  Widget
 

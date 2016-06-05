@@ -11,13 +11,16 @@
     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
   xml:base="http://www.owl-ontologies.com/ECSDIAmazon.owl">
   <owl:Ontology rdf:about=""/>
+  <owl:Class rdf:ID="Recoger_venta">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Accion"/>
+    </rdfs:subClassOf>
+  </owl:Class>
   <owl:Class rdf:ID="Valoracion"/>
   <owl:Class rdf:ID="Centro_logistico"/>
   <owl:Class rdf:ID="Lote_producto"/>
   <owl:Class rdf:ID="Cerca_productes">
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="Accion"/>
-    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#Accion"/>
   </owl:Class>
   <owl:Class rdf:ID="Rango_precio">
     <rdfs:subClassOf>
@@ -99,6 +102,10 @@
   <owl:Class rdf:ID="Peticion_retorno">
     <rdfs:subClassOf rdf:resource="#Accion"/>
   </owl:Class>
+  <owl:ObjectProperty rdf:ID="compra_a_retornar">
+    <rdfs:range rdf:resource="#Compra"/>
+    <rdfs:domain rdf:resource="#Recoger_venta"/>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="Enviar_a">
     <rdfs:range rdf:resource="#Ciudad"/>
     <rdfs:domain rdf:resource="#Compra"/>
@@ -417,4 +424,4 @@
   </Cerca_productes>
 </rdf:RDF>
 
-<!-- Created with Protege (with OWL Plugin 3.4.8, Build 629)  http://protege.stanford.edu -->
+<!-- Created with Protege (with OWL Plugin 3.5, Build 663)  http://protege.stanford.edu -->

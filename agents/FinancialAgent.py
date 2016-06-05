@@ -80,9 +80,6 @@ def register_message():
     return gr
 
 
-
-
-
 @app.route("/comm")
 def communication():
     """
@@ -141,17 +138,13 @@ def communication():
                 for item in gm.subjects(RDF.type, ACL.FipaAclMessage):
                     gm.remove((item, None, None))
 
-                sell = None
+                sell = []
                 for item in gm.subjects(RDF.type, ECSDI.Compra):
-                    sell = item
+                    sell.append(item)
+                for item in sell:
+                    payDelivery(item)
 
-                payDelivery(sell)
                 gr = returnSell(gm, sell)
-
-                gr = build_message(Graph(),
-                                   ACL['not-understood'],
-                                   sender=DirectoryAgent.uri,
-                                   msgcnt=get_count())
 
             # Ninguna accion a realizar
             else:
@@ -247,12 +240,14 @@ def sendSell(gm, sell):
 
     return gr
 
+
 def returnSell(gm, sell):
     logger.info('Nos comunicamos con el ProductsAgent')
     content = ECSDI['Recoger_venta_' + str(get_count())]
 
     gm.add((content, RDF.type, ECSDI.Retornar_venda))
-    gm.add((content, ECSDI.identificador_Compra, URIRef(sell)))
+    for item in sell:
+        gm.add((content, ECSDI.compra_a_retornar, URIRef(item)))
 
     logistic = get_agent_info(agn.LogisticHubAgent, DirectoryAgent, FinancialAgent, get_count())
 
@@ -261,14 +256,6 @@ def returnSell(gm, sell):
                       msgcnt=get_count(),
                       content=content), logistic.address)
     return gr
-
-
-def readSell(id):
-    URI = "http://www.owl-ontologies.com/ECSDIAmazon.owl#"
-    URISell = URI
-    ontologyFile = open('../data/productes')
-
-    return 0
 
 
 # MAIN METHOD ----------------------------------------------------------------------------------------------

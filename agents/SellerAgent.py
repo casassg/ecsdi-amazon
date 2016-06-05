@@ -197,17 +197,8 @@ def communication():
             elif accion == ECSDI.Peticion_retorno:
                 logger.info("He rebut la peticio de retorn")
 
-
-                sell = None
-                for item in gm.subjects(RDF.type, ECSDI.Compra):
-                    sell = item
-
-                gm.remove((content, None, None))
                 for item in gm.subjects(RDF.type, ACL.FipaAclMessage):
                     gm.remove((item, None, None))
-
-                gm.add((content, RDF.type, ECSDI.Peticion_retorno))
-                gm.add((content, ECSDI.Compra, URIRef(sell)))
 
                 gr = gm
 
