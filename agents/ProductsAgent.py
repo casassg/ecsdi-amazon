@@ -187,11 +187,13 @@ def obtainProducts(gm):
         nombre = sellsGraph.value(subject=item, predicate=ECSDI.Nombre)
         modelo = sellsGraph.value(subject=item, predicate=ECSDI.Modelo)
         precio = sellsGraph.value(subject=item, predicate=ECSDI.Precio)
+        peso = sellsGraph.value(subject=item, predicate=ECSDI.Peso)
         products.add((item, RDF.type, ECSDI.Producto))
         products.add((item, ECSDI.Marca, Literal(marca, datatype=XSD.string)))
         products.add((item, ECSDI.Nombre, Literal(nombre, datatype=XSD.string)))
         products.add((item, ECSDI.Modelo, Literal(modelo, datatype=XSD.string)))
         products.add((item, ECSDI.Precio, Literal(precio, datatype=XSD.float)))
+        products.add((item, ECSDI.Peso, Literal(peso, datatype=XSD.float)))
 
     return products
 

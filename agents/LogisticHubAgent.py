@@ -140,10 +140,11 @@ def communication():
                 for item in gm.subjects(RDF.type, ECSDI.Pedir_disponibilidad):
                     gm.remove((item, None, None))
 
-                date = dateToMillis(datetime.datetime.utcnow())
+                date = dateToMillis(datetime.datetime.utcnow() + datetime.timedelta(days=9))
                 urlSend = writeSends(gm, date)
 
-                requestTransport(date)
+                peso = obtainTotalWeight(urlSend)
+                requestTransport(date, peso)
 
                 gr = prepareResponse(urlSend)
 
@@ -198,6 +199,24 @@ def agent_behaviour(queue):
 
 # DETERMINATE AGENT FUNCTIONS ------------------------------------------------------------------------------
 
+def obtainTotalWeight(urlSend):
+    totalWeight = 0.0
+
+    gSends = Graph()
+    gSends.parse(open('../data/enviaments'), format='turtle')
+    productsArray = []
+    for lote in gSends.objects(subject=urlSend, predicate=ECSDI.Envia):
+        for producto in gSends.objects(subject=lote, predicate=ECSDI.productos):
+            productsArray.append(producto)
+
+    gProducts = Graph()
+    gProducts.parse(open('../data/productes'), format='turtle')
+    for item in productsArray:
+        totalWeight += float(gProducts.value(subject=item, predicate=ECSDI.Peso))
+
+    return totalWeight
+
+
 def dateToMillis(date):
     return (date - datetime.datetime.utcfromtimestamp(0)).total_seconds() * 1000.0
 
@@ -218,7 +237,7 @@ def writeSends(gr, deliverDate):
     return subjectEnvio
 
 
-def requestTransport(date):
+def requestTransport(date, peso):
     logger.info('Pedimos el transporte')
 
     # Content of the message
@@ -228,8 +247,9 @@ def requestTransport(date):
     gr = Graph()
     gr.add((content, RDF.type, ECSDI.Peticiona_transport))
 
-    # Anadir fecha
+    # Anadir fecha y peso
     gr.add((content, ECSDI.Fecha, Literal(date, datatype=XSD.float)))
+    gr.add((content, ECSDI.Peso_envio, Literal(peso, datatype=XSD.float)))
 
     TransportAg = get_agent_info(agn.TransportDealerAgent, DirectoryAgent, LogisticHubAgent, get_count())
 

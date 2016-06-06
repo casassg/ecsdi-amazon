@@ -128,7 +128,7 @@ def communication():
             # Accion de busqueda
             if accion == ECSDI.Peticiona_transport:
                 responPeticio(gm, content)
-                return
+                gr = Graph()
 
             # No habia ninguna accion en el mensaje
             else:
@@ -230,11 +230,7 @@ def rejectOffer(offer):
     msg = get_message_properties(resp)
 
 
-@app.route('/test')
-def requestTransports():
-    peso = 12
-    fecha = datetime.datetime.today() + datetime.timedelta(days=9)
-    destino = 'Barcelona'
+def requestTransports(peso, fecha, destino):
     agents = get_bag_agent_info(agn.ExternalTransportAgent, ExternalTransportDirectory, TransportDealerAgent, 192310291)
     offers = []
     for agent in agents:
@@ -276,15 +272,9 @@ class Offer(object):
 
 def responPeticio(gm, content):
     peso = gm.value(subject=content, predicate=ECSDI.Peso_envio)
-    destino = gm.value(subject=content, predicate=ECSDI.Destino)
     fecha = gm.value(subject=content, predicate=ECSDI.Fecha)
-    fecha = datetime.datetime.fromtimestamp(fecha / 1000.0)
 
-    offer = requestTransports(peso, fecha, destino)
-
-    if offer:
-        return 'TEST'
-    return 'NOOOOO'
+    offer = requestTransports(peso, fecha, 'Barcelona')
 
 
 # MAIN METHOD ----------------------------------------------------------------------------------------------

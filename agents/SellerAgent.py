@@ -269,13 +269,14 @@ def findProducts(model=None, brand=None, min_price=0.0, max_price=sys.float_info
         prefix xsd:<http://www.w3.org/2001/XMLSchema#>
         prefix default:<http://www.owl-ontologies.com/ECSDIAmazon.owl#>
         prefix owl:<http://www.w3.org/2002/07/owl#>
-        SELECT DISTINCT ?producto ?nombre ?marca ?modelo ?precio
+        SELECT DISTINCT ?producto ?nombre ?marca ?modelo ?precio ?peso
         where {
             { ?producto rdf:type default:Producto } UNION { ?producto rdf:type default:Producto_externo } .
             ?producto default:Nombre ?nombre .
             ?producto default:Marca ?marca .
             ?producto default:Modelo ?modelo .
             ?producto default:Precio ?precio .
+            ?producto default:Peso ?peso .
             FILTER("""
 
     if model is not None:
@@ -303,6 +304,7 @@ def findProducts(model=None, brand=None, min_price=0.0, max_price=sys.float_info
         model = row.modelo
         marca = row.marca
         preu = row.precio
+        peso = row.peso
         logger.debug(nom, marca, model, preu)
         subject = row.producto
         product_count += 1
@@ -310,6 +312,7 @@ def findProducts(model=None, brand=None, min_price=0.0, max_price=sys.float_info
         result.add((subject, ECSDI.Marca, Literal(marca, datatype=XSD.string)))
         result.add((subject, ECSDI.Modelo, Literal(model, datatype=XSD.string)))
         result.add((subject, ECSDI.Precio, Literal(preu, datatype=XSD.float)))
+        result.add((subject, ECSDI.Peso, Literal(peso, datatype=XSD.float)))
         result.add((subject, ECSDI.Nombre, Literal(nom, datatype=XSD.string)))
     return result
 
@@ -332,11 +335,13 @@ def getProducts(sell):
             modelo = products.value(subject=item, predicate=ECSDI.Modelo)
             nombre = products.value(subject=item, predicate=ECSDI.Nombre)
             precio = products.value(subject=item, predicate=ECSDI.Precio)
+            peso = products.value(subject=item, predicate=ECSDI.Peso)
 
             g.add((item, RDF.type, ECSDI.Producto))
             g.add((item, ECSDI.Marca, Literal(marca, datatype=XSD.string)))
             g.add((item, ECSDI.Modelo, Literal(modelo, datatype=XSD.string)))
             g.add((item, ECSDI.Precio, Literal(precio, datatype=XSD.float)))
+            g.add((item, ECSDI.Peso, Literal(peso, datatype=XSD.float)))
             g.add((item, ECSDI.Nombre, Literal(nombre, datatype=XSD.string)))
 
         return g

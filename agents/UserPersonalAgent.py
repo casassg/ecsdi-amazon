@@ -178,6 +178,8 @@ def browser_cerca():
                         subject_dict['precio'] = o
                     elif p == ECSDI.Nombre:
                         subject_dict['nombre'] = o
+                    elif p == ECSDI.Peso:
+                        subject_dict['peso'] = o
                     product_list[subject_pos[s]] = subject_dict
 
             return render_template('cerca.html', products=product_list)
@@ -195,6 +197,7 @@ def browser_cerca():
                 item_checked.append(item_map['nombre'])
                 item_checked.append(item_map['precio'])
                 item_checked.append(item_map['url'])
+                item_checked.append(item_map['peso'])
                 products_checked.append(item_checked)
 
             logger.info("Creando la peticion de compra")
@@ -235,6 +238,7 @@ def browser_cerca():
                 gr.add((subject_producto, ECSDI.Modelo, Literal(item[1], datatype=XSD.string)))
                 gr.add((subject_producto, ECSDI.Nombre, Literal(item[2], datatype=XSD.string)))
                 gr.add((subject_producto, ECSDI.Precio, Literal(item[3], datatype=XSD.float)))
+                gr.add((subject_producto, ECSDI.Peso, Literal(item[5], datatype=XSD.float)))
                 gr.add((subject_sobre, ECSDI.Productos, URIRef(subject_producto)))
 
             gr.add((subject_sobre, ECSDI.Precio_total, Literal(total_price, datatype=XSD.float)))
