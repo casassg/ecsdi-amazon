@@ -274,7 +274,7 @@ def responPeticio(gm, content):
     peso = gm.value(subject=content, predicate=ECSDI.Peso_envio)
     fecha = gm.value(subject=content, predicate=ECSDI.Fecha)
 
-    offer = requestTransports(peso, fecha, 'Barcelona')
+    offer = requestTransports(peso, datetime.datetime.fromtimestamp(float(fecha) / 1000.0), 'Barcelona')
 
 
 # MAIN METHOD ----------------------------------------------------------------------------------------------
