@@ -44,9 +44,7 @@ class ExternalTransportAgent(Agent):
     def answer_couter_proposal(self, new_price):
         gr = Graph()
         if self.accept_couterproposal(new_price.toPython()):
-            oferta = ECSDI.Oferta_transporte
-            gr.add((oferta, ECSDI.Precio_envio, Literal(new_price)))
-            gr = build_message(gr, ACL.propose, sender=self.uri, content=oferta)
+            gr = build_message(gr, ACL.agree, sender=self.uri)
             logging.info('Sending counter-proposal for ' + str(new_price))
             return gr
         else:

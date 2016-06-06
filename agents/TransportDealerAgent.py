@@ -210,16 +210,16 @@ def counter_offer(offer):
     gr = Graph()
     subject = ECSDI['contra-oferta']
     gr.add((subject, RDF.type, ECSDI.Contraoferta))
-    gr.add((subject, ECSDI.Precio_envio, Literal(offer.price - 2)))
+    new_price = offer.price - 2
+    gr.add((subject, ECSDI.Precio_envio, Literal(new_price)))
     resp = send_message(build_message(gr, ACL['counter-proposal'], content=subject, sender=TransportDealerAgent.uri),
                         offer.address)
     msg = get_message_properties(resp)
     if 'performative' not in msg or msg['performative'] == ACL.refuse:
         logger.warn('An agent rejected us :(')
         return None
-    elif msg['performative'] == ACL.propose:
-        precio = resp.value(msg['content'], ECSDI.Precio_envio)
-        return Offer(address=offer.address, price=precio.toPython())
+    elif msg['performative'] == ACL.agree:
+        return Offer(address=offer.address, price=new_price)
     else:
         logger.error('I can\'t understand:(')
         return None
@@ -235,7 +235,6 @@ def requestTransports(peso, fecha, destino):
     agents = get_bag_agent_info(agn.ExternalTransportAgent, ExternalTransportDirectory, TransportDealerAgent, 192310291)
     offers = []
     for agent in agents:
-        print agent.address
         offer = requestOffer(agent, peso, fecha, destino)
         logger.info('Offer received of ' + str(offer.price))
         if offer:
