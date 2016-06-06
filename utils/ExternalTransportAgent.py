@@ -8,6 +8,7 @@ from utils.Logging import config_logger
 
 logger = config_logger(level=1)
 
+
 def dateToMillis(date):
     return (date - datetime.datetime.utcfromtimestamp(0)).total_seconds() * 1000.0
 
@@ -31,24 +32,25 @@ class ExternalTransportAgent(Agent):
         gr.add((oferta, ECSDI.Precio_envio, Literal(preu)))
         gr.add((oferta, ECSDI.Entrega, Literal(dateToMillis(delivery_date))))
         gr = build_message(gr, ACL.propose, sender=self.uri, content=oferta)
-        logger.info('Sending proposal for '+str(preu))
+        logger.info('Sending proposal for ' + str(preu))
         return gr
 
     def accept_couterproposal(self, new_price):
-        if self.last_price:
+        if self.last_price and new_price > 1.0:
             return new_price >= self.last_price - 5
         else:
             return False
 
     def answer_couter_proposal(self, new_price):
         gr = Graph()
-        if self.accept_couterproposal(new_price):
+        if self.accept_couterproposal(new_price.toPython()):
             oferta = ECSDI.Oferta_transporte
             gr.add((oferta, ECSDI.Precio_envio, Literal(new_price)))
             gr = build_message(gr, ACL.propose, sender=self.uri, content=oferta)
-            logger.info('Sending counter-proposal for '+str(new_price))
+            logger.info('Sending counter-proposal for ' + str(new_price))
             return gr
         else:
+            logger.info('Rejecting counter-proposal for ' + str(new_price))
             gr = build_message(Graph(), ACL.reject, sender=self.uri)
             return gr
 
