@@ -9,12 +9,11 @@ import sys
 
 from utils.ACLMessages import get_agent_info, send_message, build_message, register_agent
 from utils.OntologyNamespaces import ECSDI, ACL
-import time
 import argparse
 import socket
 from multiprocessing import Process, Queue
 from flask import Flask, render_template, request
-from rdflib import Graph, Namespace, URIRef, RDF, Literal, XSD
+from rdflib import Graph, Namespace, RDF, Literal, XSD
 from utils.Agent import Agent
 from utils.FlaskServer import shutdown_server
 from utils.Logging import config_logger
@@ -102,8 +101,7 @@ def register_message():
 
     logger.info('Nos registramos')
 
-    gr = register_agent(ExternalSellerPersonalAgent, DirectoryAgent, ExternalSellerPersonalAgent.uri, get_count())
-    return gr
+    return register_agent(ExternalSellerPersonalAgent, DirectoryAgent, ExternalSellerPersonalAgent.uri, get_count())
 
 
 @app.route("/")
@@ -124,6 +122,7 @@ def browser_registrarProducto():
         nom = request.form['nom']
         model = request.form['model']
         preu = request.form['preu']
+        peso = request.form['peso']
         vendido = 0
 
         # Content of the message
@@ -142,18 +141,22 @@ def browser_registrarProducto():
         gr.add((subjectProd, ECSDI.Marca, Literal(marca, datatype=XSD.string)))
         gr.add((subjectProd, ECSDI.Modelo, Literal(model, datatype=XSD.string)))
         gr.add((subjectProd, ECSDI.Precio, Literal(preu, datatype=XSD.float)))
+        gr.add((subjectProd, ECSDI.Peso, Literal(peso, datatype=XSD.float)))
         gr.add((subjectProd, ECSDI.Vendido, Literal(vendido)))
 
         gr.add((content, ECSDI.producto, subjectProd))
 
         productsag = get_agent_info(agn.ProductsAgent, DirectoryAgent, ExternalSellerPersonalAgent, get_count())
 
-        gr = send_message(
+        send_message(
             build_message(gr, perf=ACL.request, sender=ExternalSellerPersonalAgent.uri, receiver=productsag.uri,
                           msgcnt=get_count(),
                           content=content), productsag.address)
 
-        return 'Hemos registrado el producto! <b>Que guay!</b>'
+        res = {'marca': request.form['marca'], 'nom': request.form['nom'], 'model': request.form['model'],
+               'preu': request.form['preu'], 'peso': request.form['peso']}
+
+        return render_template('endRegister.html', product=res)
 
 
 @app.route("/Stop")
@@ -191,7 +194,7 @@ def agent_behaviour(queue):
     :return: something
     """
 
-    gr = register_message()
+    register_message()
 
 
 if __name__ == '__main__':

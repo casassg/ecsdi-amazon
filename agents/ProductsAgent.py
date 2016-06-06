@@ -260,7 +260,7 @@ def recordExternalProduct(gm):
 
     # Guardem el graf
     g.serialize(destination='../data/productes', format='turtle')
-    return g
+    return gm
 
 
 # MAIN METHOD ----------------------------------------------------------------------------------------------

@@ -178,7 +178,6 @@ def agent_behaviour(queue):
 # DETERMINATE AGENT FUNCTIONS ------------------------------------------------------------------------------
 
 
-
 def requestOffer(agent, peso, fecha, destino):
     gr = Graph()
     subject = ECSDI['peticion-oferta']

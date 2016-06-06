@@ -229,7 +229,7 @@ def requestTransport(date):
     gr.add((content, RDF.type, ECSDI.Peticiona_transport))
 
     # Anadir fecha
-    gr.add((content, ECSDI.Fecha,Literal(date, datatype=XSD.float)))
+    gr.add((content, ECSDI.Fecha, Literal(date, datatype=XSD.float)))
 
     TransportAg = get_agent_info(agn.TransportDealerAgent, DirectoryAgent, LogisticHubAgent, get_count())
 
@@ -237,11 +237,6 @@ def requestTransport(date):
         build_message(gr, perf=ACL.request, sender=LogisticHubAgent.uri, receiver=TransportAg.uri,
                       msgcnt=get_count(),
                       content=content), TransportAg.address)
-
-
-
-
-
 
 
 def prepareResponse(urlSend):
@@ -271,6 +266,7 @@ def prepareResponse(urlSend):
         g.add((item, ECSDI.Nombre, Literal(nombre, datatype=XSD.string)))
 
     return g
+
 
 # MAIN METHOD ----------------------------------------------------------------------------------------------
 
