@@ -7,6 +7,7 @@
 </head>
 <body>
     <h1>Cerca de productes</h1>
+    <a href="javascript:history.back()">< Volver</a>
     {% if not products %}
         <form method="post">
             <input type="text" name="nom" placeholder="Nom..."/><br>
@@ -16,7 +17,6 @@
             <input type="submit" name="submit" value="Cerca">
         </form>
     {% else %}
-        <a href="javascript:history.back()">< Volver</a>
         <form method="post">
             <table cellpadding="5px">
                 <tr>

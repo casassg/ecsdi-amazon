@@ -285,12 +285,12 @@ def browser_retorna():
 
         seller = get_agent_info(agn.SellerAgent, DirectoryAgent, UserPersonalAgent, get_count())
 
-        answer = send_message(
+        send_message(
             build_message(g, perf=ACL.request, sender=UserPersonalAgent.uri, receiver=seller.uri,
                           msgcnt=get_count(),
                           content=content), seller.address)
 
-        return 'La teva petició sha complert correctament!'
+        return render_template('endRetorna.html')
 
 
 @app.route("/Stop")
@@ -332,6 +332,7 @@ def agentbehavior1():
 def get_all_sells():
     # [0] = url / [1] = [{producte}] / [2] = precio_total
     global compres
+    compres = []
 
     biggest_sell = 0
     counts = []
