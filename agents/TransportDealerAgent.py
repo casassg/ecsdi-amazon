@@ -219,9 +219,10 @@ def counter_offer(offer):
         return None
     elif msg['performative'] == ACL.propose:
         precio = resp.value(msg['content'], ECSDI.Precio_envio)
-        return Offer(address=offer.address, price=precio)
-    logger.error('I can\'t understand:(')
-    return None
+        return Offer(address=offer.address, price=precio.toPython())
+    else:
+        logger.error('I can\'t understand:(')
+        return None
 
 
 def rejectOffer(offer):
@@ -248,7 +249,6 @@ def requestTransports(peso, fecha, destino):
         else:
             logger.info('Counter offer rejected by ' + str(offer.address))
             offers2 += [offer]
-
     best_offer = min(offers2, key=lambda a: a.price)
     logger.info('Best offer is at ' + str(best_offer.price) + '€')
     end = False

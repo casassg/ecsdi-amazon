@@ -1,10 +1,13 @@
+import logging
+import random
+
 import datetime
 from rdflib import Graph, Literal
 
 from ACLMessages import build_message
 from OntologyNamespaces import ECSDI, ACL
 from utils.Agent import Agent
-import logging
+
 
 def dateToMillis(date):
     return (date - datetime.datetime.utcfromtimestamp(0)).total_seconds() * 1000.0
@@ -33,7 +36,7 @@ class ExternalTransportAgent(Agent):
         return gr
 
     def accept_couterproposal(self, new_price):
-        if self.last_price and new_price > 1.0:
+        if self.last_price and new_price >= 1.0:
             return new_price >= self.last_price - 5
         else:
             return False
@@ -56,3 +59,4 @@ class ExternalTransportAgent(Agent):
 
     def reset(self):
         self.last_price = None
+        self.random_seed = random.randrange(1, 10)
