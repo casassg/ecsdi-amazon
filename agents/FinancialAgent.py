@@ -134,16 +134,18 @@ def communication():
             # Accion de retorno
             elif accion == ECSDI.Peticion_retorno:
 
-                gm.remove((content, None, None))
                 for item in gm.subjects(RDF.type, ACL.FipaAclMessage):
                     gm.remove((item, None, None))
 
+                print(gm.serialize(format='turtle'))
+
                 sell = []
-                for item in gm.subjects(RDF.type, ECSDI.Compra):
+                for item in gm.objects(subject=content, predicate=ECSDI.CompraRetornada):
                     sell.append(item)
                 for item in sell:
                     payDelivery(item)
 
+                gm.remove((content, None, None))
                 gr = returnSell(gm, sell)
 
             # Ninguna accion a realizar
@@ -245,7 +247,7 @@ def returnSell(gm, sell):
     logger.info('Nos comunicamos con el ProductsAgent')
     content = ECSDI['Recoger_venta_' + str(get_count())]
 
-    gm.add((content, RDF.type, ECSDI.Retornar_venda))
+    gm.add((content, RDF.type, ECSDI.Recoger_venta))
     for item in sell:
         gm.add((content, ECSDI.compra_a_retornar, URIRef(item)))
 

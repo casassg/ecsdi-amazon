@@ -202,6 +202,8 @@ def communication():
 
                 gr = gm
 
+                print(gr.serialize(format='turtle'))
+
                 financial = get_agent_info(agn.FinancialAgent, DirectoryAgent, SellerAgent, get_count())
 
                 gr = send_message(

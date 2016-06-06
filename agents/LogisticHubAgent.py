@@ -146,10 +146,21 @@ def communication():
                 peso = obtainTotalWeight(urlSend)
                 requestTransport(date, peso)
 
-                gr = prepareResponse(urlSend)
+                gr = prepareSellResponse(urlSend)
 
-            elif accion == ECSDI.Retornar_venda:
+            elif accion == ECSDI.Recoger_venta:
                 logger.info('Rep la venda a retornar del financial agent')
+
+                date = dateToMillis(datetime.datetime.utcnow() + datetime.timedelta(days=9))
+
+                print(gm.serialize(format='turtle'))
+
+                for item in gm.objects(subject=content, predicate=ECSDI.compra_a_retornar):
+                    createSend(item, date)
+                    peso = obtainTotalWeight(item)
+                    removeSell(item)
+                    requestTransport(date, peso)
+
                 gr = Graph()
 
             # No habia ninguna accion en el mensaje
@@ -237,6 +248,52 @@ def writeSends(gr, deliverDate):
     return subjectEnvio
 
 
+def createSend(sellUrl, date):
+    sendGraph = Graph()
+
+    subjectEnvio = ECSDI['Envio_' + str(random.randint(1, sys.float_info.max))]
+    sendGraph.add((subjectEnvio, RDF.type, ECSDI.Envio))
+    sendGraph.add((subjectEnvio, ECSDI.Fecha_de_entrega, Literal(date, datatype=XSD.float)))
+
+    openGraph = Graph()
+    openGraph.parse(open('../data/compres'), format='turtle')
+
+    subjectLote = ECSDI['Lote_producto' + str(random.randint(1, sys.float_info.max))]
+    sendGraph.add((subjectLote, RDF.type, ECSDI.Lote_producto))
+    sendGraph.add((subjectLote, ECSDI.Prioridad, Literal(1, datatype=XSD.integer)))
+
+    for item in openGraph.objects(subject=sellUrl, predicate=ECSDI.Productos):
+        marca = openGraph.value(subject=item, predicate=ECSDI.Marca)
+        modelo = openGraph.value(subject=item, predicate=ECSDI.Modelo)
+        nombre = openGraph.value(subject=item, predicate=ECSDI.Nombre)
+        precio = openGraph.value(subject=item, predicate=ECSDI.Precio)
+        peso = openGraph.value(subject=item, predicate=ECSDI.Peso)
+
+        sendGraph.add((item, RDF.type, ECSDI.Producto))
+        sendGraph.add((item, ECSDI.Nombre, Literal(nombre, datatype=XSD.string)))
+        sendGraph.add((item, ECSDI.Marca, Literal(marca, datatype=XSD.string)))
+        sendGraph.add((item, ECSDI.Modelo, Literal(modelo, datatype=XSD.string)))
+        sendGraph.add((item, ECSDI.Peso, Literal(peso, datatype=XSD.float)))
+        sendGraph.add((item, ECSDI.Precio, Literal(precio, datatype=XSD.float)))
+
+        sendGraph.add((subjectLote, ECSDI.productos, URIRef(item)))
+
+    sendGraph.add((subjectEnvio, ECSDI.Envia, URIRef(subjectLote)))
+
+    g = Graph()
+    sendGraph += g.parse(open('../data/enviaments'), format='turtle')
+
+    sendGraph.serialize(destination='../data/enviaments', format='turtle')
+
+
+def removeSell(item):
+    logger.info('Borramos la venda')
+    gSells = Graph()
+    gSells.parse(open('../data/compres'), format='turtle')
+    gSells.remove((item, None, None))
+    gSells.serialize(destination='../data/compres', format='turtle')
+
+
 def requestTransport(date, peso):
     logger.info('Pedimos el transporte')
 
@@ -259,7 +316,7 @@ def requestTransport(date, peso):
                       content=content), TransportAg.address)
 
 
-def prepareResponse(urlSend):
+def prepareSellResponse(urlSend):
     g = Graph()
 
     enviaments = Graph()
