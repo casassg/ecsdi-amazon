@@ -153,13 +153,10 @@ def communication():
 
                 date = dateToMillis(datetime.datetime.utcnow() + datetime.timedelta(days=9))
 
-                print(gm.serialize(format='turtle'))
-
                 for item in gm.objects(subject=content, predicate=ECSDI.compra_a_retornar):
-                    createSend(item, date)
-                    peso = obtainTotalWeight(item)
-                    removeSell(item)
+                    peso = createSend(item, date)
                     requestTransport(date, peso)
+                    removeSell(item)
 
                 gr = Graph()
 
@@ -262,12 +259,14 @@ def createSend(sellUrl, date):
     sendGraph.add((subjectLote, RDF.type, ECSDI.Lote_producto))
     sendGraph.add((subjectLote, ECSDI.Prioridad, Literal(1, datatype=XSD.integer)))
 
+    weight = 0.0
     for item in openGraph.objects(subject=sellUrl, predicate=ECSDI.Productos):
         marca = openGraph.value(subject=item, predicate=ECSDI.Marca)
         modelo = openGraph.value(subject=item, predicate=ECSDI.Modelo)
         nombre = openGraph.value(subject=item, predicate=ECSDI.Nombre)
         precio = openGraph.value(subject=item, predicate=ECSDI.Precio)
         peso = openGraph.value(subject=item, predicate=ECSDI.Peso)
+        weight += float(peso)
 
         sendGraph.add((item, RDF.type, ECSDI.Producto))
         sendGraph.add((item, ECSDI.Nombre, Literal(nombre, datatype=XSD.string)))
@@ -284,6 +283,8 @@ def createSend(sellUrl, date):
     sendGraph += g.parse(open('../data/enviaments'), format='turtle')
 
     sendGraph.serialize(destination='../data/enviaments', format='turtle')
+
+    return weight
 
 
 def removeSell(item):

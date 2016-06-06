@@ -137,8 +137,6 @@ def communication():
                 for item in gm.subjects(RDF.type, ACL.FipaAclMessage):
                     gm.remove((item, None, None))
 
-                print(gm.serialize(format='turtle'))
-
                 sell = []
                 for item in gm.objects(subject=content, predicate=ECSDI.CompraRetornada):
                     sell.append(item)

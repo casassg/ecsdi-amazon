@@ -138,7 +138,6 @@ def register():
         for agn_uri in rsearch:
             agn_add = dsgraph.value(subject=agn_uri[0], predicate=DSO.Address)
             agn_name = dsgraph.value(subject=agn_uri[0], predicate=FOAF.name)
-            print(agn_add,agn_name)
 
             rsp_obj = agn['Directory-response' + str(i)]
             gr.add((rsp_obj, DSO.Address, agn_add))
