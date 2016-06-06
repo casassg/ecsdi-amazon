@@ -4,10 +4,7 @@ from rdflib import Graph, Literal
 from ACLMessages import build_message
 from OntologyNamespaces import ECSDI, ACL
 from utils.Agent import Agent
-from utils.Logging import config_logger
-
-logger = config_logger(level=1)
-
+import logging
 
 def dateToMillis(date):
     return (date - datetime.datetime.utcfromtimestamp(0)).total_seconds() * 1000.0
@@ -32,7 +29,7 @@ class ExternalTransportAgent(Agent):
         gr.add((oferta, ECSDI.Precio_envio, Literal(preu)))
         gr.add((oferta, ECSDI.Entrega, Literal(dateToMillis(delivery_date))))
         gr = build_message(gr, ACL.propose, sender=self.uri, content=oferta)
-        logger.info('Sending proposal for ' + str(preu))
+        logging.info('Sending proposal for ' + str(preu))
         return gr
 
     def accept_couterproposal(self, new_price):
@@ -47,10 +44,10 @@ class ExternalTransportAgent(Agent):
             oferta = ECSDI.Oferta_transporte
             gr.add((oferta, ECSDI.Precio_envio, Literal(new_price)))
             gr = build_message(gr, ACL.propose, sender=self.uri, content=oferta)
-            logger.info('Sending counter-proposal for ' + str(new_price))
+            logging.info('Sending counter-proposal for ' + str(new_price))
             return gr
         else:
-            logger.info('Rejecting counter-proposal for ' + str(new_price))
+            logging.info('Rejecting counter-proposal for ' + str(new_price))
             gr = build_message(Graph(), ACL.reject, sender=self.uri)
             return gr
 
