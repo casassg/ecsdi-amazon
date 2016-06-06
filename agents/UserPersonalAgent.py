@@ -146,9 +146,9 @@ def browser_cerca():
                 subject_preus = ECSDI['Restriccion_Preus_' + str(get_count())]
                 gr.add((subject_preus, RDF.type, ECSDI.Rango_precio))
                 if min_price:
-                    gr.add((subject_preus, ECSDI.Precio_min, Literal(min_price, datatype=XSD.float)))
+                    gr.add((subject_preus, ECSDI.Precio_min, Literal(min_price)))
                 if max_price:
-                    gr.add((subject_preus, ECSDI.Precio_max, Literal(max_price, datatype=XSD.float)))
+                    gr.add((subject_preus, ECSDI.Precio_max, Literal(max_price)))
                 gr.add((contentResult, ECSDI.Restringe, URIRef(subject_preus)))
 
             seller = get_agent_info(agn.SellerAgent, DirectoryAgent, UserPersonalAgent, get_count())

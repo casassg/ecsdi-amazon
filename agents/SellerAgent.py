@@ -11,8 +11,8 @@ import argparse
 import socket
 import sys
 from multiprocessing import Queue, Process
+
 from flask import Flask, request
-from prettytable import PrettyTable
 from rdflib import URIRef, XSD
 
 from utils.ACLMessages import *
@@ -161,12 +161,15 @@ def communication():
                         modelo = gm.value(subject=restriccio, predicate=ECSDI.Modelo)
                         logger.info('MODELO: ' + modelo)
                         restriccions_dict['model'] = modelo
-                    elif gm.value(subject=restriccio, predicate=RDF.type) == ECSDI.Rango_Precio:
+                    elif gm.value(subject=restriccio, predicate=RDF.type) == ECSDI.Rango_precio:
                         preu_max = gm.value(subject=restriccio, predicate=ECSDI.Precio_max)
                         preu_min = gm.value(subject=restriccio, predicate=ECSDI.Precio_min)
-                        logger.info('PRECIO: ' + preu_max + ' - ' + preu_min)
-                        restriccions_dict['max_price'] = preu_max
-                        restriccions_dict['min_price'] = preu_min
+                        if preu_min:
+                            logger.info('Preu minim: ' + preu_min)
+                            restriccions_dict['min_price'] = preu_min.toPython()
+                        if preu_max:
+                            logger.info('Preu maxim: ' + preu_max)
+                            restriccions_dict['max_price'] = preu_max.toPython()
 
                 gr = findProducts(**restriccions_dict)
 
@@ -202,7 +205,6 @@ def communication():
 
                 gr = gm
 
-                print(gr.serialize(format='turtle'))
 
                 financial = get_agent_info(agn.FinancialAgent, DirectoryAgent, SellerAgent, get_count())
 
@@ -320,33 +322,33 @@ def findProducts(model=None, brand=None, min_price=0.0, max_price=sys.float_info
 
 
 def getProducts(sell):
-        g = Graph()
-        compres = Graph()
-        compres.parse(open('../data/compres'), format='turtle')
+    g = Graph()
+    compres = Graph()
+    compres.parse(open('../data/compres'), format='turtle')
 
-        urlProducts = []
-        for item in compres.objects(subject=sell, predicate=ECSDI.Compra):
-            for product in compres.objects(subject=item, predicate=ECSDI.productos):
-                urlProducts.append(product)
+    urlProducts = []
+    for item in compres.objects(subject=sell, predicate=ECSDI.Compra):
+        for product in compres.objects(subject=item, predicate=ECSDI.productos):
+            urlProducts.append(product)
 
-        products = Graph()
-        products.parse(open('../data/productes'), format='turtle')
+    products = Graph()
+    products.parse(open('../data/productes'), format='turtle')
 
-        for item in urlProducts:
-            marca = products.value(subject=item, predicate=ECSDI.Marca)
-            modelo = products.value(subject=item, predicate=ECSDI.Modelo)
-            nombre = products.value(subject=item, predicate=ECSDI.Nombre)
-            precio = products.value(subject=item, predicate=ECSDI.Precio)
-            peso = products.value(subject=item, predicate=ECSDI.Peso)
+    for item in urlProducts:
+        marca = products.value(subject=item, predicate=ECSDI.Marca)
+        modelo = products.value(subject=item, predicate=ECSDI.Modelo)
+        nombre = products.value(subject=item, predicate=ECSDI.Nombre)
+        precio = products.value(subject=item, predicate=ECSDI.Precio)
+        peso = products.value(subject=item, predicate=ECSDI.Peso)
 
-            g.add((item, RDF.type, ECSDI.Producto))
-            g.add((item, ECSDI.Marca, Literal(marca, datatype=XSD.string)))
-            g.add((item, ECSDI.Modelo, Literal(modelo, datatype=XSD.string)))
-            g.add((item, ECSDI.Precio, Literal(precio, datatype=XSD.float)))
-            g.add((item, ECSDI.Peso, Literal(peso, datatype=XSD.float)))
-            g.add((item, ECSDI.Nombre, Literal(nombre, datatype=XSD.string)))
+        g.add((item, RDF.type, ECSDI.Producto))
+        g.add((item, ECSDI.Marca, Literal(marca, datatype=XSD.string)))
+        g.add((item, ECSDI.Modelo, Literal(modelo, datatype=XSD.string)))
+        g.add((item, ECSDI.Precio, Literal(precio, datatype=XSD.float)))
+        g.add((item, ECSDI.Peso, Literal(peso, datatype=XSD.float)))
+        g.add((item, ECSDI.Nombre, Literal(nombre, datatype=XSD.string)))
 
-        return g
+    return g
 
 
 # MAIN METHOD ----------------------------------------------------------------------------------------------
@@ -358,7 +360,7 @@ if __name__ == '__main__':
     ab1.start()
 
     # Run server
-    app.run(host=hostname, port=port)
+    app.run(host=hostname, port=port, debug=True)
 
     # Wait behaviors
     ab1.join()

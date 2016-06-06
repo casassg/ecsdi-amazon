@@ -17,7 +17,7 @@ import sys
 from flask import Flask, request
 from multiprocessing import Process, Queue
 import socket
-from rdflib import Namespace, Graph, URIRef, RDF, Literal, logger, XSD
+from rdflib import Namespace, Graph, URIRef, RDF, Literal, XSD
 from utils.ACLMessages import get_message_properties, build_message, register_agent, get_agent_info, send_message
 from utils.FlaskServer import shutdown_server
 from utils.Agent import Agent
@@ -315,6 +315,7 @@ def requestTransport(date, peso):
                       msgcnt=get_count(),
                       content=content), TransportAg.address)
 
+    
 
 def prepareSellResponse(urlSend):
     g = Graph()
